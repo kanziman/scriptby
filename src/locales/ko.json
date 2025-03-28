@@ -1,0 +1,58 @@
+{
+  "episode.airDate": "방송일",
+  "episode.rating": "평점",
+  "episode.newScript": "새 스크립트",
+  "episode.noScripts": "사용 가능한 스크립트 없음",
+  "episode.scripts": "스크립트",
+
+  "signup.yourName": "이름",
+  "signup.email": "이메일 주소",
+  "signup.password": "비밀번호 (최소 8자)",
+  "signup.passwordConfirm": "비밀번호 확인",
+  "signup.cancel": "취소",
+  "signup.create": "새 계정 만들기",
+  "signup.alreadyRegistered": "이미 가입하셨나요? 로그인하기",
+
+  "login.header": "로그인 하기",
+  "login.email": "이메일",
+  "login.noAccount": "계정이 없으신가요? 회원가입하기",
+  "login.socialLogin": "또는 소셜 계정으로 로그인",
+  "login.loginButton": "로그인",
+  "login.password": "비밀번호",
+
+  "tutor.description1": "Ready to take the next step in your journey?",
+  "tutor.description2": "As a tutor, you can:",
+  "tutor.list.create": "Create and share your own script",
+  "tutor.list.help": "Help other students with your contents",
+  "tutor.list.earn": "Earn recognition for your expertise",
+  "tutor.sendApplication": "Send tutor application",
+  "tutor.sendApplicationRequested": "Requested",
+  "tutor.sendApplicationConfirmed": "완료",
+
+  "script.add": "스크립트 추가",
+  "scriptAdd.addHeader": "스크립트 등록",
+  "scriptAdd.season": "시즌",
+  "scriptAdd.episode": "에피소드",
+  "scriptAdd.creator": "제작자",
+  "scriptAdd.language": "언어",
+  "scriptAdd.file": "파일",
+
+  "button.submit": "등록",
+  "button.cancel": "취소",
+  "button.modify": "수정",
+
+  "season.seasons": "시즌",
+  "episode.register": "등록하기",
+  "episode.seeDetails": "보러가기",
+
+  "file.upload": "업로드",
+  "file.download": "다운로드(샘플)",
+
+  "post.category.general": "일반",
+  "post.category.q&a": "q&a",
+  "post.category.error": "에러",
+  "post.category.request": "요청",
+  "post.type.general": "일반",
+  "post.type.notice": "공지",
+  "post.type.vote": "투표"
+}

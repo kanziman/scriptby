@@ -1,0 +1,46 @@
+.editor-container {
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.menu-bar {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.menu-bar button {
+  padding: 5px 10px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.menu-bar button.is-active {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.editor-content {
+  padding: 15px;
+}
+
+.ProseMirror {
+  min-height: 200px;
+  outline: none;
+}
+
+.ProseMirror p {
+  margin-bottom: 10px;
+}
+
+.ProseMirror h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}

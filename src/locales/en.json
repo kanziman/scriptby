@@ -1,0 +1,61 @@
+{
+  "episode.airDate": "Air Date",
+  "episode.rating": "Rating",
+  "episode.newScript": "New Script",
+  "episode.noScripts": "No Scripts Available",
+  "episode.scripts": "scripts",
+
+  "signup.header": "Sign up",
+  "signup.yourName": "Your Name",
+  "signup.email": "Email address",
+  "signup.password": "Password (min 8 characters)",
+  "signup.passwordConfirm": "Repeat password",
+  "signup.cancel": "Cancel",
+  "signup.create": "Create new user",
+  "signup.alreadyRegistered": "Already registered? Login",
+
+  "login.header": "Log in to your account",
+  "login.email": "Email",
+  "login.noAccount": "No Account? Sign Up",
+  "login.socialLogin": "Or with social accounts",
+  "login.loginButton": "Log in",
+  "login.password": "Password",
+
+  "script.add": "add",
+  "scriptAdd.addHeader": "Add a script",
+  "scriptAdd.season": "Season",
+  "scriptAdd.episode": "Episode",
+  "scriptAdd.creator": "Creator",
+  "scriptAdd.language": "Language",
+  "scriptAdd.file": "File",
+
+  "tutor.description1": "Ready to take the next step in your journey?",
+  "tutor.description2": "As a tutor, you can:",
+  "tutor.list.create": "Create and share your own script",
+  "tutor.list.help": "Help other students with your contents",
+  "tutor.list.earn": "Earn recognition for your expertise",
+  "tutor.sendApplication": "Send tutor application",
+  "tutor.sendApplicationRequested": "Requested",
+  "tutor.sendApplicationConfirmed": "Confirmed",
+  "tutor.uploadScriptMessage": "Now go upload your own script ->",
+
+  "button.submit": "submit",
+  "button.modify": "modify",
+  "button.cancel": "cancle",
+
+  "season.seasons": "seasons",
+
+  "episode.register": "register",
+  "episode.seeDetails": "see details",
+
+  "file.upload": "Upload",
+  "file.download": "Get a sample",
+
+  "post.category.general": "general",
+  "post.category.q&a": "q&a",
+  "post.category.error": "error",
+  "post.category.request": "request",
+  "post.type.general": "general",
+  "post.type.notice": "notice",
+  "post.type.vote": "vote"
+}
