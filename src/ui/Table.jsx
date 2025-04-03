@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import styled, { css } from "styled-components";
 
 const StyledTable = styled.div`
@@ -26,8 +27,8 @@ const StyledHeader = styled(CommonRow)`
   letter-spacing: 0.4px;
   font-weight: 600;
   color: var(--color-grey-600);
-  min-width: ${(props) => props.minWidth || "700px"};
-
+  min-width: ${(props) => props.minWidth || "600px"};
+  /* text-align: center; */
   @media (max-width: 50em) {
     font-size: 1.2rem;
     padding: 1.2rem;
@@ -36,7 +37,7 @@ const StyledHeader = styled(CommonRow)`
 
 const StyledRow = styled(CommonRow)`
   padding: 1.2rem 2.4rem;
-  min-width: ${(props) => props.minWidth || "700px"};
+  min-width: ${(props) => props.minWidth || "600px"};
 
   &:hover {
     background-color: var(--color-grey-50);
@@ -133,7 +134,14 @@ function Row({ children, ...props }) {
 }
 
 function Body({ data, render }) {
-  if (!data?.length) return <Empty>No data to show at the moment</Empty>;
+  if (!data?.length) return;
+  <Empty>
+    <FormattedMessage
+      id="empty.noData"
+      defaultMessage="No data to show at the moment"
+    />
+  </Empty>;
+
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 

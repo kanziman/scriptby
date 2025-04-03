@@ -1,11 +1,7 @@
+import { useIntl } from "react-intl";
 import FilterGroup from "../../ui/FilterGroup";
 import TableOperations from "../../ui/TableOperations";
 
-const filterOptions = [
-  // { value: "all", label: "All" },
-  { value: "movie", label: "movie" },
-  { value: "tv", label: "tv" },
-];
 // const sortOptions = [
 //   { value: "name-asc", label: "Sort by name (A-Z)" },
 //   { value: "name-desc", label: "Sort by name (Z-A)" },
@@ -16,6 +12,19 @@ const filterOptions = [
 // ];
 
 function DashboardOperations() {
+  const intl = useIntl();
+  const filterOptions = [
+    {
+      value: "movie",
+      label: intl.formatMessage({
+        id: "option.movie",
+      }),
+    },
+    {
+      value: "tv",
+      label: intl.formatMessage({ id: "option.tv" }),
+    },
+  ];
   return (
     <TableOperations>
       <FilterGroup filterField="type" options={filterOptions} />

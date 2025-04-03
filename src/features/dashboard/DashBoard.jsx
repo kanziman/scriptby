@@ -1,3 +1,5 @@
+import { FormattedMessage } from "react-intl";
+import ApplyTutorBanner from "./ApplyTutorBanner";
 import NewScriptBoard from "./NewScriptBoard";
 import TopRatedBoard from "./TopRatedBoard";
 
@@ -9,13 +11,14 @@ function Dashboard() {
         baseType="trending"
         filterField="trendingFilter"
       /> */}
+      <ApplyTutorBanner />
       <NewScriptBoard
-        title="🎉 New Scripts"
+        title={<FormattedMessage id="dashBoard.titleNewScripts" />}
         baseType="newScripts"
         filterField="newScriptFilter"
       />
       <TopRatedBoard
-        title="⭐️ Top rated"
+        title={<FormattedMessage id="dashBoard.titleTopRated" />}
         baseType="top_rated"
         filterField="topRatedFilter"
       />

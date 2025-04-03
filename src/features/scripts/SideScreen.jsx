@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Menus from "../../ui/Menus";
@@ -13,19 +14,40 @@ import { useScriptOne } from "./useScriptOne";
 const StyledSideScreen = styled.aside`
   padding-top: 3rem;
 `;
-const options = [
-  { value: "words", label: "WORDS" },
-  { value: "phrasal_verbs", label: "PHRASE" },
-  { value: "idioms", label: "IDIOMS" },
-];
+
 function SideScreen() {
   const { scriptId } = useParams();
+  const intl = useIntl();
+
+  const localizedOptions = [
+    {
+      value: "words",
+      label: intl.formatMessage({
+        id: "filter.words",
+        defaultMessage: "WORDS",
+      }),
+    },
+    {
+      value: "phrasal_verbs",
+      label: intl.formatMessage({
+        id: "filter.phrase",
+        defaultMessage: "PHRASE",
+      }),
+    },
+    {
+      value: "idioms",
+      label: intl.formatMessage({
+        id: "filter.idioms",
+        defaultMessage: "IDIOMS",
+      }),
+    },
+  ];
+
   const [activeTab, setActiveTab] = useState(0);
   const { tabData, isPending } = useScriptOne({
     scriptId,
-    activeTabValue: options[activeTab]?.value,
+    activeTabValue: localizedOptions[activeTab]?.value,
   });
-
   const sliced = sliceDataLeftRight(tabData);
 
   if (isPending) return <Spinner />;
@@ -35,7 +57,7 @@ function SideScreen() {
         <SidebarTab
           activeTab={activeTab}
           onTab={setActiveTab}
-          options={options}
+          options={localizedOptions}
         />
       </TableOperations>
       <Menus>
@@ -47,7 +69,6 @@ function SideScreen() {
               <ScreenRow key={index} data={item} isToggled={true} />
             )}
           />
-
           <Table.Footer></Table.Footer>
         </Table>
       </Menus>

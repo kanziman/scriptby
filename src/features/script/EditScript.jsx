@@ -2,6 +2,7 @@ import { FormattedMessage } from "react-intl";
 import { useParams } from "react-router-dom";
 import { useQuery } from "../../context/QueryContext";
 import Empty from "../../ui/Empty";
+import Heading from "../../ui/Heading";
 import MainHeading from "../../ui/MainHeading";
 import { useScriptOne } from "../scripts/useScriptOne";
 import EditScriptForm from "./EditScriptForm";
@@ -27,15 +28,19 @@ function EditScript() {
 
   const episode = { episodeName, episodeNumber, seasonNumber };
 
-  if (!show) return <Empty resourceName="no show" />;
+  if (!show) {
+    return <Empty resourceName={<FormattedMessage id="empty.show" />} />;
+  }
 
-  console.log("fileName :>> ", fileName);
   return (
     <>
-      <MainHeading
-        headName={<FormattedMessage id="script.addHeader" />}
-        right="moveBack"
-      />
+      <MainHeading right="moveBack">
+        <Heading as="h1">
+          {<FormattedMessage id="scriptAdd.editHeader" />}
+        </Heading>
+      </MainHeading>
+
+      {/* EDIT */}
       <EditScriptForm
         isEdit
         scriptId={scriptId}

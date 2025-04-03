@@ -16,8 +16,11 @@ import {
   EpisodeInfo,
   EpisodeLabel,
   EpisodeName,
+  LocalizedTitle,
+  OriginalTitle,
   ShowInfoWrapper,
   ShowTitle,
+  YearLabel,
 } from "../../ui/ShowTitleGroup";
 import Spinner from "../../ui/Spinner";
 import Tag from "../../ui/Tag";
@@ -45,7 +48,7 @@ const Backdrop = styled.div`
 `;
 const ContentWrapper = styled.div`
   position: absolute;
-  top: 20%;
+  top: 5%;
   left: 5%;
   display: flex;
   gap: 2rem;
@@ -53,7 +56,7 @@ const ContentWrapper = styled.div`
   flex-wrap: nowrap;
 `;
 const Header = styled.header`
-  padding: 2rem 4rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -68,19 +71,7 @@ const Section = styled.section`
   z-index: 1;
   background-color: var(--color-grey-50);
 `;
-const Footer = styled.footer`
-  padding: 1.8rem 4rem;
-  font-size: 1.2rem;
-  color: var(--color-grey-600);
-  text-align: right;
-  border-top: 1px solid var(--color-grey-200);
-  background-color: var(--color-grey-50);
-  position: relative;
-  p {
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-`;
+
 const StyledFlagGroup = styled.div`
   display: flex;
   gap: 1.5rem;
@@ -101,8 +92,32 @@ const DataItemContainer = styled.div`
   &:hover {
     transform: translateX(5px);
   }
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
+    & select,
+    button,
+    input {
+      font-size: 1rem;
+      padding: 0.6rem;
+    }
+  }
 `;
-
+const Footer = styled.footer`
+  padding: 1.8rem 4rem;
+  font-size: 1.2rem;
+  color: var(--color-grey-600);
+  text-align: right;
+  border-top: 1px solid var(--color-grey-200);
+  background-color: var(--color-grey-50);
+  position: relative;
+  p {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  @media (max-width: 34em) {
+    font-size: 0.8rem;
+  }
+`;
 // helper: prepare show data by removing id and setting show_id and category
 function prepareShowData(selectedShow, category) {
   if (!selectedShow) return null;
@@ -147,11 +162,13 @@ function AddScriptForm() {
     let baseScript = {
       original_language: originalLanguage,
       translated_language: selectedLanguage,
+      name,
       original_name: originalName,
       user_id: userId,
       file_name: fName,
       show_id: showId,
       show_category: category,
+      status: "pending",
     };
 
     if (selectedEpisode) {
@@ -217,10 +234,21 @@ function AddScriptForm() {
         <ContentWrapper>
           <Header>
             <ShowInfoWrapper>
+              {/* <ShowTitle backdropColor>
+                {originalName}
+                {date && <span> ({format(new Date(date), "yyyy")})</span>}(
+                {name})
+              </ShowTitle> */}
               <ShowTitle backdropColor>
-                {name}
-                {date && <span> ({format(new Date(date), "yyyy")})</span>}
+                <OriginalTitle>{originalName}</OriginalTitle>
+                {date && (
+                  <YearLabel backdropColor>
+                    ({format(new Date(date), "yyyy")})
+                  </YearLabel>
+                )}
+                <LocalizedTitle backdropColor>{name}</LocalizedTitle>
               </ShowTitle>
+
               {isTv && (
                 <>
                   <EpisodeInfo backdropColor>

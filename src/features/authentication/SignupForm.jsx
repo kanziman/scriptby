@@ -22,7 +22,7 @@ function SignupForm() {
     signup(
       { username, email, password },
       {
-        // onSettled: () => reset(),
+        onSettled: () => navigate("/dashboard"),
       }
     );
   }

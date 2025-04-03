@@ -1,10 +1,11 @@
 import { FaRegCircleXmark } from "react-icons/fa6";
+import { useIntl } from "react-intl";
 
 import { useRef } from "react";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
 import { useKey } from "../../hooks/useKey";
-import ScriptTableOperations from "../scripts/ScriptTableOperations";
+import FindOperations from "./FindOperations";
 
 const SearchContainer = styled.span`
   position: relative;
@@ -21,8 +22,9 @@ const InputWrapper = styled.div`
 
 const StyledSearch = styled.input`
   width: 100%;
-  padding: 0.4rem 4rem 0.4rem 1.6rem; /* 오른쪽 여백 확보 */
-  font-size: 1.8rem;
+  height: 100%;
+  padding: 0.8rem;
+  font-size: 1.6rem;
   border: none;
   border-radius: 5px;
   background-color: var(--color-grey-200);
@@ -34,6 +36,10 @@ const StyledSearch = styled.input`
 
   &:focus::placeholder {
     color: transparent;
+  }
+
+  @media (max-width: 34em) {
+    font-size: 1.6rem;
   }
 `;
 
@@ -54,6 +60,8 @@ const ClearButton = styled.button`
 `;
 
 function Search() {
+  const intl = useIntl();
+
   const inputEl = useRef(null);
   const { state, dispatch } = useQuery();
 
@@ -99,7 +107,9 @@ function Search() {
       <InputWrapper>
         <StyledSearch
           type="text"
-          placeholder="🔎 search movies, series ..."
+          placeholder={intl.formatMessage({
+            id: "search.placeHolder",
+          })}
           value={state.query || ""}
           onChange={handleChange}
           ref={inputEl}
@@ -110,10 +120,7 @@ function Search() {
           </ClearButton>
         }
       </InputWrapper>
-      <ScriptTableOperations
-        onChange={handleFilter}
-        value={state.filter || ""}
-      />
+      <FindOperations onChange={handleFilter} value={state.filter || ""} />
     </SearchContainer>
   );
 }

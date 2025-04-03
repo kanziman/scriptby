@@ -7,6 +7,7 @@ import {
   HiOutlineSun,
   HiOutlineUser,
 } from "react-icons/hi2";
+import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { messages } from "../context/LanguageProvider";
@@ -74,9 +75,7 @@ function HeaderMenu() {
             <LanguageIcon />
           </ButtonIcon>
         </li>
-        <li>
-          <Logout />
-        </li>
+        <li>{currentUser && <Logout />}</li>
       </StyledHeaderMenu>
 
       <StyledMenus isBrowserSmall={isBrowserSmall}>
@@ -85,25 +84,37 @@ function HeaderMenu() {
             <Menus.Toggle id={2} icon={<HiOutlineMenu />} />
             <Menus.List id={2}>
               <Menus.Button onClick={handleClick} icon={<HiOutlineUser />}>
-                Account
+                <FormattedMessage id="menu.account" />
               </Menus.Button>
               <Menus.Button onClick={handleToggle} icon={<LanguageIcon />}>
-                Language
+                <FormattedMessage id="menu.language" />
               </Menus.Button>
               <Menus.Button
                 icon={isDarkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
                 onClick={toggleDarkMode}
               >
-                Dark Mode
+                <FormattedMessage id="menu.darkMode" />
               </Menus.Button>
-              <Menus.Button
-                icon={
-                  !isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />
-                }
-                onClick={logout}
-              >
-                Log Out
-              </Menus.Button>
+
+              {currentUser ? (
+                <Menus.Button
+                  icon={
+                    !isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />
+                  }
+                  onClick={logout}
+                >
+                  <FormattedMessage id="menu.logout" />
+                </Menus.Button>
+              ) : (
+                <Menus.Button
+                  icon={
+                    !isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />
+                  }
+                  onClick={handleClick}
+                >
+                  <FormattedMessage id="menu.login" />
+                </Menus.Button>
+              )}
             </Menus.List>
           </Menus.Menu>
         </Menus>

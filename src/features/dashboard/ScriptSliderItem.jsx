@@ -1,11 +1,12 @@
 import { format } from "date-fns";
-import { MdFiberNew } from "react-icons/md";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FlagTextVertical from "../../ui/FlagTextVertical";
 import { MetaSubGroup } from "../../ui/MetaSubGroup";
 import Row from "../../ui/Row";
 import { IMG_PATH } from "../../utils/constants";
+import { cleansingData } from "../../utils/helpers";
 
 const StyledItem = styled.div`
   padding: 1rem;
@@ -13,39 +14,69 @@ const StyledItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  min-height: 30rem;
+  min-height: 28rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  /* aspect-ratio를 사용해 이미지 영역의 비율을 고정 (예: 16:9) */
-  aspect-ratio: 2/3;
+  aspect-ratio: 7/10;
   overflow: hidden;
-  margin-bottom: 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0.5rem;
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+
+  ${StyledItem}:hover & {
+    transform: scale(1.05);
   }
 `;
 
-const NewBadge = styled.div`
+const Badge = styled.div`
   position: absolute;
-  top: 1px;
-  right: 1px;
+  top: 0.8rem;
+  right: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--color-tertiary-700);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: bold;
   z-index: 2;
+`;
+const FlagWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0rem;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+`;
+const FlagTextWrapper = styled.div`
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  border-radius: 0 0 0.5rem 0.5rem;
 `;
 
 const TextContainer = styled.div`
-  margin-top: auto; /* 남은 공간을 모두 채워서 아래쪽에 고정 */
-`;
-const SubRow = styled.div`
   margin-top: 1rem;
   display: flex;
-  justify-content: flex-start;
   flex-direction: column;
 `;
 
@@ -61,8 +92,9 @@ const EpisodeTitle = styled.h3`
   height: 4.6rem;
 
   @media (max-width: 50em) {
-    font-size: 1.4rem;
-    height: 4rem;
+    /* font-size: 1.4rem; */
+    /* -webkit-line-clamp: 2; */
+    /* height: 2rem; */
   }
 `;
 
@@ -76,69 +108,110 @@ const MetaContainer = styled.div`
   font-size: 0.9rem;
   color: var(--color-grey-600);
   margin-top: 0.8rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 34em) {
+    padding: 0.6rem 1rem;
+  }
 `;
 
-function ScriptSliderItem({ item }) {
+const SubRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+`;
+
+function ScriptSliderItem({ item: script }) {
+  const intl = useIntl();
   const navigate = useNavigate();
   const {
     id,
     still_path: stillPath,
-    name: episodeNameProp,
     season_number: seasonNumber,
     episode_number: episodeNumber,
     original_language: originalLanguage,
     original_name: originalName,
-    translated_language,
+    translated_language: translatedLanguage,
     show,
-    profile: { username },
-  } = item;
-  const { poster_path: posterPath, release_date: releaseDate } = show;
-  const isTv = show?.first_air_date && show?.name;
+    profile,
+  } = script;
+
+  const { poster, date, isTv } = cleansingData(show);
+  const { username } = profile;
 
   return (
     <StyledItem onClick={() => navigate(`/scripts/${id}`)}>
       <ImageWrapper>
-        <img
+        <Image
           src={
-            posterPath
-              ? `${IMG_PATH}${posterPath}`
+            poster
+              ? `${IMG_PATH}${poster}`
               : stillPath
               ? `${IMG_PATH}${stillPath}`
               : "https://via.placeholder.com/500x281?text=No+Image"
           }
           alt={`${originalName} poster`}
         />
-        <NewBadge>
-          <MdFiberNew size={24} color="red" />
-        </NewBadge>
-      </ImageWrapper>
-      <TextContainer>
-        <EpisodeTitle>{!isTv ? originalName : episodeNameProp}</EpisodeTitle>
-        <MetaContainer>
-          <Row type="horizontal" gap="0.4rem">
-            <FlagTextVertical code={originalLanguage} />
-            &rarr;
-            <FlagTextVertical code={translated_language} />
-          </Row>
 
+        <Badge>
+          {intl.formatMessage({
+            id: "badge.new",
+          })}
+        </Badge>
+
+        <FlagWrapper>
+          <Row type="horizontal" gap="1rem" style={{ color: "white" }}>
+            <FlagTextVertical code={originalLanguage} flagOnly />
+            <span style={{ fontSize: "1.2rem" }}>&rarr;</span>
+            <FlagTextVertical code={translatedLanguage} flagOnly />
+          </Row>
+        </FlagWrapper>
+      </ImageWrapper>
+
+      <FlagTextWrapper>
+        <Row type="horizontal" gap="0.4rem" style={{ color: "white" }}>
+          <FlagTextVertical code={originalLanguage} textOnly />
+          <span style={{ fontSize: "1.2rem" }}>&rarr;</span>
+          <FlagTextVertical code={translatedLanguage} textOnly />
+        </Row>
+      </FlagTextWrapper>
+
+      <TextContainer>
+        <EpisodeTitle>{originalName}</EpisodeTitle>
+        <MetaContainer>
           <SubRow>
             {isTv ? (
               <Row type="horizontal" gap="0.4rem">
                 <MetaSubGroup
-                  label="season"
+                  label={intl.formatMessage({
+                    id: "meta.season",
+                  })}
                   boldValue={seasonNumber}
                   delimeter={"|"}
                 />
-                <MetaSubGroup label="episode" boldValue={episodeNumber} />
+                <MetaSubGroup
+                  label={intl.formatMessage({
+                    id: "meta.episode",
+                  })}
+                  boldValue={episodeNumber}
+                />
               </Row>
             ) : (
               <MetaSubGroup
-                label="released"
-                boldValue={format(new Date(releaseDate), "yyyy.MM.dd.")}
+                label={intl.formatMessage({
+                  id: "meta.released",
+                })}
+                boldValue={format(new Date(date), "yyyy.MM.dd.")}
               />
             )}
 
-            <MetaSubGroup label="created by" boldValue={username} />
+            <MetaSubGroup
+              label={intl.formatMessage({
+                id: "meta.createdBy",
+              })}
+              boldValue={username}
+            />
           </SubRow>
         </MetaContainer>
       </TextContainer>

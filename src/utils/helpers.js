@@ -215,6 +215,7 @@ export function cleansingData(showOrMovie) {
   const date = showOrMovie?.first_air_date || showOrMovie?.release_date;
   const runTime = showOrMovie?.runtime || showOrMovie?.episode_run_time?.[0];
   const numberOfSeasons = showOrMovie?.number_of_seasons;
+  const numberOfEpisodes = showOrMovie?.number_of_episodes;
   const overview = showOrMovie?.overview;
   const homepage = showOrMovie?.homepage;
 
@@ -224,6 +225,9 @@ export function cleansingData(showOrMovie) {
   const originalLanguage =
     showOrMovie?.original_language || showOrMovie?.original_language;
   const category = showOrMovie?.category || showOrMovie?.show_category;
+
+  const seasonNumber = showOrMovie?.season_number;
+  const episodeNumber = showOrMovie?.episode_number;
 
   const isTv = !!(showOrMovie?.first_air_date && showOrMovie?.name);
 
@@ -239,9 +243,12 @@ export function cleansingData(showOrMovie) {
     isTv,
     vote,
     numberOfSeasons,
+    numberOfEpisodes,
     overview,
     homepage,
     category,
     backdropPath,
+    seasonNumber,
+    episodeNumber,
   };
 }

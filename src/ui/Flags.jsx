@@ -14,7 +14,7 @@ const StyledFlagText = styled.span`
 `;
 const FlagWrapper = styled.span`
   font-size: 1.8rem;
-  z-index: 99;
+  z-index: 0;
 `;
 
 function Flags({ code }) {

@@ -2,15 +2,14 @@ import styled, { css } from "styled-components";
 
 const TabButton = styled.button`
   background-color: var(--color-secondary-50);
-  color: var(--color-secondary-800);
-  /* background-color: var(--color-grey-0); */
+  color: var(--color-brand-800);
   border: none;
 
   ${(props) =>
     props.active &&
     css`
-      background-color: var(--color-secondary-600);
-      color: var(--color-secondary-50);
+      background-color: var(--color-brand-600);
+      color: var(--color-brand-50);
     `}
 
   border-radius: var(--border-radius-sm);
@@ -21,7 +20,7 @@ const TabButton = styled.button`
   transition: all 0.3s;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-secondary-600);
+    background-color: var(--color-brand-600);
     color: var(--color-secondary-50);
   }
 

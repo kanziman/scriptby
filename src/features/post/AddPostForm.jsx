@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../ui/Button";
@@ -12,7 +12,7 @@ import {
   getPostTypeOptions,
 } from "../../utils/constants";
 import { useUser } from "../authentication/useUser";
-import ReactEditor from "./ReactEditor";
+import TiptapEditor from "./TiptapEditor";
 import { submitPost, useCreatePost } from "./useCreatePost";
 
 const Form = styled.form`
@@ -69,30 +69,28 @@ function AddPostForm() {
     <>
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <FormRow
-          // orientation="vertical"
-          label="TYPE"
-          error={errors?.category?.message}
+          label={<FormattedMessage id="post.type" />}
+          error={errors?.type?.message}
         >
           <Select
             id="type"
             options={typeOptions}
             type="white"
-            disabled={!isManager}
+            disabled={!currentUser?.isMaster}
             {...register("type", {
               required: "This field is required",
             })}
           />
         </FormRow>
         <FormRow
-          // orientation="vertical"
-          label="CATEGORY"
+          label={<FormattedMessage id="post.category" />}
           error={errors?.category?.message}
         >
           <Select
             id="category"
             options={categoryOptions}
             type="white"
-            // disabled={!isMaster}
+            disabled={!currentUser?.isMaster}
             {...register("category", {
               required: "This field is required",
             })}
@@ -100,7 +98,7 @@ function AddPostForm() {
         </FormRow>
         <FormRow
           orientation="vertical"
-          label="TITLE"
+          label={<FormattedMessage id="post.title" />}
           error={errors?.title?.message}
         >
           <Input
@@ -115,7 +113,7 @@ function AddPostForm() {
 
         <FormRow
           orientation="vertical"
-          label="CONTENT"
+          label={<FormattedMessage id="post.content" />}
           error={errors?.content?.message}
         >
           <Controller
@@ -123,19 +121,13 @@ function AddPostForm() {
             control={control}
             rules={{ required: "Content is required" }}
             render={({ field }) => (
-              <ReactEditor
-                value={field.value}
+              <TiptapEditor
+                id="content"
+                modelValue={field.value}
                 onChange={field.onChange}
-                // 나머지 props
-              />
+              ></TiptapEditor>
             )}
           />
-          {/* <ReactEditor
-            id="content"
-            value={editorContent}
-            onChange={setEditorContent}
-            style={{ width: "100%", height: "400px" }}
-          /> */}
         </FormRow>
 
         <FormRow>
@@ -147,9 +139,11 @@ function AddPostForm() {
               setEditorContent("");
             }}
           >
-            Cancel
+            <FormattedMessage id="button.cancel" />
           </Button>
-          <Button>저장</Button>
+          <Button>
+            <FormattedMessage id="button.submit" />
+          </Button>
         </FormRow>
       </Form>
     </>

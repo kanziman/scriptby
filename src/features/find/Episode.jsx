@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { HiArrowUpOnSquare, HiEye } from "react-icons/hi2";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
@@ -22,10 +22,15 @@ const StyledEpisode = styled.li`
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--color-grey-200);
   border-radius: 5px;
+  transition: transform 0.2s, box-shadow 0.2s;
 
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
   img {
     width: 100%;
-    aspect-ratio: 5 / 3;
+    aspect-ratio: 16/9;
     object-fit: cover;
     border-radius: 5px;
   }
@@ -36,7 +41,7 @@ const StyledEpisode = styled.li`
     padding: 0.8rem 1rem;
     font-size: 1.4rem;
     img {
-      /* width: 50%; */
+      width: 66%;
     }
   }
 `;
@@ -53,20 +58,16 @@ const EpisodeHeader = styled.div`
   gap: 0.8rem;
 `;
 
-const EpisodeTitle = styled.div`
-  h3 {
-    font-size: 1.4rem;
-    margin: 0;
-  }
-  @media (max-width: 80rem) {
-    h3 {
-      font-size: 1.2rem;
-    }
-  }
-  @media (max-width: 70rem) {
-    h3 {
-      font-size: 1.1rem;
-    }
+const EpisodeTitle = styled.h3`
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 최대 2줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.4rem;
+  margin: 0;
+
+  @media (max-width: 34em) {
+    font-size: 1rem;
   }
 `;
 
@@ -81,14 +82,9 @@ const EpisodeInfo = styled.div`
     display: flex;
     align-items: center;
   }
-  @media (max-width: 80rem) {
+  @media (max-width: 34em) {
     p {
       font-size: 1rem;
-    }
-  }
-  @media (max-width: 70rem) {
-    p {
-      font-size: 0.9rem;
     }
   }
 `;
@@ -107,7 +103,7 @@ const ScriptInfo = styled.div`
   align-items: center;
   gap: 0.6rem;
   width: 100%;
-  @media (max-width: 80rem) {
+  @media (max-width: 50em) {
     & > span {
       font-size: 0.8rem;
     }
@@ -144,6 +140,7 @@ const FlagBadge = styled.div`
 const MAX_FLAGS = 3;
 
 export default function Episode({ episode }) {
+  const intl = useIntl();
   const navigate = useNavigate();
   const { selectedShow, dispatch } = useQuery();
 
@@ -193,9 +190,7 @@ export default function Episode({ episode }) {
       <EpisodeContent>
         <EpisodeHeader>
           <EpisodeTitle>
-            <h3>
-              EP {episodeNumber}. {epName}
-            </h3>
+            EP {episodeNumber}. {epName}
           </EpisodeTitle>
           <EpisodeInfo>
             <p>
@@ -210,7 +205,7 @@ export default function Episode({ episode }) {
               <span role="img" aria-label="rating">
                 ⭐️
               </span>
-              {vote_average.toFixed(1)} TMDB
+              {vote_average.toFixed(1)}
             </p>
           </EpisodeInfo>
         </EpisodeHeader>
@@ -232,7 +227,12 @@ export default function Episode({ episode }) {
                     <FlagWrapper key={script.id}>
                       <Flags
                         code={script.translated_language}
-                        title={`${script.translated_language} Script`}
+                        title={intl.formatMessage(
+                          {
+                            id: "flag.scriptTitle",
+                          },
+                          { language: script.translated_language }
+                        )}
                       />
                       <FlagBadge>+{extraCount}</FlagBadge>
                     </FlagWrapper>
@@ -240,7 +240,12 @@ export default function Episode({ episode }) {
                     <FlagWrapper key={script.id}>
                       <Flags
                         code={script.translated_language}
-                        title={`${script.translated_language} Script`}
+                        title={intl.formatMessage(
+                          {
+                            id: "flag.scriptTitle",
+                          },
+                          { language: script.translated_language }
+                        )}
                       />
                     </FlagWrapper>
                   )
@@ -254,14 +259,16 @@ export default function Episode({ episode }) {
               <Menus.Menu>
                 <Menus.Toggle id={episodeNumber} />
                 <Menus.List id={episodeNumber}>
-                  <Menus.Button
-                    icon={<HiEye />}
-                    onClick={() =>
-                      handleSeeDetail(selectedShow.id, episodeNumber)
-                    }
-                  >
-                    <FormattedMessage id="episode.seeDetails" />
-                  </Menus.Button>
+                  {hasScripts && (
+                    <Menus.Button
+                      icon={<HiEye />}
+                      onClick={() =>
+                        handleSeeDetail(selectedShow.id, episodeNumber)
+                      }
+                    >
+                      <FormattedMessage id="episode.seeDetails" />
+                    </Menus.Button>
+                  )}
                   <Menus.Button
                     icon={<HiArrowUpOnSquare />}
                     onClick={() => handleScriptAdd()}

@@ -15,11 +15,8 @@ const StyledMetaSubGroup = styled.div`
   font-size: 1rem;
   color: var(--color-grey-400);
 
-  @media (max-width: 90rem) {
+  @media (max-width: 34em) {
     font-size: 1rem;
-  }
-  @media (max-width: 42em) {
-    font-size: 0.8rem;
   }
 `;
 const Bold = styled.span`

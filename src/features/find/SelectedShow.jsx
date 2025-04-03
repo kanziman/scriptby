@@ -8,21 +8,18 @@ import SeasonItem from "./SeasonItem";
 import ShowInfoMain from "./ShowInfoMain";
 import ShowInfoSub from "./ShowInfoSub";
 
+const StyledSeasonsHead = styled.h2`
+  margin: 3rem auto;
+  width: fit-content;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-grey-300);
+  @media (max-width: 34em) {
+    font-size: 2rem;
+  }
+`;
 const StyledSeasonList = styled.ul`
   cursor: pointer;
   transition: all 0.3s;
-
-  h1,
-  h2 {
-    margin: 1rem auto;
-    width: fit-content;
-    gap: 1rem;
-    border-bottom: 1px solid var(--color-grey-300);
-  }
-
-  /* display: flex;
-  flex-direction: column;
-  flex: 1; */
 `;
 
 export default function SelectedShow() {
@@ -40,17 +37,16 @@ export default function SelectedShow() {
       <ShowInfoSub />
 
       {/* SEASEAONS */}
+      {seasons && (
+        <StyledSeasonsHead>
+          <span>📺</span>
+          <span>{seasonsCount}</span>
+          <span>
+            <FormattedMessage id="season.seasons" />
+          </span>
+        </StyledSeasonsHead>
+      )}
       <StyledSeasonList>
-        {seasons && (
-          <h2>
-            <span>📺</span>
-            <span>{seasonsCount}</span>
-            <span>
-              <FormattedMessage id="season.seasons" />
-            </span>
-          </h2>
-        )}
-
         {visibleSeasons.map((season, index) => (
           <SeasonItem
             seasonIndex={state.seasonIndex}
@@ -64,7 +60,9 @@ export default function SelectedShow() {
 
       {/* LOAD MORE */}
       {seasons && visibleCount < seasons.length && (
-        <LoadMoreButton onClick={handleLoadMore}>더보기</LoadMoreButton>
+        <LoadMoreButton onClick={handleLoadMore}>
+          <FormattedMessage id="loadMore" defaultMessage="더보기" />
+        </LoadMoreButton>
       )}
     </Box>
   );

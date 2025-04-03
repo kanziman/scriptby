@@ -4,11 +4,13 @@ const HeadingGroup = styled.div`
   align-items: center;
   gap: 2.4rem;
   @media (max-width: 34em) {
+    padding: 0 1rem;
+    gap: 1.2rem;
     & h2 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
     & span {
-      font-size: 1.4rem;
+      font-size: 1rem;
     }
   }
 `;

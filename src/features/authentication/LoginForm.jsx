@@ -83,9 +83,6 @@ function LoginForm() {
           <SocialButton />
         </FormRowVertical>
 
-        {/* <FormRowVertical>
-          {!isPending ? <NaverLogin /> : <SpinnerMini />}
-        </FormRowVertical> */}
         <FormRowVertical>
           {!isPending ? <GoogleLogin /> : <SpinnerMini />}
         </FormRowVertical>

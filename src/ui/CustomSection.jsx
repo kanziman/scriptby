@@ -1,4 +1,5 @@
 import { HiLink } from "react-icons/hi2";
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
 import FlagText from "../ui/FlagText";
@@ -19,7 +20,7 @@ const StyledSection = styled.section`
     border-bottom: 1px solid var(--color-grey-300);
     padding-bottom: 0.8rem;
   }
-  @media (max-width: 50rem) {
+  @media (max-width: 50em) {
     gap: 0.8rem;
   }
 `;
@@ -30,7 +31,7 @@ const DetailsContainer = styled.div`
   gap: 0.6rem;
   color: var(--color-grey-600);
 
-  @media (max-width: 50rem) {
+  @media (max-width: 50em) {
     gap: 0.2rem;
   }
 `;
@@ -65,6 +66,9 @@ const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  @media (max-width: 60em) {
+    font-size: 1.4rem;
+  }
 `;
 
 const SeasonCount = styled.p`
@@ -91,7 +95,7 @@ function CustomSection({
 
       <DetailsContainer>
         <DetailItem>
-          <FlagText code={originalLanguage} type={"horizontal"} />
+          <FlagText code={originalLanguage} type={"horizontal"} gap="0.8rem" />
         </DetailItem>
 
         {date && (
@@ -101,10 +105,12 @@ function CustomSection({
           </DetailItem>
         )}
 
-        <DetailItem>
-          <span>⭐️</span>
-          <span>{vote} TMDB rating</span>
-        </DetailItem>
+        {vote && (
+          <DetailItem>
+            <span>⭐️</span>
+            <span>{vote}</span>
+          </DetailItem>
+        )}
 
         {homepage && (
           <DetailItem>
@@ -114,7 +120,13 @@ function CustomSection({
               rel="noopener noreferrer"
             >
               <HiLink />
-              <span>Visit Homepage</span>
+              <span>
+                {" "}
+                <FormattedMessage
+                  id="homepage.visit"
+                  defaultMessage="Visit Homepage"
+                />
+              </span>
             </HomepageLink>
           </DetailItem>
         )}
@@ -122,7 +134,13 @@ function CustomSection({
 
       <BottomContainer>
         {isTv && numberOfSeasons && (
-          <SeasonCount>{`Total ${numberOfSeasons} seasons`}</SeasonCount>
+          <SeasonCount>
+            <FormattedMessage
+              id="season.total"
+              defaultMessage="Total {seasons} seasons"
+              values={{ seasons: numberOfSeasons }}
+            />
+          </SeasonCount>
         )}
 
         {<ActionContainer play={play} isTv={isTv} />}

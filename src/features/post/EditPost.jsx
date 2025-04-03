@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FormattedMessage } from "react-intl";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../ui/Button";
@@ -62,7 +63,6 @@ function EditPost() {
   // ReactEditor의 값이 변경되면 "content" 필드 업데이트
   useEffect(() => {
     setValue("content", editorContent);
-    console.log("editorContent :>> ", editorContent);
   }, [editorContent, setValue]);
 
   useEffect(() => {
@@ -150,9 +150,11 @@ function EditPost() {
             setEditorContent("");
           }}
         >
-          취소
+          <FormattedMessage id="button.cancel" />
         </Button>
-        <Button disabled={!submitable}>저장</Button>
+        <Button disabled={!submitable}>
+          <FormattedMessage id="button.submit" />
+        </Button>
       </FormRow>
     </Form>
   );

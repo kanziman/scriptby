@@ -31,6 +31,7 @@ const StyledToggle = styled.button`
 
 const StyledList = styled.ul`
   position: fixed;
+  z-index: 9999;
 
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);

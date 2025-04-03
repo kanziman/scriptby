@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
 import { useMore } from "../../hooks/useMore";
@@ -13,6 +14,7 @@ const GridRow = styled.div`
   border-radius: 0.9rem;
   overflow: hidden;
   align-self: flex-start;
+  padding-bottom: 2rem;
 
   @media (max-width: 54em) {
     grid-template-columns: 1fr 1fr 1fr;
@@ -55,7 +57,9 @@ export default function SearchedShows() {
           )}
         </>
       ) : (
-        <div>No data found.</div>
+        <div>
+          <FormattedMessage id="search.noData" />
+        </div>
       )}
     </>
   );

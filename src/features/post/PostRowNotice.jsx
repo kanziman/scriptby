@@ -1,4 +1,6 @@
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
+import { POST_TYPE_OPTIONS, statusToTagName } from "../../utils/constants";
 
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,7 +10,6 @@ import MetaData from "../../ui/MetaData";
 import Modal from "../../ui/Modal";
 import Table from "../../ui/Table";
 import Tag from "../../ui/Tag";
-import { statusToTagName } from "../../utils/constants";
 import { useUser } from "../authentication/useUser";
 import { useDeletePost } from "./useDeletePost";
 
@@ -22,22 +23,36 @@ const Img = styled.img`
   align-self: center;
   justify-self: end;
   transform: scale(1.3);
+  transition: transform 0.3s ease-in-out;
 
   &:hover {
     transform: scale(1.5);
     overflow: hidden;
   }
-  /* transform: scale(1.5) translateX(-7px); */
+  @media (max-width: 34em) {
+    width: 50%;
+  }
 `;
 
 const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  @media (max-width: 34em) {
+    & span {
+      font-size: 1rem;
+    }
+  }
 `;
 const Sided = styled.div`
   display: flex;
   gap: 0.8rem;
+
+  @media (max-width: 34em) {
+    & span {
+      font-size: 0.8rem;
+    }
+  }
 `;
 
 const Title = styled.h2`
@@ -45,6 +60,9 @@ const Title = styled.h2`
   font-weight: 600;
   color: var(--color-grey-700);
   margin: 0;
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
+  }
 `;
 
 const RowGrid = styled.div`
@@ -71,6 +89,9 @@ function PostRowNotice({ data }) {
   } = data;
   const { user: currentUser } = useUser();
   const { isDeleting, deletePost } = useDeletePost();
+  const typeLabel = POST_TYPE_OPTIONS.find(
+    (option) => option.value === type
+  )?.label;
   // const avatar = user?.user_metadata?.avatar || "/default-user.jpg";
   return (
     <Table.Row type="posts">
@@ -79,7 +100,10 @@ function PostRowNotice({ data }) {
           <Stacked>
             <Sided>
               <Tag round="square" type={statusToTagName[type]}>
-                {type}
+                <FormattedMessage
+                  id={`post.type.${type}`}
+                  defaultMessage={typeLabel}
+                />
               </Tag>
               <Title>{title}</Title>
             </Sided>
@@ -106,12 +130,14 @@ function PostRowNotice({ data }) {
                     onFuncFromOutside={() => navigate(`/posts/edit/${postId}`)}
                     icon={<HiPencil />}
                   >
-                    Edit
+                    <FormattedMessage id="modal.menu.edit" />
                   </Menus.Button>
                 </Modal.Open>
 
                 <Modal.Open opens="delete">
-                  <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                  <Menus.Button icon={<HiTrash />}>
+                    <FormattedMessage id="modal.menu.delete" />
+                  </Menus.Button>
                 </Modal.Open>
               </Menus.List>
             </Menus.Menu>

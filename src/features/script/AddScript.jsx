@@ -11,15 +11,18 @@ function AddScript() {
   const { action } = useParams();
   const isEdit = action === "edit";
 
-  if (!selectedShow?.id) return <Empty resourceName="no show" />;
+  if (!selectedShow?.id) {
+    return <Empty resourceName={<FormattedMessage id="empty.show" />} />;
+  }
+
   return (
     <>
-      <MainHeading
-        headName={<FormattedMessage id="script.addHeader" />}
-        right="moveBack"
-      >
-        <Heading as="h1">{`# 스크립트 등록`}</Heading>
+      <MainHeading right="moveBack">
+        <Heading as="h1">
+          {<FormattedMessage id="scriptAdd.addHeader" />}
+        </Heading>
       </MainHeading>
+      {/* ADD */}
       <AddScriptForm isEdit={isEdit} />
     </>
   );

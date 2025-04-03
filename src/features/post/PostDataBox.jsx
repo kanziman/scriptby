@@ -39,6 +39,7 @@ function PostDataBox() {
 
   const sanitizedContent = DOMPurify.sanitize(content);
   // const avatarImg = avatar || "/default-user.jpg";
+  const updatedContent = sanitizedContent.replace(/<p><\/p>/g, "<p>&nbsp;</p>");
 
   return (
     <>
@@ -48,13 +49,13 @@ function PostDataBox() {
           <ContentContainer>
             <div
               className="ql-editor"
-              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+              dangerouslySetInnerHTML={{ __html: updatedContent }}
             />
           </ContentContainer>
         </PostSection>
 
         <Footer>
-          <p>Posted {format(new Date(createdAt), "yyyy.MM.dd(EE), p")}</p>
+          <p>{format(new Date(createdAt), "yyyy.MM.dd(EE), p")}</p>
         </Footer>
       </StyledPostDataBox>
     </>

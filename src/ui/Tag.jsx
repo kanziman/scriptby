@@ -1,19 +1,14 @@
 import styled, { css } from "styled-components";
 
-const propToTagColor = {
-  notice: "red",
-  general: "grey",
-  "checked-in": "green",
-  "checked-out": "silver",
-};
 const Tag = styled.span`
   width: fit-content;
   text-transform: uppercase;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   padding: 0.4rem 1.2rem;
   border-radius: 100px;
   align-self: center;
+  word-break: keep-all;
 
   ${(props) =>
     props.round === "square" &&

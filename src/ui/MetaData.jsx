@@ -13,6 +13,11 @@ const MetaItem = styled.span`
   h3 {
     font-weight: 500;
   }
+  @media (max-width: 34em) {
+    h3 {
+      font-size: 1rem;
+    }
+  }
 `;
 
 function MetaData({ username, createdAt, view }) {

@@ -8,7 +8,7 @@ import Modal from "../../ui/Modal";
 import Table from "../../ui/Table";
 
 import { format, isToday } from "date-fns";
-import { useQuery } from "../../context/QueryContext";
+import { FormattedMessage } from "react-intl";
 import Button from "../../ui/Button";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { getFlag, getLanguageName, maskEmail } from "../../utils/helpers";
@@ -20,13 +20,13 @@ const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  cursor: pointer;
+  /* cursor: pointer; */
 
   & span:first-child {
     font-weight: 500;
-
+    font-size: 1.2rem;
     @media (max-width: 50em) {
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
   }
 
@@ -36,6 +36,10 @@ const Stacked = styled.div`
     @media (max-width: 50em) {
       font-size: 0.8rem;
     }
+  }
+
+  & button {
+    font-size: 0.6rem;
   }
 `;
 
@@ -55,13 +59,11 @@ function ScriptRow({
     show: { date: firstAirDate, category },
     profile: { email, username },
   },
-  isAdminPage,
 }) {
   const navigate = useNavigate();
   const { user: currentUser } = useUser();
   const { confirm, isPending } = useConfirm();
   const { deleteScript, isDeleting } = useDeleteScript();
-  const { dispatch } = useQuery();
 
   const userRole = currentUser?.role;
 
@@ -78,6 +80,10 @@ function ScriptRow({
     });
   }
 
+  function hanldeClick() {
+    navigate(`/scripts/${scriptId}`);
+  }
+
   function hanldeDelete() {
     deleteScript(scriptId);
   }
@@ -88,7 +94,26 @@ function ScriptRow({
 
   return (
     <>
-      <Table.Row onClick={() => navigate(`/scripts/${scriptId}`)}>
+      <Table.Row
+        onClick={isConfirmed ? hanldeClick : undefined}
+        style={{ cursor: isConfirmed ? "pointer" : "not-allowed" }}
+      >
+        {/* STATUS -  */}
+        <Stacked>
+          <Button
+            size="small"
+            onClick={hanldeConfirm}
+            disabled={!canConfirm}
+            variation={isConfirmed ? "blue" : "danger"}
+          >
+            <FormattedMessage
+              id={isConfirmed ? "status.confirmed" : "status.pending"}
+              defaultMessage={status}
+            />
+
+            {isPending && <SpinnerMini />}
+          </Button>
+        </Stacked>
         <Stacked>
           {category === "tv" ? <span>📺 Tv</span> : <span>🎬 Movie</span>}
           <span></span>
@@ -132,19 +157,6 @@ function ScriptRow({
           <span>{maskEmail(email)}</span>
         </Stacked>
 
-        {/* STATUS -  */}
-        {isAdminPage && (
-          <Button
-            size="small"
-            onClick={hanldeConfirm}
-            disabled={!canConfirm}
-            variation={isConfirmed ? "blue" : "danger"}
-          >
-            {status.replace("-", " ")}
-            {isPending && <SpinnerMini />}
-          </Button>
-        )}
-
         <Modal>
           <Menus>
             <Menus.Menu>
@@ -160,14 +172,16 @@ function ScriptRow({
                 {canDeleteUpdate && (
                   <>
                     <Modal.Open opens="delete">
-                      <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                      <Menus.Button icon={<HiTrash />}>
+                        <FormattedMessage id="modal.menu.delete" />
+                      </Menus.Button>
                     </Modal.Open>
 
                     <Menus.Button
                       icon={<HiPaintBrush />}
                       onClick={hanldeUpdate}
                     >
-                      Update
+                      <FormattedMessage id="modal.menu.update" />
                     </Menus.Button>
                   </>
                 )}

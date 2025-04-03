@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
 import { useMore } from "../../hooks/useMore";
@@ -40,7 +41,9 @@ export default function Episodes() {
           ))}
         </StyledEpisodes>
         {episodes && visibleCount < episodes.length && (
-          <LoadMoreButton onClick={handleLoadMore}>더보기</LoadMoreButton>
+          <LoadMoreButton onClick={handleLoadMore}>
+            <FormattedMessage id="loadMore" defaultMessage="더보기" />
+          </LoadMoreButton>
         )}
       </Box>
     </>

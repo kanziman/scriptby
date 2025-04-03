@@ -1,60 +1,53 @@
-import Slider from "react-slick";
-import ArrowButton from "../../ui/ArrowButton";
+// import Slider from "react-slick";
+// import settings from "../../ui/sliderSettings";
+// import ScriptSliderItem from "./ScriptSliderItem";
+
+// function ScriptSlider({ items = [] }) {
+//   return (
+//     <Slider {...settings}>
+//       {items.map((item) => {
+//         return <ScriptSliderItem item={item} key={item.id} />;
+//       })}
+//     </Slider>
+//   );
+// }
+
+// export default ScriptSlider;
+
+import styled from "styled-components";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import ScriptSliderItem from "./ScriptSliderItem";
 
-const PrevButton = (props) => {
-  const { onClick } = props;
-  return (
-    <ArrowButton style={{ left: "10px" }} onClick={onClick}>
-      {"<"}
-    </ArrowButton>
-  );
-};
-
-const NextButton = (props) => {
-  const { onClick } = props;
-  return (
-    <ArrowButton style={{ right: "10px" }} onClick={onClick}>
-      {">"}
-    </ArrowButton>
-  );
-};
+const StyledSlider = styled.div`
+  /* width: 100%; */
+`;
 
 function ScriptSlider({ items = [] }) {
-  const slidesToShow = 5;
-  const sliderSettings = {
-    dots: true,
-    speed: 500,
-    slidesToScroll: 1,
-    infinite: items.length >= slidesToShow,
-    slidesToShow: slidesToShow,
-    nextArrow: <NextButton />,
-    prevArrow: <PrevButton />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        // 데스크탑에서도 최소 3개를 유지
-        settings: { slidesToShow: 5 },
-      },
-      {
-        breakpoint: 960,
-        // 태블릿에서는 2개 이상
-        settings: { slidesToShow: 4 },
-      },
-      {
-        breakpoint: 800,
-        // 태블릿에서는 2개 이상
-        settings: { slidesToShow: 3 },
-      },
-    ],
-  };
-
   return (
-    <Slider {...sliderSettings}>
-      {items.map((item) => {
-        return <ScriptSliderItem item={item} key={item.id} />;
-      })}
-    </Slider>
+    <StyledSlider>
+      <Swiper
+        modules={[Navigation]}
+        navigation={true}
+        spaceBetween={10}
+        slidesPerView={2}
+        breakpoints={{
+          544: { slidesPerView: 3 },
+          800: { slidesPerView: 3 },
+          960: { slidesPerView: 4 },
+          1024: { slidesPerView: 5 },
+        }}
+        className="script-slider"
+      >
+        {items.map((item, index) => (
+          <SwiperSlide key={index}>
+            <ScriptSliderItem item={item} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </StyledSlider>
   );
 }
 

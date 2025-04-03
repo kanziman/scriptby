@@ -1,4 +1,5 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FormattedMessage, useIntl } from "react-intl";
 import styled from "styled-components";
 import { useSettings } from "../../context/SettingsContext";
 
@@ -6,6 +7,7 @@ const Footer = styled.footer`
   padding: 2.8rem 0;
   border-top: 1px solid #eee;
   background-color: var(--color-grey-50);
+  max-width: 100%;
 `;
 
 const GridFooter = styled.div`
@@ -19,7 +21,6 @@ const GridFooter = styled.div`
   /* row-gap: 3.6rem; */
 
   @media (max-width: 50em) {
-    column-gap: 2.4rem;
     row-gap: 3.6rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto;
@@ -129,6 +130,7 @@ const FooterLink = styled.a`
 `;
 
 function MainFooter() {
+  const intl = useIntl();
   const { isDarkMode } = useSettings();
 
   const src = isDarkMode ? "/logodark.png" : "/logolight.png";
@@ -163,11 +165,19 @@ function MainFooter() {
         </LogoCol>
 
         <ContactCol>
-          <FooterHeading>Contact us</FooterHeading>
+          <FooterHeading>
+            <FormattedMessage
+              id="footer.contactUs"
+              defaultMessage="Contact us"
+            />
+          </FooterHeading>
           <Contacts>
             <Address>
-              135, Misagangbyeonhangang-ro, Hanam-si,
-              <br /> Gyeonggi-do, Republic of Korea
+              <FormattedMessage
+                id="footer.address"
+                defaultMessage="135, Misagangbyeonhangang-ro, Hanam-si, {br}Gyeonggi-do, Republic of Korea"
+                values={{ br: <br /> }}
+              />
             </Address>
             <p>
               <FooterLink href="mailto:scriptby99@gmail.com">
@@ -178,37 +188,73 @@ function MainFooter() {
         </ContactCol>
 
         <NavAccount>
-          <FooterHeading>Account</FooterHeading>
+          <FooterHeading>
+            <FormattedMessage id="footer.account" defaultMessage="Account" />
+          </FooterHeading>
           <FooterNav>
             <li>
-              <FooterLink href="/signup">Create account</FooterLink>
+              <FooterLink href="/signup">
+                <FormattedMessage
+                  id="footer.createAccount"
+                  defaultMessage="Create account"
+                />
+              </FooterLink>
             </li>
             <li>
-              <FooterLink href="/login">Sign in</FooterLink>
+              <FooterLink href="/login">
+                <FormattedMessage id="footer.signIn" defaultMessage="Sign in" />
+              </FooterLink>
             </li>
           </FooterNav>
         </NavAccount>
 
         <NavCompany>
-          <FooterHeading>Company</FooterHeading>
+          <FooterHeading>
+            <FormattedMessage id="footer.company" defaultMessage="Company" />
+          </FooterHeading>
           <FooterNav>
             <li>
-              <FooterLink href="#">About ScriptBy</FooterLink>
+              <FooterLink href="#">
+                <FormattedMessage
+                  id="footer.aboutScriptBy"
+                  defaultMessage="About ScriptBy"
+                />
+              </FooterLink>
             </li>
             <li>
-              <FooterLink href="#">For Business</FooterLink>
+              <FooterLink href="#">
+                <FormattedMessage
+                  id="footer.forBusiness"
+                  defaultMessage="For Business"
+                />
+              </FooterLink>
             </li>
           </FooterNav>
         </NavCompany>
 
         <NavResources>
-          <FooterHeading>Resources</FooterHeading>
+          <FooterHeading>
+            <FormattedMessage
+              id="footer.resources"
+              defaultMessage="Resources"
+            />
+          </FooterHeading>
           <FooterNav>
             <li>
-              <FooterLink href="#">Help center</FooterLink>
+              <FooterLink href="#">
+                <FormattedMessage
+                  id="footer.helpCenter"
+                  defaultMessage="Help center"
+                />
+              </FooterLink>
             </li>
             <li>
-              <FooterLink href="#">Privacy & terms</FooterLink>
+              <FooterLink href="#">
+                <FormattedMessage
+                  id="footer.privacyTerms"
+                  defaultMessage="Privacy & terms"
+                />
+              </FooterLink>
             </li>
           </FooterNav>
         </NavResources>

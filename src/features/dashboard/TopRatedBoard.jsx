@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import styled from "styled-components";
 import FilterGroup from "../../ui/FilterGroup";
 import Heading from "../../ui/Heading";
@@ -12,12 +13,16 @@ const StyledTrendBoard = styled.div`
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-  padding: 3.2rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
   grid-column: 1 / span 2;
-  padding-top: 2.4rem;
+  padding: 2.4rem 3.2rem 1.6rem;
+
+  @media (max-width: 34em) {
+    padding: 1.2rem 0 1.6rem;
+    gap: 1.2rem;
+  }
 `;
 
 function TopRatedBoard({ title, baseType }) {
@@ -26,9 +31,18 @@ function TopRatedBoard({ title, baseType }) {
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const intl = useIntl();
   const filterOptions = [
-    { value: "movie", label: "Movie" },
-    { value: "tv", label: "TV" },
+    {
+      value: "movie",
+      label: intl.formatMessage({
+        id: "option.movie",
+      }),
+    },
+    {
+      value: "tv",
+      label: intl.formatMessage({ id: "option.tv" }),
+    },
   ];
 
   useEffect(() => {
@@ -58,6 +72,7 @@ function TopRatedBoard({ title, baseType }) {
           <Heading as="h2">{title}</Heading>
         </HeadingGroup>
         <FilterGroup
+          size="small"
           filterField="type"
           options={filterOptions}
           value={filter}

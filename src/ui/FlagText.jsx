@@ -5,9 +5,7 @@ const StyledFlagText = styled.div`
   display: flex;
   flex-direction: ${({ type }) => (type === "horizontal" ? "row" : "column")};
   align-items: center;
-  gap: 0.8rem;
-
-  /* margin-bottom: 0.4rem; */
+  gap: ${({ gap }) => (gap ? gap : "0.2rem")};
 `;
 
 const FlagWrapper = styled.span`
@@ -19,15 +17,16 @@ const FlagWrapper = styled.span`
 
 const FlagName = styled.span`
   font-size: 1.2rem;
-  @media (max-width: 90em) {
-    font-size: 1.1rem;
+
+  @media (max-width: 50em) {
+    font-size: 1rem;
   }
-  @media (max-width: 42em) {
+  @media (max-width: 34em) {
     font-size: 0.8rem;
   }
 `;
 
-function FlagText({ code, type = "vertical" }) {
+function FlagText({ code, type = "vertical", gap }) {
   if (!code) {
     console.error("No lang code");
     return;
@@ -39,7 +38,7 @@ function FlagText({ code, type = "vertical" }) {
   if (!language) return null;
 
   return (
-    <StyledFlagText type={type}>
+    <StyledFlagText type={type} gap={gap}>
       <FlagWrapper type={type} role="img" aria-label={language.EnglishName}>
         {language.Flag}
       </FlagWrapper>

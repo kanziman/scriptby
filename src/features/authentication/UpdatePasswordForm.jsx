@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
+import { FormattedMessage } from "react-intl";
+import FormRow from "../../ui/FormRowV1";
 import { useUpdateUser } from "./useUpdateUser";
 
 function UpdatePasswordForm() {
@@ -19,7 +20,12 @@ function UpdatePasswordForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
-        label="Password (min 8 characters)"
+        label={
+          <FormattedMessage
+            id="form.password"
+            defaultMessage="Password (min 8 characters)"
+          />
+        }
         error={errors?.password?.message}
       >
         <Input
@@ -38,7 +44,12 @@ function UpdatePasswordForm() {
       </FormRow>
 
       <FormRow
-        label="Confirm password"
+        label={
+          <FormattedMessage
+            id="form.passwordConfirm"
+            defaultMessage="Confirm password"
+          />
+        }
         error={errors?.passwordConfirm?.message}
       >
         <Input
@@ -53,12 +64,15 @@ function UpdatePasswordForm() {
           })}
         />
       </FormRow>
-      <FormRow>
+      <FormRow hasButton>
         <Button onClick={reset} type="reset" variation="secondary">
-          Cancel
+          <FormattedMessage id="button.cancel" defaultMessage="Cancel" />
         </Button>
         <Button variation="tertiary" disabled={isUpdating}>
-          Update password
+          <FormattedMessage
+            id="button.updateAccount"
+            defaultMessage="Update account"
+          />
         </Button>
       </FormRow>
     </Form>

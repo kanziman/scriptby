@@ -1,12 +1,12 @@
 import { useState } from "react";
 
+import { useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
+import FormRow from "../../ui/FormRowV1";
 import Input from "../../ui/Input";
-
-import { useEffect } from "react";
 import { useUpdateUser } from "./useUpdateUser";
 import { useUser } from "./useUser";
 
@@ -47,11 +47,22 @@ function UpdateUserDataForm() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormRow label="Email address">
+      <FormRow
+        label={
+          <FormattedMessage
+            id="form.emailAddress"
+            defaultMessage="Email address"
+          />
+        }
+      >
         <Input value={email} disabled />
       </FormRow>
 
-      <FormRow label="Full name">
+      <FormRow
+        label={
+          <FormattedMessage id="form.fullName" defaultMessage="Full name" />
+        }
+      >
         <Input
           type="text"
           value={username}
@@ -61,7 +72,15 @@ function UpdateUserDataForm() {
         />
       </FormRow>
 
-      <FormRow label="Avatar image" noFlex>
+      <FormRow
+        label={
+          <FormattedMessage
+            id="form.avatarImage"
+            defaultMessage="Avatar image"
+          />
+        }
+        noFlex
+      >
         <FileInput
           id="avatar"
           accept="image/*"
@@ -70,17 +89,20 @@ function UpdateUserDataForm() {
         />
       </FormRow>
 
-      <FormRow>
+      <FormRow hasButton>
         <Button
           type="reset"
           variation="secondary"
           disabled={isUpdating}
           onClick={handleCancel}
         >
-          Cancel
+          <FormattedMessage id="button.cancel" defaultMessage="Cancel" />
         </Button>
         <Button variation="tertiary" disabled={isUpdating}>
-          Update account
+          <FormattedMessage
+            id="button.updateAccount"
+            defaultMessage="Update account"
+          />
         </Button>
       </FormRow>
     </Form>

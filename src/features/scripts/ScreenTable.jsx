@@ -1,6 +1,7 @@
 import Empty from "../../ui/Empty";
 import Table from "../../ui/Table";
 
+import { FormattedMessage } from "react-intl";
 import { useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import ScreenPagenation from "./ScreenPagenation";
@@ -15,12 +16,14 @@ function ScreenTable({ isToggled, children, hideTranslation }) {
   });
 
   if (isPending) return <Spinner />;
-  if (!script) return <Empty resourceName="no script" />;
+  if (!script) {
+    return <Empty resourceName={<FormattedMessage id="empty.script" />} />;
+  }
 
   return (
     <>
-      <Table columns={isToggled ? "1fr 1fr" : "1fr"} minWidth="500">
-        <Table.Header fixedColmuns={"1fr 1fr"}>{children}</Table.Header>
+      <Table columns={isToggled ? "1fr 1fr" : "1fr"} minWidth="400">
+        <Table.Header fixedColumns={"1fr 1fr"}>{children}</Table.Header>
         <Table.Body
           data={script}
           render={(item, index) => (

@@ -1,11 +1,95 @@
 {
+  "menu.home": "Home",
+  "menu.find": "Find",
+  "menu.scripts": "Scripts",
+  "menu.posts": "Posts",
+  "menu.users": "Users",
+  "menu.account": "Account",
+  "menu.language": "Language",
+  "menu.darkMode": "Dark Mode",
+  "menu.logout": "Log Out",
+  "menu.login": "Log In",
+  "menu.back": "Back",
+
+  "option.movie": "Movie",
+  "option.tv": "Tv",
+  "option.all": "All",
+
+  "flag.scriptTitle": "{language} Script",
+
+  "badge.hot": "HOT",
+  "badge.new": "NEW",
+  "loadMore": "More",
+  "showInfo.firstAired": "First Aired:",
+  "showInfo.runTime": "Run time:",
+  "showInfo.min": "min",
+  "showInfo.genres": "Genres:",
+  "showInfo.released": "Released:",
+  "showInfo.seasons": "Seasons:",
+  "showInfo.episodes": "Episodes:",
+
+  "meta.season": "season",
+  "meta.episode": "episode",
+  "meta.released": "released",
+  "meta.createdBy": "created by",
+
+  "status.confirmed": "Confirmed",
+  "status.pending": "Pending",
+  "status.unconfirmed": "Unconfirmed",
+
+  "pagination.previous": "previous",
+  "pagination.next": "next",
+
+  "sortOptions.created.desc": "latest ⬇️",
+  "sortOptions.created.asc": "oldest ⬇️",
+  "sortOptions.title.desc": "title (Z-A)",
+  "sortOptions.title.asc": "title (A-Z)",
+
+  "search.placeHolder": "🔎 search movie or tv...",
+  "search.scripts": "🔎 search by titles",
+  "search.noData": "No data found",
+
+  "banner.message": "Want to {highlight} and share it with the world?",
+  "banner.applyButton": "Apply to become a tutor",
+  "banner.createYourOwnScript": "create your own script",
+
+  "profile.updateUserData": "✏️ Update user data",
+  "profile.becomeTutor": "Become a tutor",
+  "profile.updatePassword": "‼️ Update password",
+
+  "dashBoard.titleNewScripts": "🎉 New Scripts",
+  "dashBoard.titleTopRated": "⭐️ Top rated",
+  "newScriptBoard.seeAll": "See all",
+
+  "table.header.status": "status",
+  "table.header.type": "type",
+  "table.header.title": "title",
+  "table.header.original": "original",
+  "table.header.info": "info",
+  "table.header.to": "to",
+  "table.header.date": "date",
+  "table.header.contributor": "contributor",
+
   "episode.airDate": "Air Date",
   "episode.rating": "Rating",
   "episode.newScript": "New Script",
   "episode.noScripts": "No Scripts Available",
   "episode.scripts": "scripts",
 
+  "action.registerScript": "Register Script",
+  "action.applyTutor": "Apply to Become a Tutor",
+  "action.pending": "Pending Approval",
+  "action.login": "Login",
+  "notice.episodeRequired": "To register a script, please select a season.",
+  "notice.tutorRequired": "To register a script, you must apply as a tutor.",
+  "notice.loginRequired": "To register a script, you must be logged in.",
+
+  "season.total": "Total {seasons} seasons",
+  "season.episodes": "{count} episodes",
+  "homepage.visit": "Visit Homepage",
+
   "signup.header": "Sign up",
+  "signup.success": "Account successfully created!",
   "signup.yourName": "Your Name",
   "signup.email": "Email address",
   "signup.password": "Password (min 8 characters)",
@@ -23,6 +107,7 @@
 
   "script.add": "add",
   "scriptAdd.addHeader": "Add a script",
+  "scriptAdd.editHeader": "Edit a script",
   "scriptAdd.season": "Season",
   "scriptAdd.episode": "Episode",
   "scriptAdd.creator": "Creator",
@@ -34,14 +119,17 @@
   "tutor.list.create": "Create and share your own script",
   "tutor.list.help": "Help other students with your contents",
   "tutor.list.earn": "Earn recognition for your expertise",
+  "tutor.list.notice": "It may take up to one day for approval after uploading your script",
   "tutor.sendApplication": "Send tutor application",
   "tutor.sendApplicationRequested": "Requested",
   "tutor.sendApplicationConfirmed": "Confirmed",
   "tutor.uploadScriptMessage": "Now go upload your own script ->",
 
-  "button.submit": "submit",
-  "button.modify": "modify",
-  "button.cancel": "cancle",
+  "button.submit": "Submit",
+  "button.modify": "Modify",
+  "button.addPost": "Add Post",
+  "button.cancel": "Cancel",
+  "button.updateAccount": "Update",
 
   "season.seasons": "seasons",
 
@@ -51,11 +139,58 @@
   "file.upload": "Upload",
   "file.download": "Get a sample",
 
+  "post.head": "POSTS",
+  "post.count": "views",
+
+  "post.type": "TYPE",
+  "post.category": "CATEGORY",
+  "post.title": "TITLE",
+  "post.content": "CONTENT",
+
   "post.category.general": "general",
   "post.category.q&a": "q&a",
   "post.category.error": "error",
   "post.category.request": "request",
   "post.type.general": "general",
   "post.type.notice": "notice",
-  "post.type.vote": "vote"
+  "post.type.vote": "vote",
+
+  "empty.noPosts": "no posts",
+  "empty.noPost": "no post",
+  "empty.noShow": "no show",
+  "empty.noScripts": "no scripts",
+  "empty.noScript": "no script",
+  "empty.noData": "No data to show at the moment",
+
+  "filter.lines": "LINES",
+  "filter.words": "WORDS",
+  "filter.phrase": "PHRASE",
+  "filter.idioms": "IDIOMS",
+
+  "modal.menu.edit": "Edit",
+  "modal.menu.delete": "Delete",
+  "modal.menu.register": "Register",
+  "modal.menu.update": "Update",
+
+  "form.emailAddress": "Email address",
+  "form.fullName": "Nick name",
+  "form.avatarImage": "Avatar image",
+  "form.password": "Password (min 8 characters)",
+  "form.passwordConfirm": "Confirm password",
+  "form.file": "Select File",
+
+  "results.summary.lines": "{size} lines of total ({count})",
+  "results.summary.pagination": "{start} ~ {end} of {count} results",
+
+  "footer.contactUs": "Contact us",
+  "footer.address": "135, Misagangbyeonhangang-ro, Hanam-si, {br}Gyeonggi-do, Republic of Korea",
+  "footer.account": "Account",
+  "footer.createAccount": "Create account",
+  "footer.signIn": "Sign in",
+  "footer.company": "Company",
+  "footer.aboutScriptBy": "About ScriptBy",
+  "footer.forBusiness": "For Business",
+  "footer.resources": "Resources",
+  "footer.helpCenter": "Help center",
+  "footer.privacyTerms": "Privacy & terms"
 }

@@ -176,7 +176,6 @@ body {
   line-height: 1.5;
   font-size: 1.6rem;
 
-
 }
 
 
@@ -246,7 +245,32 @@ img {
   filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
 }
 
+/* swiper navigation */
+.swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 20px;       /* 아이콘 크기 조절 */
+    /* color: #ddd; */
+  }
 
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: var(--color-brand);
+    &:after {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  .swiper-wrapper {
+    padding-bottom: 1rem;
+  }
 `;
 
 export default GlobalStyles;

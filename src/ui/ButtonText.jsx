@@ -8,7 +8,7 @@ const ButtonText = styled.button`
   background: none;
   border: none;
   border-radius: var(--border-radius-sm);
-
+  word-break: keep-all;
   ${(props) =>
     props.active &&
     css`

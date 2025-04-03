@@ -5,16 +5,15 @@ const ExpandButton = styled.button`
   display: flex;
   align-items: center;
   background-color: unset;
-  border: 1px solid var(--color-grey-50);
-  border-radius: 5px;
+  border: none;
   padding: 0.4rem 0.8rem;
   position: fixed;
-  top: 10%;
-  left: 1rem;
+  top: 17%;
+  left: 1%;
   z-index: 1000;
   overflow: hidden;
   width: 8rem;
-  color: var(--color-secondary-500);
+  color: var(--color-tertiary-500);
 
   /* hover 시 너비 확장 */
   &:hover {
@@ -26,7 +25,7 @@ const ExpandButton = styled.button`
   /* 화살표 아이콘 */
   & svg {
     font-size: 2.8rem;
-    color: var(--color-secondary-500);
+    color: var(--color-tertiary-500);
     margin-right: 0.6rem;
     flex-shrink: 0;
   }

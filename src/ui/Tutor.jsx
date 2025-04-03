@@ -30,6 +30,7 @@ export const CardContent = styled.div`
 
   li {
     margin-bottom: 0.8rem;
+    color: var(--color-grey-500);
   }
 `;
 
@@ -141,6 +142,13 @@ function Tutor() {
             {formatMessage({
               id: "tutor.list.earn",
               defaultMessage: "Earn recognition for your expertise",
+            })}
+          </li>
+          <li>
+            ❗️{" "}
+            {formatMessage({
+              id: "tutor.list.notice",
+              defaultMessage: "It",
             })}
           </li>
         </ul>

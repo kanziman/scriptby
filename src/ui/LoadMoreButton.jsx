@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const LoadMoreButton = styled.button`
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding: 0.8rem 1.2rem;
   font-size: 1.4rem;
   background-color: var(--color-brand-500);

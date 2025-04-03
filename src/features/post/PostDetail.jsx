@@ -8,6 +8,7 @@ import PostDataBox from "./PostDataBox";
 import { usePost } from "./usePost";
 
 // Import CSS
+import { FormattedMessage } from "react-intl";
 import "reactjs-tiptap-editor/style.css";
 
 function PostDetail() {
@@ -15,13 +16,19 @@ function PostDetail() {
   const { action } = useParams();
 
   if (isPending) return <Spinner />;
-  if (!post) return <Empty resourceName="no show" />;
+
+  if (!post) {
+    return <Empty resourceName={<FormattedMessage id="empty.post" />} />;
+  }
 
   return (
     <>
-      <MainHeading right="moveBack" link={"/post"}>
-        <Heading as="h1">{`전체글`}</Heading>
+      <MainHeading right="moveBack">
+        <Heading as="h1">
+          <FormattedMessage id="post.head" />
+        </Heading>
       </MainHeading>
+
       {action === "edit" ? <EditPost /> : <PostDataBox />}
     </>
   );

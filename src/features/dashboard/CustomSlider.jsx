@@ -1,50 +1,20 @@
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
-import Slider from "react-slick";
 import styled from "styled-components";
-import ArrowButton from "../../ui/ArrowButton";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useSettings } from "../../context/SettingsContext";
 
-// 화살표 버튼 컴포넌트들
-const PrevButton = (props) => {
-  const { onClick } = props;
-  return (
-    <ArrowButton style={{ left: "10px" }} onClick={onClick}>
-      {"<"}
-    </ArrowButton>
-  );
-};
+const StyledSwiperContainer = styled.div`
+  width: 100%;
+  position: relative;
 
-const NextButton = (props) => {
-  const { onClick } = props;
-  return (
-    <ArrowButton style={{ right: "10px" }} onClick={onClick}>
-      {">"}
-    </ArrowButton>
-  );
-};
-
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 5,
-  slidesToScroll: 1,
-  nextArrow: <NextButton />,
-  prevArrow: <PrevButton />,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: { slidesToShow: 5 },
-    },
-    {
-      breakpoint: 960,
-      settings: { slidesToShow: 4 },
-    },
-    {
-      breakpoint: 800,
-      settings: { slidesToShow: 3 },
-    },
-  ],
-};
+  .swiper-wrapper {
+    padding-bottom: 2rem;
+  }
+`;
 
 const StyledItem = styled.div`
   padding: 1rem;
@@ -52,24 +22,49 @@ const StyledItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  /* 최소 높이를 지정해 카드 간 높이 차이가 없도록 */
-  min-height: 30rem;
+  min-height: 20rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 0.8rem;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  /* 고정된 비율 유지 (예: 2:3) */
-  aspect-ratio: 2 / 3;
-  overflow: hidden;
+  aspect-ratio: 7/10;
   margin-bottom: 1rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0.5rem;
+    transition: transform 0.5s ease;
   }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+`;
+
+const Badge = styled.div`
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  color: var(--color-red-700);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  z-index: 2;
 `;
 
 const Title = styled.h3`
@@ -81,31 +76,154 @@ const Title = styled.h3`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* height: 3.2rem;  */
 `;
 
-function CustomSlider({ trends, mediaType }) {
-  const navigate = useNavigate();
+const RatingContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+`;
 
+const RatingStars = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+`;
+
+const Star = styled.span`
+  color: ${(props) => (props.filled ? "#FFD700" : "#E0E0E0")};
+  font-size: 1.2rem;
+`;
+
+const RatingValue = styled.span`
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-grey-700);
+`;
+
+const ReleaseDate = styled.p`
+  font-size: 1.2rem;
+  color: var(--color-grey-600);
+  margin-bottom: 0.5rem;
+  align-self: center;
+  font-weight: 300;
+`;
+
+const Genres = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+`;
+
+const GenreTag = styled.span`
+  background-color: var(--color-grey-200);
+  color: var(--color-grey-700);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  font-size: 0.8rem;
+`;
+
+function formatDate(dateString, locale) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString(locale, {
+    year: "numeric",
+    // month: "short",
+    // day: "numeric",
+  });
+}
+
+function renderStars(rating) {
+  if (!rating) return null;
+
+  const normalizedRating = rating / 2; // Assuming rating is out of 10
+  const stars = [];
+
+  for (let i = 1; i <= 5; i++) {
+    if (i <= normalizedRating) {
+      stars.push(
+        <Star key={i} filled>
+          ★
+        </Star>
+      );
+    } else if (i - 0.5 <= normalizedRating) {
+      stars.push(
+        <Star key={i} filled>
+          ★
+        </Star>
+      );
+    } else {
+      stars.push(<Star key={i}>☆</Star>);
+    }
+  }
+
+  return stars;
+}
+
+function getGenreName(id, genreMap) {
+  return genreMap[id] || "";
+}
+
+function CustomSlider({ trends, mediaType, genres = {} }) {
+  const intl = useIntl();
+
+  const navigate = useNavigate();
+  const { locale } = useSettings();
   const handleClick = (trendId) => {
-    // mediaType 값을 포함하여 상세 페이지로 이동합니다.
     navigate(`/trend/${mediaType}/${trendId}`);
   };
 
   return (
-    <Slider {...settings}>
-      {trends.map((trend) => (
-        <StyledItem key={trend.id} onClick={() => handleClick(trend.id)}>
-          <ImageWrapper>
-            <img
-              src={`https://image.tmdb.org/t/p/w500${trend.poster_path}`}
-              alt={trend.title || trend.name}
-            />
-          </ImageWrapper>
-          <Title>{trend.title || trend.name}</Title>
-        </StyledItem>
-      ))}
-    </Slider>
+    <StyledSwiperContainer>
+      <Swiper
+        modules={[Navigation]}
+        navigation={true}
+        spaceBetween={15}
+        slidesPerView={3} // 기본: 작은 화면에서 2개 표시
+        breakpoints={{
+          544: { slidesPerView: 3 },
+          800: { slidesPerView: 3 },
+          960: { slidesPerView: 4 },
+          1024: { slidesPerView: 5 },
+        }}
+        className="script-slider"
+      >
+        {trends.map((trend) => (
+          <SwiperSlide key={trend.id}>
+            <StyledItem onClick={() => handleClick(trend.id)}>
+              <ImageWrapper>
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${trend.poster_path}`}
+                  alt={trend.title || trend.name}
+                />
+                {trend.vote_average > 7.5 && (
+                  <Badge>
+                    {intl.formatMessage({
+                      id: "badge.hot",
+                    })}
+                  </Badge>
+                )}
+              </ImageWrapper>
+              <Title>{trend.title || trend.name}</Title>
+
+              <RatingContainer>
+                <RatingStars>{renderStars(trend.vote_average)}</RatingStars>
+                <RatingValue>
+                  {trend.vote_average ? trend.vote_average.toFixed(1) : "N/A"}
+                </RatingValue>
+              </RatingContainer>
+
+              <ReleaseDate>
+                {formatDate(trend.release_date || trend.first_air_date, locale)}
+              </ReleaseDate>
+            </StyledItem>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </StyledSwiperContainer>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 
 const HiddenFileInput = styled.input.attrs({ type: "file" })`
@@ -62,7 +63,7 @@ function FileInput({ onChange, disabled }) {
         disabled={disabled}
       />
       <CustomButton type="button" onClick={handleButtonClick}>
-        Select File
+        <FormattedMessage id="form.file" defaultMessage="Select File" />
       </CustomButton>
       {fileName && <FileNameDisplay>{fileName}</FileNameDisplay>}
     </Container>

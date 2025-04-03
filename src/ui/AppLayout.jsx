@@ -14,12 +14,11 @@ const StyledAppLayout = styled.div`
 
 const Main = styled.main`
   background-color: var(--color-grey-50);
-  padding: 4rem 4.8rem 6.4rem;
-  /* overflow: scroll; */
+  padding: 2rem 4.8rem 6.4rem;
 
   width: 100%;
   @media (max-width: 34em) {
-    padding: 2rem 2.4rem 3.2rem;
+    padding: 2rem 0rem 3.2rem;
   }
 `;
 
@@ -28,16 +27,18 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
-  width: 100%;
-
+  @media (max-width: 34em) {
+    padding: 0 1rem;
+  }
+  /* width: 100%; */
   max-width: ${({ theme }) => theme.breakpoints.desktop};
 
   @media (max-width: 84em) {
     max-width: ${({ theme }) => theme.breakpoints.smallDesktop};
   }
-  @media (max-width: 75em) {
-    max-width: ${({ theme }) => theme.breakpoints.landScapeTablet};
-  }
+  /* @media (max-width: 75em) {
+max-width: ${({ theme }) => theme.breakpoints.landScapeTablet};
+} */
   @media (max-width: 60em) {
     max-width: ${({ theme }) => theme.breakpoints.tablet};
   }
@@ -46,6 +47,7 @@ const Container = styled.div`
   }
   @media (max-width: 34em) {
     max-width: ${({ theme }) => theme.breakpoints.mobile};
+    /* max-width: 100%; */
   }
 `;
 
@@ -72,7 +74,7 @@ const SidebarModal = styled.div`
     width: 70%;
   }
   @media (max-width: 50rem) {
-    width: 80%;
+    width: 90%;
   }
 `;
 

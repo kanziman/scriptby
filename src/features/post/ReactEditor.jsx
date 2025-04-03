@@ -4,14 +4,8 @@ import "react-quill/dist/quill.snow.css";
 // import ReactQuill from "react-quill-new";
 // import "react-quill-new/dist/quill.snow.css";
 
-import { ImageActions } from "@xeger/quill-image-actions";
-import { ImageFormats } from "@xeger/quill-image-formats";
-import { Quill } from "react-quill";
 import styled from "styled-components";
 import ReactModule from "./reactModule";
-
-Quill.register("modules/imageActions", ImageActions);
-Quill.register("modules/imageFormats", ImageFormats);
 
 const CustomQuillEditorView = styled.div`
   #toolBar {

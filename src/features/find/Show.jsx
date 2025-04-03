@@ -13,20 +13,26 @@ const StyledCard = styled.li`
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  /* padding: 1rem; */
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--color-grey-50);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  aspect-ratio: 3/4;
+  aspect-ratio: 2/3;
   overflow: hidden;
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
     transition: transform 0.3s ease;
   }
 
@@ -35,62 +41,83 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const DetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* 채워지는 영역에서 제목은 위쪽, InfoRow는 아래쪽에 배치 */
-  justify-content: space-between;
-  flex: 1; /* 부모의 남은 공간을 모두 차지 */
-  padding: 0 2rem 2rem;
-  gap: 1rem;
-
-  @media (max-width: 54em) {
-    gap: 0.3rem;
-    padding: 0 1rem 1rem;
-  }
+const Overlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 1rem;
+  padding-top: 3rem;
 `;
 
 const ShowName = styled.h3`
   margin: 0;
-  font-size: 1.8rem;
-  color: var(--color-grey-800);
+  font-size: 1.4rem;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* text-overflow: ellipsis; */
 
-  @media (max-width: 80em) {
-    font-size: 1.6rem;
-  }
-  @media (max-width: 70em) {
-    font-size: 1.4rem;
-  }
-  @media (max-width: 54rem) {
+  @media (max-width: 50em) {
     font-size: 1.2rem;
   }
 `;
 
-// InfoRow는 이제 별도의 margin-top가 필요하지 않습니다.
-const InfoRow = styled.div`
+const DetailsContainer = styled.div`
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 1.2rem;
-  color: var(--color-grey-500);
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-grey-50);
+`;
 
-  @media (max-width: 54em) {
+const InfoItems = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color-grey-600);
+  font-size: 1.1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 50em) {
+    font-size: 1rem;
+    gap: 0.4rem;
+  }
+  @media (max-width: 34em) {
     gap: 0.2rem;
-    & span {
-      font-size: 1rem;
-    }
+    font-size: 0.8rem;
   }
 `;
 
-const RowItem = styled.div`
+const InfoItem = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.3rem;
+`;
+
+const Rating = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  color: var(--color-grey-800);
+  background-color: var(--color-grey-100);
+  padding: 0.3rem 0.6rem;
+  border-radius: 1rem;
+
+  span[role="img"] {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 50em) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 34em) {
+    font-size: 1rem;
+  }
 `;
 
 export default function Show({ show }) {
@@ -106,34 +133,35 @@ export default function Show({ show }) {
           src={poster ? `${IMG_PATH}${poster}` : DEFAULT_IMAGE}
           alt={`${name} poster`}
         />
+        <Overlay>
+          <ShowName>{name}</ShowName>
+        </Overlay>
       </ImageWrapper>
-      <DetailsContainer>
-        <ShowName>{name}</ShowName>
-        <InfoRow>
-          <RowItem>
-            <FlagText code={originalLanguage} type="horizontal" />
-          </RowItem>
-          <RowItem>
-            {date && (
-              <>
-                <span role="img" aria-label="calendar">
-                  🗓
-                </span>
-                <span>{format(new Date(date), "yyyy.MM.dd")}</span>
-              </>
-            )}
-            {date && vote && <span style={{ margin: "0 0.1rem" }}>|</span>}
 
-            {vote && (
-              <>
-                <span role="img" aria-label="rating">
-                  ⭐️
-                </span>
-                <span>{vote}</span>
-              </>
-            )}
-          </RowItem>
-        </InfoRow>
+      <DetailsContainer>
+        <InfoItems>
+          <InfoItem>
+            <FlagText code={originalLanguage} type="horizontal" />
+          </InfoItem>
+
+          {date && (
+            <InfoItem>
+              <span role="img" aria-label="calendar">
+                🗓
+              </span>
+              <span>{format(new Date(date), "yyyy")}</span>
+            </InfoItem>
+          )}
+        </InfoItems>
+
+        {vote && (
+          <Rating>
+            <span role="img" aria-label="rating">
+              ⭐️
+            </span>
+            <span>{vote}</span>
+          </Rating>
+        )}
       </DetailsContainer>
     </StyledCard>
   );

@@ -5,7 +5,7 @@ const StyledFlagText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
+  /* gap: 0.8rem; */
   /* margin-bottom: 0.4rem; */
 `;
 
@@ -15,16 +15,14 @@ const FlagWrapper = styled.span`
 `;
 
 const FlagName = styled.span`
-  font-size: 1.2rem;
-  @media (max-width: 90em) {
-    font-size: 1.1rem;
-  }
-  @media (max-width: 42em) {
+  font-size: 1rem;
+
+  @media (max-width: 34em) {
     font-size: 0.8rem;
   }
 `;
 
-function FlagTextVertical({ code }) {
+function FlagTextVertical({ code, textOnly = false, flagOnly = false }) {
   if (!code) {
     console.error("No lang code");
     return;
@@ -37,10 +35,12 @@ function FlagTextVertical({ code }) {
 
   return (
     <StyledFlagText>
-      <FlagWrapper role="img" aria-label={language.EnglishName}>
-        {language.Flag}
-      </FlagWrapper>
-      <FlagName>{language.EnglishName}</FlagName>
+      {!textOnly && (
+        <FlagWrapper role="img" aria-label={language.EnglishName}>
+          {language.Flag}
+        </FlagWrapper>
+      )}
+      {!flagOnly && <FlagName>{language.EnglishName}</FlagName>}
     </StyledFlagText>
   );
 }

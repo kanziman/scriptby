@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
@@ -8,10 +9,10 @@ const StyledHeaderPageMenu = styled.ul`
   align-items: center;
   gap: 0.2rem;
   font-family: "Sono";
-
+  /* 
   li:nth-child(2) {
     display: none;
-  }
+  } */
   @media (max-width: 50em) {
     gap: 0;
 
@@ -34,7 +35,7 @@ const StyledNavLink = styled(NavLink)`
     align-items: center;
     gap: 1.2rem;
     color: var(--color-grey-600);
-    padding: ${(props) => (props.noPadding ? "0 1.2rem" : "0.6rem 1.2rem")};
+    padding: 0.6rem 1.2rem;
     transition: all 0.3s;
   }
 
@@ -46,48 +47,57 @@ const StyledNavLink = styled(NavLink)`
     border-radius: var(--border-radius-sm);
   }
 
-  &:hover svg,
-  &:active svg,
-  &.active:link svg,
-  &.active:visited svg {
-    color: var(--color-brand-600);
+  @media (max-width: 34em) {
+    &:link,
+    &:visited {
+      padding: 0.6rem;
+    }
   }
 `;
 
-function HeaderPageMenu() {
+function HeaderNavMenu() {
   const { user } = useUser();
-  console.log("user :>> ", user);
   return (
     <StyledHeaderPageMenu>
       <li>
-        <StyledNavLink to="/" $noPadding>
+        <StyledNavLink to="/">
           <Logo size="medium" />
         </StyledNavLink>
       </li>
       <li>
         <StyledNavLink to="/dashboard">
-          <span>home</span>
+          <span>
+            <FormattedMessage id="menu.home" />
+          </span>
         </StyledNavLink>
       </li>
       <li>
         <StyledNavLink to="/find">
-          <span>find</span>
+          <span>
+            <FormattedMessage id="menu.find" />
+          </span>
         </StyledNavLink>
       </li>
       <li>
         <StyledNavLink to="/scripts">
-          <span>scripts</span>
+          <span>
+            <FormattedMessage id="menu.scripts" />
+          </span>
         </StyledNavLink>
       </li>
       <li>
         <StyledNavLink to="/posts">
-          <span>posts</span>
+          <span>
+            <FormattedMessage id="menu.posts" />
+          </span>
         </StyledNavLink>
       </li>
       {user?.isMaster && (
         <li>
           <StyledNavLink to="/users">
-            <span>users</span>
+            <span>
+              <FormattedMessage id="menu.users" />
+            </span>
           </StyledNavLink>
         </li>
       )}
@@ -95,4 +105,4 @@ function HeaderPageMenu() {
   );
 }
 
-export default HeaderPageMenu;
+export default HeaderNavMenu;

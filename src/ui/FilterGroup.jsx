@@ -9,12 +9,15 @@ const StyledFilter = styled.div`
   padding: 0.4rem;
   display: flex;
   gap: 0.4rem;
+  height: 100%;
 `;
 
 const FilterButton = styled.button`
+  height: 100%;
   background-color: var(--color-grey-100);
   color: var(--color-grey-700);
   border: none;
+  word-break: keep-all;
 
   ${(props) =>
     props.active &&
@@ -24,7 +27,7 @@ const FilterButton = styled.button`
     `}
 
   border-radius: var(--border-radius-sm);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.4rem;
   /* To give the same height as select */
   padding: 0.44rem 0.8rem;
@@ -35,12 +38,16 @@ const FilterButton = styled.button`
     color: var(--color-brand-50);
   }
 
-  @media (max-width: 50em) {
-    font-size: 1.2rem;
-  }
+  /* ${(props) =>
+    props.size === "small" &&
+    css`
+      @media (max-width: 34em) {
+        font-size: 1rem !important;
+      }
+    `} */
 `;
 
-function Filter({ filterField, options, onChange, value }) {
+function Filter({ filterField, options, onChange, value, size }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = value
     ? value
@@ -60,10 +67,9 @@ function Filter({ filterField, options, onChange, value }) {
     <StyledFilter>
       {options.map((option) => (
         <FilterButton
-          size="small"
+          size={size}
           key={option.value}
           onClick={() => handleClick(option.value)}
-          // onClick={() => handleClick(option.value)}
           active={option.value === currentFilter}
           disabled={option.value === currentFilter}
         >

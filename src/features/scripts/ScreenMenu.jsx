@@ -5,6 +5,7 @@ import {
   PiTranslate,
   PiTranslateFill,
 } from "react-icons/pi";
+import { useIntl } from "react-intl";
 import styled from "styled-components";
 import ButtonIcon from "../../ui/ButtonIcon";
 import FilterGroup from "../../ui/FilterGroup";
@@ -13,7 +14,6 @@ import TableOperations from "../../ui/TableOperations";
 const StyledScreenMenu = styled.ul`
   display: flex;
   gap: 0.4rem;
-  /* justify-content: space-around; */
   justify-content: ${(props) =>
     props.type === "end" ? "flex-end" : "flex-start"};
 
@@ -24,6 +24,12 @@ const StyledScreenMenu = styled.ul`
   div {
     display: flex;
   }
+  @media (max-width: 34em) {
+    & svg {
+      width: 1.8rem;
+      height: 1.8rem;
+    }
+  }
 `;
 
 function ScreenMenu({
@@ -33,19 +39,42 @@ function ScreenMenu({
   onHide,
   hideTranslation,
 }) {
+  const intl = useIntl();
+  const options = [
+    {
+      value: "lines",
+      label: intl.formatMessage({
+        id: "filter.lines",
+        defaultMessage: "LINES",
+      }),
+    },
+    {
+      value: "words",
+      label: intl.formatMessage({
+        id: "filter.words",
+        defaultMessage: "WORDS",
+      }),
+    },
+    {
+      value: "phrasal_verbs",
+      label: intl.formatMessage({
+        id: "filter.phrase",
+        defaultMessage: "PHRASE",
+      }),
+    },
+    {
+      value: "idioms",
+      label: intl.formatMessage({
+        id: "filter.idioms",
+        defaultMessage: "IDIOMS",
+      }),
+    },
+  ];
   return (
     <>
       <StyledScreenMenu type="start">
         <TableOperations>
-          <FilterGroup
-            filterField="dataType"
-            options={[
-              { value: "lines", label: "LINES" },
-              { value: "words", label: "WORDS" },
-              { value: "phrasal_verbs", label: "PHRASE" },
-              { value: "idioms", label: "IDIOMS" },
-            ]}
-          />
+          <FilterGroup size="small" filterField="dataType" options={options} />
         </TableOperations>
       </StyledScreenMenu>
       <StyledScreenMenu type="end">

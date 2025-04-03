@@ -1,4 +1,4 @@
-import { PAGE_SIZE } from "../../../final-6-final/src/utils/constants";
+import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 

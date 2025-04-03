@@ -9,17 +9,15 @@ export const theme = {
     /* 59em BELOW 960px (Tablets) */
     tablet: "75rem", // 태블릿 기준
     /* 50em BELOW 800px (Smaller tablets) */
-    smallTablet: "65rem", // 모바일 기준
+    smallTablet: "55rem", // 모바일 기준
     /* 34em BELOW 544px (Phones) */
-    mobile: "44rem", // 모바일 기준
+    mobile: "37.5rem", // 모바일 기준
   },
   colors: {
     primary: "#3498db",
     secondary: "#2ecc71",
-    // ...추가 색상
   },
   fonts: {
     primary: '"Poppins", "Sono", sans-serif',
-    // ...추가 폰트
   },
 };

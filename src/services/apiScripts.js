@@ -78,6 +78,98 @@ export async function getScriptsWithFilter({ filter, sortBy, page, size }) {
 
   return { data, count };
 }
+/// GET ALL WITH FILTER
+export async function getScriptsWithFilterV1({
+  filter,
+  sortBy,
+  page,
+  size,
+  query,
+  signal,
+}) {
+  // 1. 전체 행수(count)를 조회하기 위한 베이스 쿼리 생성
+  let baseQuery = supabase
+    .from("scripts")
+    .select("*, tv:tvs(*), profile:profiles(email,username)", {
+      count: "exact",
+      signal, // abort signal 전달
+    });
+
+  if (filter) {
+    if (Array.isArray(filter)) {
+      filter.forEach((f) => {
+        baseQuery = baseQuery[f.method || "eq"](f.field, f.value);
+      });
+    } else {
+      baseQuery = baseQuery[filter.method || "eq"](filter.field, filter.value);
+    }
+  }
+
+  // 검색어(query)가 있을 경우 original_name 필드에 대해 대소문자 구분 없이 검색 적용
+  if (query) {
+    baseQuery = baseQuery.ilike("original_name", `%${query}%`);
+  }
+
+  if (sortBy) {
+    baseQuery = baseQuery.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+  }
+
+  // 2. count만 먼저 가져옴
+  const { count, error: countError } = await baseQuery;
+  if (countError) {
+    console.error(countError);
+    throw new Error("Scripts could not be loaded (count error)");
+  }
+
+  const totalCount = count;
+  const pageCount = Math.ceil(totalCount / size);
+  // 요청한 페이지가 전체 페이지 수보다 크면 마지막 페이지로 보정
+  const currentPage = page > pageCount ? pageCount : page;
+  const from = (currentPage - 1) * size;
+  // 마지막 페이지의 경우 to 값은 totalCount - 1, 그 외는 from + size - 1
+  const to = currentPage === pageCount ? totalCount - 1 : from + size - 1;
+
+  // 3. 동일한 조건으로 range를 적용하여 실제 데이터를 조회
+  let q = supabase
+    .from("scripts")
+    .select("*, tv:tvs(*), profile:profiles(email,username)", {
+      count: "exact",
+      signal, // abort signal 전달
+    });
+
+  if (filter) {
+    if (Array.isArray(filter)) {
+      filter.forEach((f) => {
+        q = q[f.method || "eq"](f.field, f.value);
+      });
+    } else {
+      q = q[filter.method || "eq"](filter.field, filter.value);
+    }
+  }
+
+  if (query) {
+    q = q.ilike("original_name", `%${query}%`);
+  }
+
+  if (sortBy) {
+    q = q.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+  }
+
+  q = q.range(from, to);
+
+  const { data, error } = await q;
+
+  if (error) {
+    console.error(error);
+    throw new Error("Scripts could not be loaded (data error)");
+  }
+
+  return { data, count };
+}
 
 /// For
 export async function getScriptDataById(id) {

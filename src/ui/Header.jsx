@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import UserAvatar from "../features/authentication/UserAvatar";
 import HeaderMenu from "./HeaderMenu";
-import HeaderPageMenu from "./HeaderPageMenu";
+import HeaderNavMenu from "./HeaderNavMenu";
 
 import { useEffect, useRef, useState } from "react";
 import { useIsBrowser } from "../hooks/useIsBrowser";
@@ -15,9 +15,9 @@ const StyledHeader = styled.header`
   grid-template-columns: 1fr auto auto;
   align-items: center;
   padding: 0.8rem 4.8rem;
-  width: 100%;
-  margin: 0 auto;
-  justify-content: space-between;
+  max-width: 100%;
+  /* margin: 0 auto; */
+  /* justify-content: space-between; */
   transition: all 0.3s ease-in-out;
 
   &.sticky {
@@ -31,6 +31,11 @@ const StyledHeader = styled.header`
 
   @media (max-width: 50em) {
     padding: 0.8rem 2.4rem;
+  }
+  @media (max-width: 34em) {
+    padding: 1rem 1rem;
+    font-weight: 500;
+    font-size: 1.8rem;
   }
 `;
 
@@ -77,7 +82,7 @@ function Header() {
 
   return (
     <StyledHeader ref={headerRef} className={isSticky ? "sticky" : ""}>
-      <HeaderPageMenu />
+      <HeaderNavMenu />
       <UserAvatar isBrowserSmall={isBrowserSmall} />
       <HeaderMenu />
     </StyledHeader>

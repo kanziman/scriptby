@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -8,7 +9,6 @@ import FilterGroup from "../../ui/FilterGroup";
 import Heading from "../../ui/Heading";
 import HeadingGroup from "../../ui/HeadingGroup";
 import Spinner from "../../ui/Spinner";
-import { TMDB_BASE_URL, TMDB_KEY } from "../../utils/constants";
 import ScriptSlider from "./ScriptSlider";
 import { useNewScripts } from "./useNewScripts";
 
@@ -19,15 +19,14 @@ const StyledTrendBoard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
-  grid-column: 1 / span 2;
-  padding: 2.4rem 3.2rem 3.2rem;
+  padding: 2.4rem 3.2rem 1.6rem;
 
   @media (max-width: 34em) {
-    padding: 1.2rem 1.6rem 2.8rem;
+    padding: 1.2rem 0 1.6rem;
+    gap: 1.2rem;
   }
 `;
 
-// RightAlignedButtonText는 margin-left: auto를 적용하여 오른쪽 끝에 붙게 함
 const RightAlignedButtonText = styled(ButtonText)`
   margin-left: auto;
 `;
@@ -38,17 +37,30 @@ function NewScriptBoard({ title, baseType }) {
   // 기본 filter 값 (예: "movie")
   const [filter, setFilter] = useState("movie");
   const [items, setItems] = useState([]);
-
+  const intl = useIntl();
   const filterOptions = [
-    { value: "all", label: "All" },
-    { value: "movie", label: "Movie" },
-    { value: "tv", label: "TV" },
+    {
+      value: "all",
+      label: intl.formatMessage({
+        id: "option.all",
+      }),
+    },
+    {
+      value: "movie",
+      label: intl.formatMessage({
+        id: "option.movie",
+      }),
+    },
+    {
+      value: "tv",
+      label: intl.formatMessage({ id: "option.tv" }),
+    },
   ];
 
   // baseType이 "newScripts"인지 여부 확인
   const isNewScripts = baseType === "newScripts";
 
-  // newScripts일 경우에는 커스텀 hook을 사용
+  // TODO: to react-query
   const { isPending, newScripts } = useNewScripts({ options: filterOptions });
 
   useEffect(() => {
@@ -57,13 +69,6 @@ function NewScriptBoard({ title, baseType }) {
         if (isNewScripts) {
           const filtered = newScripts;
           setItems(filtered || []);
-        } else {
-          // top_rated 등 다른 baseType일 경우 TMDB API 호출
-          const response = await fetch(
-            `${TMDB_BASE_URL}/${filter}/${baseType}?api_key=${TMDB_KEY}`
-          );
-          const data = await response.json();
-          setItems(data.results);
         }
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -79,6 +84,7 @@ function NewScriptBoard({ title, baseType }) {
       <HeadingGroup>
         <Heading as="h2">{title}</Heading>
         <FilterGroup
+          size="small"
           filterField="new-script"
           options={filterOptions}
           onChange={(newFilter) => setFilter(newFilter)}
@@ -88,7 +94,9 @@ function NewScriptBoard({ title, baseType }) {
             navigate("/scripts");
           }}
         >
-          <span>See all &rarr;</span>
+          <span>
+            <FormattedMessage id="newScriptBoard.seeAll" /> &rarr;
+          </span>
         </RightAlignedButtonText>
       </HeadingGroup>
       <ScriptSlider items={items} />

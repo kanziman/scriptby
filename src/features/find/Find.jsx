@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
 import ErrorMessage from "../../ui/ErrorMessage";
-import MainHeading from "../../ui/MainHeading";
 import Row from "../../ui/Row";
 import Spinner from "../../ui/Spinner";
 import Episodes from "./Episodes";
@@ -15,10 +14,16 @@ const RowGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto;
   gap: 5rem;
+  min-height: 30vh;
+  padding: 0 1rem;
 
-  @media (max-width: 80rem) {
+  @media (max-width: 50em) {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+  }
+  @media (max-width: 34em) {
+    padding: 0;
+    gap: 1rem;
   }
 `;
 
@@ -37,8 +42,6 @@ function Find() {
 
   return (
     <>
-      <MainHeading />
-
       <Row type="horizontal">
         <Search />
       </Row>

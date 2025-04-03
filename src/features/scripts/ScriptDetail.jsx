@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { FormattedMessage } from "react-intl";
 import { useParams, useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
 import MainHeading from "../../ui/MainHeading";
@@ -37,9 +38,9 @@ function ScriptDetail() {
   }, [pageParam, searchParams, setSearchParams]);
 
   if (isPending) return <Spinner />;
-  if (!scriptId) return <Empty resourceName="no show" />;
-
-  console.log("show :>> ", show);
+  if (!scriptId) {
+    return <Empty resourceName={<FormattedMessage id="empty.script" />} />;
+  }
 
   return (
     <>

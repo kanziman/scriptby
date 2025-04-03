@@ -16,8 +16,11 @@ import {
   EpisodeInfo,
   EpisodeLabel,
   EpisodeName,
+  LocalizedTitle,
+  OriginalTitle,
   ShowInfoWrapper,
   ShowTitle,
+  YearLabel,
 } from "../../ui/ShowTitleGroup";
 import Spinner from "../../ui/Spinner";
 import Tag from "../../ui/Tag";
@@ -46,7 +49,7 @@ const Backdrop = styled.div`
 `;
 const ContentWrapper = styled.div`
   position: absolute;
-  top: 20%;
+  top: 5%;
   left: 5%;
   display: flex;
   gap: 2rem;
@@ -81,6 +84,9 @@ const Footer = styled.footer`
     font-weight: 500;
     letter-spacing: 0.5px;
   }
+  @media (max-width: 34em) {
+    font-size: 0.8rem;
+  }
 `;
 const StyledFlagGroup = styled.div`
   display: flex;
@@ -101,6 +107,15 @@ const DataItemContainer = styled.div`
   transition: transform 0.2s;
   &:hover {
     transform: translateX(5px);
+  }
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
+    & select,
+    button,
+    input {
+      font-size: 1rem;
+      padding: 0.6rem;
+    }
   }
 `;
 
@@ -163,10 +178,12 @@ function EditScriptForm({
     let baseScript = {
       original_language: originalLanguage,
       translated_language: selectedLanguage,
+      name,
       original_name: originalName,
       user_id: userId,
       file_name: fName,
       show_category: category,
+      status: "pending",
     };
     if (selectedEpisode && category === "tv") {
       // selectedEpisode에서 불필요한 scripts 속성은 제거
@@ -235,8 +252,13 @@ function EditScriptForm({
           <Header>
             <ShowInfoWrapper>
               <ShowTitle backdropColor>
-                {name}
-                {date && <span> ({format(new Date(date), "yyyy")})</span>}
+                <OriginalTitle>{originalName}</OriginalTitle>
+                {date && (
+                  <YearLabel backdropColor>
+                    ({format(new Date(date), "yyyy")})
+                  </YearLabel>
+                )}
+                <LocalizedTitle backdropColor>{name}</LocalizedTitle>
               </ShowTitle>
               {category === "tv" && (
                 <>

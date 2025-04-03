@@ -3,6 +3,7 @@ import { useSettings } from "../context/SettingsContext";
 
 const StyledLogo = styled.div`
   text-align: center;
+  border-bottom: 1px solid var(--color-brand-500);
 `;
 
 const Img = styled.img`
@@ -11,7 +12,7 @@ const Img = styled.img`
   ${(props) =>
     props.size === "large" &&
     css`
-      height: 12.6rem;
+      height: 8rem;
     `}
   ${(props) =>
     props.size === "medium" &&
@@ -22,7 +23,6 @@ const Img = styled.img`
 
 function Logo({ size }) {
   const { isDarkMode } = useSettings();
-
   const src = isDarkMode ? "/logodark.png" : "/logolight.png";
 
   return (

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../ui/Button";
@@ -102,7 +103,7 @@ function PostData({ post }) {
   const postId = post?.id;
   const isWriter = currentUser?.id === post?.user_id;
   const avatarImg = avatar || "/default-user.jpg";
-  const typeLable = POST_TYPE_OPTIONS.find(
+  const typeLabel = POST_TYPE_OPTIONS.find(
     (option) => option.value === category
   )?.label;
   const handleDelete = function (id) {
@@ -114,11 +115,12 @@ function PostData({ post }) {
       <Title>{title}</Title>
       <MetaInfo>
         <CategoryWrapper>
-          {
-            <Tag round="square" type={statusToTagName[category]}>
-              {typeLable}
-            </Tag>
-          }
+          <Tag round="square" type={statusToTagName[category]}>
+            <FormattedMessage
+              id={`post.type.${category}`}
+              defaultMessage={typeLabel}
+            />
+          </Tag>
         </CategoryWrapper>
 
         <UserInfoRow>
@@ -130,25 +132,25 @@ function PostData({ post }) {
             <TimeStamp dateTime={createdAt}>
               {customTimeFormat(createdAt)}
             </TimeStamp>
-            <ViewCount>조회 {view}</ViewCount>
+            <ViewCount>
+              {view} <FormattedMessage id="post.count" />
+            </ViewCount>
           </MetaGroup>
 
           {(isWriter || currentUser?.isMaster) && (
             <WriterGroupButton>
               <Modal>
-                {/* Delete 버튼 */}
                 <Modal.Open opens="delete">
                   <Button size="small" variation="danger">
-                    Delete
+                    <FormattedMessage id="modal.menu.delete" />
                   </Button>
                 </Modal.Open>
 
-                {/* Edit 버튼 - 별도의 Modal.Open으로 감싸기 */}
                 <Button
                   size="small"
                   onClick={() => navigate(`/posts/edit/${postId}`)}
                 >
-                  Edit
+                  <FormattedMessage id="modal.menu.edit" />
                 </Button>
 
                 {/* Modal Windows */}

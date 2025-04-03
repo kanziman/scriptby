@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
@@ -10,14 +11,18 @@ function Posts() {
   return (
     <>
       <MainHeading right="moveBack">
-        <Heading as="h1">{`전체글`}</Heading>
+        <Heading as="h1">
+          <FormattedMessage id="post.head" />
+        </Heading>
       </MainHeading>
 
       <PostTable></PostTable>
 
       <ButtonGroup>
         <Button onClick={() => navigate("/post/add")}>
-          <span>새글</span>
+          <span>
+            <FormattedMessage id="button.addPost" />
+          </span>
         </Button>
       </ButtonGroup>
     </>

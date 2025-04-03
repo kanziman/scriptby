@@ -91,14 +91,13 @@ const Button = styled.button`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
+  word-break: keep-all;
 
   ${(props) => sizes[props.size]}
-  ${(props) => variations[props.variation]} /* @media (max-width: 90rem) {
+  ${(props) => variations[props.variation]}
+  @media (max-width: 34em) {
     font-size: 1.2rem;
   }
-  @media (max-width: 70rem) {
-    font-size: 1rem;
-  } */
 `;
 
 Button.defaultProps = {

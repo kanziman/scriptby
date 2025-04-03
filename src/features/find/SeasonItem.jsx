@@ -1,95 +1,112 @@
 import { format } from "date-fns";
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { DEFAULT_IMAGE, IMG_PATH } from "../../utils/constants";
 
 const StyledSeasonItem = styled.li`
   position: relative;
-  display: grid;
-  grid-template-columns: 9rem 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 2rem;
-  align-items: center;
-  padding: 1rem 2.4rem;
-  border-bottom: 1px solid var(--color-grey-200);
-  border-radius: 5px;
+  display: flex;
+  padding: 1.2rem;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
+  background-color: var(--color-grey-100);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-  img,
-  svg {
-    width: 100%;
-    grid-row: 1 / -1;
-    aspect-ratio: 2 / 3;
-  }
-  svg {
-    height: 33%;
-  }
-  :hover {
+  &:hover {
     background-color: var(--color-grey-200);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+
   &.active {
     border-left: 5px solid var(--color-brand-600);
+    background-color: var(--color-grey-200);
   }
 
-  section {
-    width: 100%;
-    padding: 1rem 2rem;
-    display: flex;
+  @media (max-width: 50em) {
     flex-direction: column;
-    gap: 1rem;
-    font-size: 1.4rem;
-    color: var(--color-grey-700);
-    p {
-      color: var(--color-grey-500);
-    }
+    padding: 1rem;
+  }
+`;
+
+const PosterContainer = styled.div`
+  flex-shrink: 0;
+  width: 9rem;
+  margin-right: 3rem;
+
+  img {
+    width: 100%;
+    border-radius: 8px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 50rem) {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    column-gap: 1rem;
-    padding: 0.8rem 1rem;
-    font-size: 1.4rem;
+  @media (max-width: 50em) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 1rem;
 
-    /* 이미지 크기 줄이고 중앙 정렬 */
-    img,
-    svg {
-      grid-row: auto;
-      width: 80%;
-      max-width: 8rem;
-      aspect-ratio: 2 / 3;
+    img {
+      width: 30%;
+      aspect-ratio: 3 / 4;
       margin: 0 auto;
-    }
-
-    section {
-      padding: 0.8rem 1rem;
-      display: flex;
-      flex-direction: column;
-    }
-    @media (max-width: 50rem) {
-      section h3 {
-        font-size: 1.6rem;
-      }
-    }
-    @media (max-width: 44rem) {
-      section h3 {
-        font-size: 1.4rem;
-      }
+      display: block;
     }
   }
 `;
-const DetailedItem = styled.div`
+
+const ContentContainer = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+`;
+
+const SeasonName = styled.h3`
+  margin: 0 0 1rem 0;
+  font-size: 1.6rem;
+  color: var(--color-grey-800);
+  /* align-self: center; */
+  /* margin: 1rem auto; */
+  @media (max-width: 50em) {
+    font-size: 1.6rem;
+  }
+`;
+
+const DetailedItem = styled.section`
+  display: grid;
   gap: 0.4rem;
   font-size: 1.4rem;
-  @media (max-width: 50rem) {
-    gap: 0.2rem;
+  color: var(--color-grey-600);
+
+  @media (max-width: 50em) {
+    grid-template-columns: 1fr;
+    gap: 0rem;
     font-size: 1.2rem;
   }
-  @media (max-width: 44rem) {
+
+  @media (max-width: 34em) {
     font-size: 1rem;
   }
 `;
+
+const DetailRow = styled.div`
+  display: flex;
+  align-items: center;
+
+  span:first-child {
+    margin-right: 0.5rem;
+  }
+`;
+
 export default function SeasonItem({ index, seasonIndex, season, dispatch }) {
+  // Handle cases where air_date might be null
+  const formattedDate = season.air_date
+    ? format(new Date(season.air_date), "yyyy.MM.dd")
+    : "N/A";
+
   return (
     <StyledSeasonItem
       className={seasonIndex === index ? "active" : ""}
@@ -100,31 +117,41 @@ export default function SeasonItem({ index, seasonIndex, season, dispatch }) {
         })
       }
     >
-      <img
-        src={
-          season.poster_path
-            ? `${IMG_PATH}${season.poster_path}`
-            : DEFAULT_IMAGE
-        }
-        alt={`${season.name} poster`}
-      />
-      <section>
-        <h3>{season.name}</h3>
+      <PosterContainer>
+        <img
+          src={
+            season.poster_path
+              ? `${IMG_PATH}${season.poster_path}`
+              : DEFAULT_IMAGE
+          }
+          alt={`${season.name} poster`}
+          loading="lazy"
+        />
+      </PosterContainer>
+
+      <ContentContainer>
+        <SeasonName>{season.name}</SeasonName>
         <DetailedItem>
-          <p>
-            <span>🗓</span>
-            <span>{format(new Date(season.air_date), "yyyy.MM.dd")}</span>
-          </p>
-          <p>
-            <span>⭐️</span>
-            {season.vote_average.toFixed(1)} TMDB rating
-          </p>
-          <p>
-            <span>📹</span>
-            <span>{`${season.episode_count} episodes`}</span>
-          </p>
+          <DetailRow>
+            <span aria-hidden="true">🗓</span>
+            <span>{formattedDate}</span>
+          </DetailRow>
+          <DetailRow>
+            <span aria-hidden="true">⭐️</span>
+            <span>{season.vote_average.toFixed(1)}</span>
+          </DetailRow>
+          <DetailRow>
+            <span aria-hidden="true">📹</span>
+            <span>
+              <FormattedMessage
+                id="season.episodeCount"
+                defaultMessage="{count} episodes"
+                values={{ count: season.episode_count }}
+              />
+            </span>
+          </DetailRow>
         </DetailedItem>
-      </section>
+      </ContentContainer>
     </StyledSeasonItem>
   );
 }

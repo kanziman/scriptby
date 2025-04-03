@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { HiPencil, HiTrash } from "react-icons/hi2";
+import { FormattedMessage } from "react-intl";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Menus from "../../ui/Menus";
@@ -20,12 +21,15 @@ const Img = styled.img`
   align-self: center;
   justify-self: end;
   transform: scale(1.3);
+  transition: transform 0.3s ease-in-out;
 
   &:hover {
     transform: scale(1.5);
     overflow: hidden;
   }
-
+  @media (max-width: 34em) {
+    width: 50%;
+  }
   /* transform: scale(1.5) translateX(-7px); */
 `;
 
@@ -33,6 +37,11 @@ const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  @media (max-width: 34em) {
+    & span {
+      font-size: 1rem;
+    }
+  }
 `;
 const StyledLink = styled(Link)`
   &:visited {
@@ -44,6 +53,9 @@ const StyledLink = styled(Link)`
 const Title = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
+  }
 `;
 const RowGrid = styled.div`
   display: grid;
@@ -99,12 +111,14 @@ function PostRow({ data }) {
                       }
                       icon={<HiPencil />}
                     >
-                      Edit
+                      <FormattedMessage id="modal.menu.edit" />
                     </Menus.Button>
                   </Modal.Open>
 
                   <Modal.Open opens="delete">
-                    <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                    <Menus.Button icon={<HiTrash />}>
+                      <FormattedMessage id="modal.menu.delete" />
+                    </Menus.Button>
                   </Modal.Open>
                 </Menus.List>
               </Menus.Menu>

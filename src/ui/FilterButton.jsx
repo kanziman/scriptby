@@ -64,6 +64,7 @@ const FilterButton = styled.button`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
+  word-break: keep-all;
 
   ${(props) => sizes[props.size]}
   ${(props) => variations[props.variation]}

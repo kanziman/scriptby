@@ -9,6 +9,7 @@ const initState = {
   query: "",
   filter: "movie",
   shows: [],
+  // showId: null,
   seasons: [],
   episodes: [],
   selectedShow: null,

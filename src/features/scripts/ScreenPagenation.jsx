@@ -1,4 +1,5 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PAGE_SIZE } from "../../utils/constants";
@@ -96,32 +97,51 @@ function ScreenPagenation({ count, isToggled }) {
     <StyledScreenPagenation>
       {isToggled ? (
         <P>
-          Showing <span>{(currentPage - 1) * 2 * PAGE_SIZE + 1}</span> to{" "}
-          <span>
-            {currentPage === pageCount ? count : currentPage * 2 * PAGE_SIZE}
-          </span>{" "}
-          of <span>{count}</span> results
+          <FormattedMessage
+            id="results.summary.pagination"
+            defaultMessage="{start} ~ {end} of {count} results"
+            values={{
+              start: (currentPage - 1) * 2 * PAGE_SIZE + 1,
+              end:
+                currentPage === pageCount ? count : currentPage * 2 * PAGE_SIZE,
+              count,
+            }}
+          />
         </P>
       ) : (
         <P>
-          Showing <span>{(currentPage - 1) * PAGE_SIZE + 1}</span> to{" "}
-          <span>
-            {currentPage === pageCount ? count : currentPage * PAGE_SIZE}
-          </span>{" "}
-          of <span>{count}</span> results
+          <FormattedMessage
+            id="results.summary.pagination"
+            defaultMessage="{start} ~ {end} of {count} results"
+            values={{
+              start: (currentPage - 1) * PAGE_SIZE + 1,
+              end: currentPage === pageCount ? count : currentPage * PAGE_SIZE,
+              count,
+            }}
+          />
         </P>
       )}
 
       <Buttons>
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
-          <HiChevronLeft /> <span>Previous</span>
+          <HiChevronLeft />{" "}
+          <span>
+            {" "}
+            <FormattedMessage
+              id="pagination.previous"
+              defaultMessage="Previous"
+            />
+          </span>
         </PaginationButton>
 
         <PaginationButton
           onClick={nextPage}
           disabled={currentPage === pageCount}
         >
-          <span>Next</span>
+          <span>
+            {" "}
+            <FormattedMessage id="pagination.next" defaultMessage="Next" />
+          </span>
           <HiChevronRight />
         </PaginationButton>
       </Buttons>

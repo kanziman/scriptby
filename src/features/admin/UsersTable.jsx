@@ -2,11 +2,12 @@ import Empty from "../../ui/Empty";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 
+import { FormattedMessage } from "react-intl";
 import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
-import UsersTableOperations from "./UsersTableOperations";
 import UsersTableRow from "../authentication/UsersTableRow";
 import { useUsers } from "../authentication/useUsers";
+import UsersTableOperations from "./UsersTableOperations";
 // import { useShowScripts } from "./useBookings";
 
 function UsersTable() {
@@ -15,7 +16,9 @@ function UsersTable() {
   const { users, count, isPending } = useUsers(pageSize);
   if (isPending) return <Spinner />;
 
-  if (!users?.length) return <Empty resourceName="users" />;
+  if (!users?.length) {
+    return <Empty resourceName={<FormattedMessage id="empty.noUsers" />} />;
+  }
 
   return (
     <>

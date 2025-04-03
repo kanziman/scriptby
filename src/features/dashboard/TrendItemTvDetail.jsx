@@ -5,33 +5,44 @@ import ActionContainer from "../../ui/ActionContainer";
 import Spinner from "../../ui/Spinner";
 import { TMDB_BASE_URL, TMDB_KEY } from "../../utils/constants";
 
+// 전체 페이지를 감싸는 래퍼 (배경 이미지를 위한 relative container)
 const DetailWrapper = styled.div`
   position: relative;
-  color: #ddd;
+  color: #fff;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
 `;
 
+// 배경(backdrop) 이미지 스타일
 const Backdrop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   background-image: url(${(props) => props.image});
   background-size: cover;
-  background-position: center;
+  background-position: top;
   filter: brightness(0.5);
-  height: 80vh;
+  height: 100%;
   width: 100%;
 `;
 
 const ContentWrapper = styled.div`
-  position: absolute;
-  top: 10%;
-  left: 5%;
+  position: relative; // 절대 위치에서 상대 위치로 변경
+  padding: 5% 5%;
   display: flex;
   gap: 2rem;
   width: 90%;
   flex-wrap: nowrap;
+  /* z-index: 1; */
+  margin: 0 auto;
 
   @media (max-width: 50em) {
     flex-direction: column;
     align-items: center;
-    top: 5%;
+    gap: 1rem;
+    padding-bottom: 2rem;
     h1 {
       font-size: 2.8rem;
     }
@@ -39,19 +50,23 @@ const ContentWrapper = styled.div`
       font-size: 1.4rem;
     }
     p {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
   }
 `;
 
 const Poster = styled.img`
-  width: 33%;
+  width: 50%;
   max-width: 300px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   aspect-ratio: 2/3;
   object-fit: cover;
+
+  @media (max-width: 50em) {
+    max-width: 250px;
+  }
 `;
 
 const Details = styled.div`
@@ -62,34 +77,50 @@ const Details = styled.div`
 
   @media (max-width: 50em) {
     gap: 0.4rem;
+    width: 100%;
   }
 `;
 
+// 영화 제목
 const Title = styled.h1`
-  /* font-size: 3rem; */
+  font-size: 3rem;
   margin: 0;
+  word-break: break-word; // 긴 제목이 넘치지 않도록 처리
 `;
 
+// 태그라인 (있을 경우)
 const Tagline = styled.h3`
-  /* font-size: 1.5rem; */
+  font-size: 1.5rem;
   font-style: italic;
   color: #ddd;
   margin: 0;
 `;
 
+// 기타 정보 (개봉일, 상영시간, 평점 등)
 const Info = styled.p`
   margin: 0.2rem 0;
   font-size: 1.2rem;
+
+  @media (max-width: 50em) {
+    font-size: 1rem;
+  }
 `;
 
+// 줄거리(Overview)
 const Overview = styled.p`
   font-size: 1.2rem;
   line-height: 1.5;
+
+  @media (max-width: 50em) {
+    font-size: 1rem;
+  }
 `;
 
+// 링크 스타일
 const HomepageLink = styled.a`
-  color: #ddd;
+  color: #fff;
   text-decoration: underline;
+  word-break: break-all; // 긴 URL이 넘치지 않도록 처리
   &:hover {
     color: #ccc;
   }
@@ -133,10 +164,9 @@ function TVDetail({ play }) {
     }
   }, [tv?.backdrop_path]);
 
-  if (loading) return <div>Loading...</div>;
   if (!tv) return <div>No data available</div>;
+  if (loading && !isBackdropLoaded) return <Spinner />;
 
-  if (!isBackdropLoaded) return <Spinner />;
   return (
     <DetailWrapper>
       <Backdrop

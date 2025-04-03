@@ -3,7 +3,6 @@ import styled from "styled-components";
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
   /* width: 42rem; */
   min-width: 42rem;
   /* padding: 1.2rem; */
@@ -13,8 +12,11 @@ const Box = styled.div`
   align-items: stretch;
   align-self: flex-start;
 
-  @media (max-width: 80rem) {
+  @media (max-width: 50em) {
     min-width: 20rem;
+  }
+  @media (max-width: 34em) {
+    min-width: 10rem;
   }
 `;
 

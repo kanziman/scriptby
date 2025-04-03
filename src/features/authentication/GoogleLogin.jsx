@@ -2,6 +2,7 @@ import { useState } from "react";
 import supabase from "../../services/supabase";
 
 import styled from "styled-components";
+import { useSettings } from "../../context/SettingsContext";
 import SpinnerMini from "../../ui/SpinnerMini";
 
 const GoogleIcon = styled.img`
@@ -11,7 +12,8 @@ const GoogleIcon = styled.img`
 
 function GoogleLogin() {
   const [loading, setLoading] = useState(false);
-
+  const { darkMode } = useSettings();
+  const src = darkMode ? "google-dark.png" : "google-light.png";
   const handleGoogleLogin = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({
@@ -33,13 +35,8 @@ function GoogleLogin() {
   };
 
   if (loading) return <SpinnerMini></SpinnerMini>;
-
   return (
-    <GoogleIcon
-      src="google-light.png"
-      alt="google login icon"
-      onClick={handleGoogleLogin}
-    />
+    <GoogleIcon src={src} alt="google login icon" onClick={handleGoogleLogin} />
   );
 }
 

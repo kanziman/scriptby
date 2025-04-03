@@ -11,6 +11,8 @@ const StyledScreenContainer = styled.div`
   background: ${(props) => (props.isExpanded ? "white" : "transparent")};
   z-index: ${(props) => (props.isExpanded ? "1000" : "auto")};
   overflow: auto;
+
+  display: flex;
 `;
 
 function Screen() {

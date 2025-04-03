@@ -3,7 +3,7 @@ import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import BookingRow from "./BookingRow";
 
-import Pagination from "../../../../final-6-final/src/ui/Pagination";
+import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import { useBookings } from "./useBookings";
 
