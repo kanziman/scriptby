@@ -19,7 +19,8 @@ function ScriptTable() {
 
   // const adminColumns = "0.6fr 1fr 1fr 0.4fr 0.4fr 0.4fr 0.8fr 1fr 2rem";
   // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
-  const userColumns = `6rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
+  // const userColumns = `6rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
+  const userColumns = `1fr 1fr 3fr 1fr 1fr 1fr 1.2fr 3fr 1rem `;
 
   const intl = useIntl();
   const resourceName = intl.formatMessage({ id: "menu.scripts" });

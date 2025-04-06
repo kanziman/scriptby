@@ -10,6 +10,7 @@ import Modal from "../../ui/Modal";
 import Tag from "../../ui/Tag";
 import { DEFAULT_IMAGE, IMG_PATH } from "../../utils/constants";
 import { shortName } from "../../utils/helpers";
+import { useUser } from "../authentication/useUser";
 
 const StyledEpisode = styled.li`
   position: relative;
@@ -142,6 +143,10 @@ const MAX_FLAGS = 3;
 export default function Episode({ episode }) {
   const intl = useIntl();
   const navigate = useNavigate();
+
+  const { user: currentUser } = useUser();
+  const isTutor = currentUser?.play === "tutor";
+
   const { selectedShow, dispatch } = useQuery();
 
   const {
@@ -269,12 +274,14 @@ export default function Episode({ episode }) {
                       <FormattedMessage id="episode.seeDetails" />
                     </Menus.Button>
                   )}
-                  <Menus.Button
-                    icon={<HiArrowUpOnSquare />}
-                    onClick={() => handleScriptAdd()}
-                  >
-                    <FormattedMessage id="episode.register" />
-                  </Menus.Button>
+                  {isTutor && (
+                    <Menus.Button
+                      icon={<HiArrowUpOnSquare />}
+                      onClick={() => handleScriptAdd()}
+                    >
+                      <FormattedMessage id="episode.register" />
+                    </Menus.Button>
+                  )}
                 </Menus.List>
               </Menus.Menu>
             </Modal>

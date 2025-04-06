@@ -42,6 +42,12 @@ const Stacked = styled.div`
     font-size: 0.6rem;
   }
 `;
+const StyledButton = styled.div`
+  display: inline-block;
+  button {
+    font-size: 1rem;
+  }
+`;
 
 function ScriptRow({
   script: {
@@ -111,7 +117,7 @@ function ScriptRow({
         style={{ cursor: isConfirmed ? "pointer" : "not-allowed" }}
       >
         {/* STATUS -  */}
-        <Stacked>
+        <StyledButton>
           <Button
             size="small"
             onClick={hanldeConfirm}
@@ -122,7 +128,7 @@ function ScriptRow({
 
             {isPending && <SpinnerMini />}
           </Button>
-        </Stacked>
+        </StyledButton>
         <Stacked>
           {category === "tv" ? <span>📺 Tv</span> : <span>🎬 Movie</span>}
           <span></span>
