@@ -111,6 +111,8 @@
   "login.password": "Password",
 
   "script.add": "add",
+  "script.see": "see details",
+
   "scriptAdd.addHeader": "Add a script",
   "scriptAdd.editHeader": "Edit a script",
   "scriptAdd.season": "Season",

@@ -1,4 +1,4 @@
-import { HiPaintBrush, HiTrash } from "react-icons/hi2";
+import { HiEye, HiPaintBrush, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -65,11 +65,9 @@ function ScriptRow({
   const { confirm, isPending } = useConfirm();
   const { deleteScript, isDeleting } = useDeleteScript();
 
-  const userRole = currentUser?.role;
-
   const canConfirm = currentUser?.isMaster || currentUser?.isManager;
   const canDeleteUpdate =
-    userRole === "master" || scriptUserId === currentUser?.id;
+    currentUser?.isMaster || scriptUserId === currentUser?.id;
   const isConfirmed = status === "confirmed";
   const buttonVariation =
     status === "pending"
@@ -167,19 +165,17 @@ function ScriptRow({
           <span>{username}</span>
           <span>{maskEmail(email)}</span>
         </Stacked>
-
         <Modal>
           <Menus>
             <Menus.Menu>
               <Menus.Toggle id={scriptId} />
               <Menus.List id={scriptId}>
-                {/* <Menus.Button
+                <Menus.Button
                   icon={<HiEye />}
                   onClick={() => navigate(`/scripts/${scriptId}`)}
                 >
-                  See details
-                </Menus.Button> */}
-
+                  <FormattedMessage id="script.see" />
+                </Menus.Button>
                 {canDeleteUpdate && (
                   <>
                     <Modal.Open opens="delete">

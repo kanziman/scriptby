@@ -9,11 +9,14 @@ import ScriptRow from "./ScriptRow";
 // import ScriptTableOperations from "./ScriptTableOperations";
 import { FormattedMessage, useIntl } from "react-intl";
 
+import { useUser } from "../authentication/useUser";
 import { useScript } from "./useScript";
 function ScriptTable() {
   const { scripts, isLoading, count } = useScript();
   const location = useLocation();
   const isAdminPage = location.pathname.includes("users") ? true : false;
+  const { user: currentUser } = useUser();
+
   // const adminColumns = "0.6fr 1fr 1fr 0.4fr 0.4fr 0.4fr 0.8fr 1fr 2rem";
   // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
   const userColumns = `6rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;

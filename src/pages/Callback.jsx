@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 
 const LoadingPage = () => {
+  console.log("loading page :>> ");
   // const { naverLogIn } = useNaver();
   const intl = useIntl();
   const message = intl.formatMessage({
