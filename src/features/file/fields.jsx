@@ -61,29 +61,29 @@ export const fields = [
     ],
   },
   {
-    label: "Original Phrasal Verbs",
-    key: "original_phrasal_verbs",
+    label: "Original Phrases",
+    key: "original_phrases",
     fieldType: {
       type: "input",
     },
     alternateMatches: [
-      "ORIGINAL_PHRASAL_VERBS",
-      "originalPhrasalVerbs",
-      "original-phrasal-verbs",
-      "Original_Phrasal_Verbs",
+      "ORIGINAL_PHRASES",
+      "originalPhrases",
+      "original-phrases",
+      "Original_Phrases",
     ],
   },
   {
-    label: "Translated Phrasal Verbs",
-    key: "translated_phrasal_verbs",
+    label: "Translated Phrases",
+    key: "translated_phrases",
     fieldType: {
       type: "input",
     },
     alternateMatches: [
-      "TRANSLATED_PHRASAL_VERBS",
-      "translatedPhrasalVerbs",
-      "translated-phrasal-verbs",
-      "Translated_Phrasal_Verbs",
+      "TRANSLATED_PHRASES",
+      "translatedPhrases",
+      "translated-phrases",
+      "Translated_Phrases",
     ],
   },
   {

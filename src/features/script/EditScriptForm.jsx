@@ -70,6 +70,7 @@ const Header = styled.header`
     h1 {
       gap: 0;
       margin: 0;
+      flex-direction: row;
     }
   }
 `;

@@ -28,7 +28,7 @@ function SideScreen() {
       }),
     },
     {
-      value: "phrasal_verbs",
+      value: "phrases",
       label: intl.formatMessage({
         id: "filter.phrase",
         defaultMessage: "PHRASE",

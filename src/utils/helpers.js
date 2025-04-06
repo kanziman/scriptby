@@ -192,10 +192,10 @@ export function transform(uploadData) {
   return {
     lines: transformSection(uploadData, "original", "translated"),
     words: transformSection(uploadData, "original_words", "translated_words"),
-    phrasal_verbs: transformSection(
+    phrases: transformSection(
       uploadData,
-      "original_phrasal_verbs",
-      "translated_phrasal_verbs"
+      "original_phrases",
+      "translated_phrases"
     ),
     idioms: transformSection(
       uploadData,

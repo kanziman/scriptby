@@ -176,12 +176,14 @@ function ScriptRow({
             <Menus.Menu>
               <Menus.Toggle id={scriptId} />
               <Menus.List id={scriptId}>
-                <Menus.Button
-                  icon={<HiEye />}
-                  onClick={() => navigate(`/scripts/${scriptId}`)}
-                >
-                  <FormattedMessage id="script.see" />
-                </Menus.Button>
+                {isConfirmed && (
+                  <Menus.Button
+                    icon={<HiEye />}
+                    onClick={() => navigate(`/scripts/${scriptId}`)}
+                  >
+                    <FormattedMessage id="script.see" />
+                  </Menus.Button>
+                )}
                 {canDeleteUpdate && (
                   <>
                     <Modal.Open opens="delete">
