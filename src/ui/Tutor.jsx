@@ -92,7 +92,7 @@ function Tutor() {
     if (!user) return;
 
     updateUser(
-      { id, play: play === "student" ? "tutor" : "" },
+      { userId: id, play: play === "student" ? "tutor" : "" },
       {
         onSuccess: () => {
           setPlay(play);
@@ -106,6 +106,21 @@ function Tutor() {
 
   const isStudent = play === "student";
   const isTutor = play === "tutor";
+  const isRequested = play === "requested";
+  const sendApplication = formatMessage({
+    id: "tutor.sendApplication",
+    defaultMessage: "Send tutor application",
+  });
+
+  const sendApplicationConfirmed = formatMessage({
+    id: "tutor.sendApplicationConfirmed",
+    defaultMessage: "Confirmed",
+  });
+
+  const sendApplicationRequested = formatMessage({
+    id: "tutor.sendApplicationRequested",
+    defaultMessage: "Requested",
+  });
 
   return (
     <StyledCard>
@@ -133,15 +148,15 @@ function Tutor() {
           <li>
             ✅{" "}
             {formatMessage({
-              id: "tutor.list.help",
-              defaultMessage: "Help other students with your contents",
+              id: "tutor.list.earn",
+              defaultMessage: "Earn recognition for your expertise",
             })}
           </li>
           <li>
             ✅{" "}
             {formatMessage({
-              id: "tutor.list.earn",
-              defaultMessage: "Earn recognition for your expertise",
+              id: "tutor.list.help",
+              defaultMessage: "Help other students with your contents",
             })}
           </li>
           <li>
@@ -160,34 +175,24 @@ function Tutor() {
             })}
           </ButtonText>
         )}
-
-        {isUpdating ? (
-          <SpinnerMini />
-        ) : (
-          <ButtonContainer>
-            <Button
-              variation={isStudent ? "primary" : "inactive"}
-              size="large"
-              onClick={handleTutorRequest}
-              disabled={!isStudent}
-            >
-              {isStudent
-                ? formatMessage({
-                    id: "tutor.sendApplication",
-                    defaultMessage: "Send tutor application",
-                  })
-                : isTutor
-                ? formatMessage({
-                    id: "tutor.sendApplicationConfirmed",
-                    defaultMessage: "Confirmed",
-                  })
-                : formatMessage({
-                    id: "tutor.sendApplicationRequested",
-                    defaultMessage: "Requested",
-                  })}
-            </Button>
-          </ButtonContainer>
-        )}
+        <ButtonContainer>
+          <Button
+            variation={isStudent ? "primary" : "inactive"}
+            size="large"
+            onClick={handleTutorRequest}
+            disabled={!isStudent}
+          >
+            {isUpdating ? (
+              <SpinnerMini />
+            ) : (
+              <>
+                {isStudent && sendApplication}
+                {isTutor && sendApplicationConfirmed}
+                {isRequested && sendApplicationRequested}
+              </>
+            )}
+          </Button>
+        </ButtonContainer>
       </CardContent>
     </StyledCard>
   );

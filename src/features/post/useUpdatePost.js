@@ -1,15 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { useIntl } from "react-intl";
 import { updatePostApi } from "../../services/apiPost";
-import { extractFirstImage, resizeImage } from "../../utils/helpers";
 
 export function useUpdatePost() {
   const queryClient = useQueryClient();
-
+  const intl = useIntl();
+  const message = intl.formatMessage({
+    id: "toast.success.updated",
+  });
   const { mutate: updatePost, isPending: isCreating } = useMutation({
     mutationFn: updatePostApi,
     onSuccess: () => {
-      toast.success("New post successfully created");
+      toast.success(message);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: (err) => toast.error(err.message),

@@ -91,18 +91,10 @@ function EditPost() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow label="CATEGORY" error={errors?.category?.message}>
-        <Select
-          id="category"
-          options={POST_CATEGORY_OPTIONS}
-          type="white"
-          disabled={!isMaster}
-          {...register("category", {
-            required: "This field is required",
-          })}
-        />
-      </FormRow>
-      <FormRow label="TYPE" error={errors?.type?.message}>
+      <FormRow
+        label={<FormattedMessage id="post.type" />}
+        error={errors?.type?.message}
+      >
         <Select
           id="type"
           options={POST_TYPE_OPTIONS}
@@ -113,10 +105,24 @@ function EditPost() {
           })}
         />
       </FormRow>
+      <FormRow
+        label={<FormattedMessage id="post.category" />}
+        error={errors?.category?.message}
+      >
+        <Select
+          id="category"
+          options={POST_CATEGORY_OPTIONS}
+          type="white"
+          // disabled={!isMaster}
+          {...register("category", {
+            required: "This field is required",
+          })}
+        />
+      </FormRow>
 
       <FormRow
         orientation="vertical"
-        label="TITLE"
+        label={<FormattedMessage id="post.title" />}
         error={errors?.title?.message}
       >
         <Input
@@ -131,7 +137,7 @@ function EditPost() {
 
       <FormRow
         orientation="vertical"
-        label="CONTENT"
+        label={<FormattedMessage id="post.content" />}
         error={errors?.content?.message}
       >
         <TiptapEditor
@@ -141,7 +147,7 @@ function EditPost() {
         ></TiptapEditor>
       </FormRow>
 
-      <FormRow>
+      <FormRow hasButton>
         <Button
           variation="secondary"
           type="reset"

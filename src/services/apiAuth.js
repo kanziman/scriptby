@@ -37,12 +37,6 @@ export async function getCurrentUser() {
 
   if (!session.session) return null;
 
-  // const { data, error } = await supabase
-  //   .from("profiles")
-  //   .select("*")
-  //   .eq("id", session.session?.user.id)
-  //   .single();
-  // console.log("new user:", data);
   const { data, error } = await supabase.auth.getUser();
 
   data.user.isMaster = data.user.user_metadata.role === "master";
@@ -53,7 +47,7 @@ export async function getCurrentUser() {
   return data.user;
 }
 
-/// USING AUTH
+/// USING PROFILE
 export async function getCurrentProfile() {
   const { data: session } = await supabase.auth.getSession();
 
@@ -79,6 +73,7 @@ export async function getAllUsers() {
   if (error) throw new Error(error.message);
   return { data, count };
 }
+
 export async function getUsersWithPage({ filter, sortBy, page, size }) {
   // 1. 전체 행수(count)를 조회하기 위한 베이스 쿼리 생성
   let baseQuery = supabase.from("profiles").select("*", { count: "exact" });
@@ -137,35 +132,6 @@ export async function logout() {
   if (error) throw new Error(error.message);
 }
 
-// export async function updateCurrentUser({ password, fullName, avatar, play }) {
-//   // 1. Update password OR fullName
-//   let updateData;
-//   if (password) updateData = { password };
-//   if (fullName) updateData = { data: { username: fullName } };
-//   if (play) updateData = { play };
-
-//   const { data, error } = await supabase.auth.updateUser(updateData);
-
-//   if (error) throw new Error(error.message);
-//   if (!avatar) return data;
-
-//   // 2. Upload the avatar image
-//   const fileName = `avatar-${data.user.id}-${Math.random()}`;
-
-//   const { error: storageError } = await supabase.storage
-//     .from("avatars")
-//     .upload(fileName, avatar);
-
-//   if (storageError) throw new Error(storageError.message);
-
-//   // 3. Update avatar in the user
-//   const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-//     data: {
-//       avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-//     },
-//   });
-// }
-
 export async function updateCurrentProfile({
   password,
   username,
@@ -177,7 +143,7 @@ export async function updateCurrentProfile({
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log(password, username, avatar, role, play);
+
   if (!user) throw new Error("사용자를 찾을 수 없습니다");
 
   // 1. 비밀번호 업데이트 (auth 테이블에 해당)
@@ -206,8 +172,8 @@ export async function updateCurrentProfile({
 
   // 2. 아바타 이미지 업로드
   if (avatar) {
-    const fileName = `avatar-${user.id}-${Math.random()}`;
-
+    const fileName = `${user.id}/${Math.random()}`;
+    console.log("fileName :>> ", fileName);
     const { error: storageError } = await supabase.storage
       .from("avatars")
       .upload(fileName, avatar);
@@ -239,14 +205,14 @@ export async function updateCurrentProfile({
 
 /// UPDATE USERS BY ADMIN(MANAGER,MASTER)
 export async function updateUserByAdmin({
-  id,
+  userId,
   password,
   username,
   avatar,
   role,
   play,
 }) {
-  if (!id) {
+  if (!userId) {
     console.error("userId is required to update another user.");
     return;
   }
@@ -259,16 +225,20 @@ export async function updateUserByAdmin({
   if (role) updateData.role = role;
   if (play) updateData.play = play;
 
-  console.log("Updating user:", id, "with data:", updateData);
+  console.log("Updating user by admin:", userId, "with data:", updateData);
 
   // Supabase DB 업데이트 (마스터 계정은 Service Role 사용)
   const { data, error } = await supabase
     .from("profiles")
     .update(updateData)
-    .eq("id", id);
-
+    .eq("id", userId);
+  console.log("data :>> ", data);
   if (error) {
     console.error("Error updating user:", error);
+  } else if (!data) {
+    console.error(
+      "No rows updated. This may be due to RLS policy restrictions."
+    );
   } else {
     console.log("User updated successfully:", data);
   }

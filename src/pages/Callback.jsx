@@ -2,11 +2,16 @@
 
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
 
 const LoadingPage = () => {
   // const { naverLogIn } = useNaver();
+  const intl = useIntl();
+  const message = intl.formatMessage({
+    id: "toast.success.login",
+  });
   const navigate = useNavigate();
   const { user: currentUser } = useUser();
 
@@ -27,10 +32,10 @@ const LoadingPage = () => {
 
     if (currentUser) {
       // 성공 페이지로 리다이렉트
-      toast.success("Log in success");
+      toast.success(message);
       navigate("/dashboard");
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, navigate, message]);
 
   return <div>Loading...</div>;
 };

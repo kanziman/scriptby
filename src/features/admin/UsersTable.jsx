@@ -1,8 +1,7 @@
-import Empty from "../../ui/Empty";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import UsersTableRow from "../authentication/UsersTableRow";
@@ -14,17 +13,18 @@ function UsersTable() {
   // const { showScripts, isLoading, count } = useShowScripts();
   const pageSize = 5;
   const { users, count, isPending } = useUsers(pageSize);
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.users" });
+
   if (isPending) return <Spinner />;
 
-  if (!users?.length) {
-    return <Empty resourceName={<FormattedMessage id="empty.noUsers" />} />;
-  }
+  const userColumns = `15rem 6rem 6rem 8rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
 
   return (
     <>
       <UsersTableOperations />
       <Menus>
-        <Table columns="1.4fr .5fr .5fr .5fr .5fr  .5fr 1fr .5fr .2rem">
+        <Table columns={userColumns}>
           <Table.Header>
             <div>email</div>
             <div>avatar</div>

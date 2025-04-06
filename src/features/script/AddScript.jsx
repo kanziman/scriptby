@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
 import { useQuery } from "../../context/QueryContext";
 import Empty from "../../ui/Empty";
@@ -10,9 +10,11 @@ function AddScript() {
   const { selectedShow } = useQuery();
   const { action } = useParams();
   const isEdit = action === "edit";
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.show" });
 
   if (!selectedShow?.id) {
-    return <Empty resourceName={<FormattedMessage id="empty.show" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (

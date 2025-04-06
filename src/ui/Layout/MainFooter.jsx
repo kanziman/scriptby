@@ -1,5 +1,5 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useSettings } from "../../context/SettingsContext";
 
@@ -8,6 +8,7 @@ const Footer = styled.footer`
   border-top: 1px solid #eee;
   background-color: var(--color-grey-50);
   max-width: 100%;
+  color: var(--color-grey-500);
 `;
 
 const GridFooter = styled.div`
@@ -47,6 +48,7 @@ const FooterLogo = styled.img`
 `;
 
 const SocialLinks = styled.ul`
+  color: var(--color-grey-600);
   list-style: none;
   display: flex;
   gap: 2.4rem;
@@ -65,6 +67,7 @@ const Copyright = styled.p`
 const FooterHeading = styled.h2`
   font-size: 1.6rem;
   font-weight: 500;
+  color: var(--color-grey-600);
   margin-bottom: 2rem;
 `;
 
@@ -130,10 +133,9 @@ const FooterLink = styled.a`
 `;
 
 function MainFooter() {
-  const intl = useIntl();
-  const { isDarkMode } = useSettings();
+  const { darkMode } = useSettings();
 
-  const src = isDarkMode ? "/logodark.png" : "/logolight.png";
+  const src = darkMode ? "/logodark.png" : "/logolight.png";
   return (
     <Footer>
       <GridFooter>

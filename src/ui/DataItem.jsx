@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledDataItem = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1.5fr 4fr;
   align-items: center;
   gap: 1.6rem;
   padding: 0.8rem 0;

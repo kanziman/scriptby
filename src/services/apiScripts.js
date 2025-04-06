@@ -209,7 +209,7 @@ export async function getScriptsByShowId(showId) {
 export async function getNewScriptsWithinAWeek({ filter }) {
   // 오늘 날짜 기준 7일 전
   const oneWeekAgo = new Date();
-  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 14);
 
   // Supabase에서 "scripts" 테이블 조회 (카운트도 함께 조회)
   // const { data, error, count } = await supabase
@@ -228,6 +228,7 @@ export async function getNewScriptsWithinAWeek({ filter }) {
     .select("*, show:tvs(*), profile:profiles(email,username)", {
       count: "exact",
     })
+    .eq("status", "confirmed")
     .gte("created_at", oneWeekAgo.toISOString());
 
   if (filter) {

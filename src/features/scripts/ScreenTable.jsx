@@ -1,7 +1,7 @@
 import Empty from "../../ui/Empty";
 import Table from "../../ui/Table";
 
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import ScreenPagenation from "./ScreenPagenation";
@@ -15,9 +15,12 @@ function ScreenTable({ isToggled, children, hideTranslation }) {
     isToggled,
   });
 
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.script" });
+
   if (isPending) return <Spinner />;
   if (!script) {
-    return <Empty resourceName={<FormattedMessage id="empty.script" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (

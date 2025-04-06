@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useParams, useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
 import MainHeading from "../../ui/MainHeading";
@@ -37,9 +37,12 @@ function ScriptDetail() {
     }
   }, [pageParam, searchParams, setSearchParams]);
 
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.script" });
+
   if (isPending) return <Spinner />;
   if (!scriptId) {
-    return <Empty resourceName={<FormattedMessage id="empty.script" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (
@@ -47,7 +50,7 @@ function ScriptDetail() {
       <MainHeading right="moveBack">
         {show?.category === "tv" ? (
           <ShowInfoWrapper>
-            <ShowTitle>{show?.name}</ShowTitle>
+            <ShowTitle>{show?.originalName}</ShowTitle>
             <EpisodeInfo>
               <EpisodeLabel>Season {seasonNumber}</EpisodeLabel>
               <EpisodeLabel>Episode {episodeNumber}</EpisodeLabel>
@@ -56,7 +59,7 @@ function ScriptDetail() {
           </ShowInfoWrapper>
         ) : (
           <ShowInfoWrapper>
-            <ShowTitle>{show?.name}</ShowTitle>
+            <ShowTitle>{show?.originalName}</ShowTitle>
           </ShowInfoWrapper>
         )}
       </MainHeading>

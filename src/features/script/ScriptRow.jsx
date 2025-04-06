@@ -13,8 +13,8 @@ import Button from "../../ui/Button";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { getFlag, getLanguageName, maskEmail } from "../../utils/helpers";
 import { useUser } from "../authentication/useUser";
-import { useConfirm } from "../scripts/shows/useConfirm";
-import { useDeleteScript } from "../scripts/useDeleteScript";
+import { useConfirm } from "./useConfirm";
+import { useDeleteScript } from "./useDeleteScript";
 
 const Stacked = styled.div`
   display: flex;
@@ -71,12 +71,26 @@ function ScriptRow({
   const canDeleteUpdate =
     userRole === "master" || scriptUserId === currentUser?.id;
   const isConfirmed = status === "confirmed";
+  const buttonVariation =
+    status === "pending"
+      ? "primary"
+      : status === "confirmed"
+      ? "blue"
+      : "danger";
 
   function hanldeConfirm(e) {
     e.stopPropagation();
+    let newStatus;
+    if (status === "pending") {
+      newStatus = "confirmed";
+    } else if (status === "confirmed") {
+      newStatus = "unconfirmed";
+    } else if (status === "unconfirmed") {
+      newStatus = "pending";
+    }
     confirm({
       scriptId,
-      status: status === "confirmed" ? "unconfirmed" : "confirmed",
+      status: newStatus,
     });
   }
 
@@ -104,12 +118,9 @@ function ScriptRow({
             size="small"
             onClick={hanldeConfirm}
             disabled={!canConfirm}
-            variation={isConfirmed ? "blue" : "danger"}
+            variation={buttonVariation}
           >
-            <FormattedMessage
-              id={isConfirmed ? "status.confirmed" : "status.pending"}
-              defaultMessage={status}
-            />
+            <FormattedMessage id={`status.${status}`} defaultMessage={status} />
 
             {isPending && <SpinnerMini />}
           </Button>
@@ -191,7 +202,7 @@ function ScriptRow({
 
           <Modal.Window name="delete">
             <ConfirmDelete
-              resourceName="script"
+              resourceName={<FormattedMessage id="menu.script" />}
               disabled={isDeleting}
               onConfirm={hanldeDelete}
             />

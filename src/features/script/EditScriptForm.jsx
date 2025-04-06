@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineCheckCircle, HiOutlineXCircle } from "react-icons/hi2";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
@@ -44,7 +44,7 @@ const Backdrop = styled.div`
   background-size: cover;
   background-position: center;
   filter: brightness(0.5);
-  height: 25vh;
+  height: 30vh;
   width: 100%;
 `;
 const ContentWrapper = styled.div`
@@ -52,16 +52,26 @@ const ContentWrapper = styled.div`
   top: 5%;
   left: 5%;
   display: flex;
+  flex-direction: column;
   gap: 2rem;
   width: 90%;
   flex-wrap: nowrap;
+  @media (max-width: 34em) {
+    gap: 1rem;
+  }
 `;
 const Header = styled.header`
-  padding: 2rem 4rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-brand-500);
+  @media (max-width: 34em) {
+    h1 {
+      gap: 0;
+      margin: 0;
+    }
+  }
 `;
 const Section = styled.section`
   padding: 3.2rem 4rem 2.4rem;
@@ -86,6 +96,15 @@ const Footer = styled.footer`
   }
   @media (max-width: 34em) {
     font-size: 0.8rem;
+  }
+`;
+const OverView = styled.div`
+  color: #d1d5db;
+  font-style: italic;
+  font-size: 1.2rem;
+  padding: 1rem;
+  @media (max-width: 34em) {
+    font-size: 1rem;
   }
 `;
 const StyledFlagGroup = styled.div`
@@ -144,14 +163,24 @@ function EditScriptForm({
   episode,
 }) {
   const navigate = useNavigate();
+  const intl = useIntl();
+  const errMessage = intl.formatMessage({
+    id: "toast.error.auth",
+  });
   // 편집 시에는 useQuery로부터 selectedShow를 참조(편집 전 페이지의 show 정보)
   const { selectedShow, selectedEpisode } = useQuery();
   const { user: currentUser } = useUser();
   const { editAll, isUpdating } = useUpdateScript();
-
   const userId = currentUser?.id;
-  const { name, originalLanguage, originalName, category, backdropPath, date } =
-    show;
+  const {
+    name,
+    originalLanguage,
+    originalName,
+    category,
+    backdropPath,
+    date,
+    overview,
+  } = show;
   const episodeName = episode?.episodeName;
   const episodeNumber = episode?.episodeNumber;
   const seasonNumber = episode?.seasonNumber;
@@ -206,7 +235,7 @@ function EditScriptForm({
 
   function handleOnClick() {
     if (!userId) {
-      toast.error("Should be logged in");
+      toast.error(errMessage);
       return;
     }
     // newScript가 이미 준비되어 있으면 그대로, 아니면 현재 상태로 baseScript 생성
@@ -273,6 +302,8 @@ function EditScriptForm({
               )}
             </ShowInfoWrapper>
           </Header>
+
+          <OverView>{overview}</OverView>
         </ContentWrapper>
 
         <Section>

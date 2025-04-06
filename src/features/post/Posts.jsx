@@ -16,6 +16,7 @@ function Posts() {
         </Heading>
       </MainHeading>
 
+      {/* MAIN */}
       <PostTable></PostTable>
 
       <ButtonGroup>

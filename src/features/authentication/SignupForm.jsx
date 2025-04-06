@@ -7,6 +7,7 @@ import FormRow from "../../ui/FormRow";
 import FormRowVertical from "../../ui/FormRowVertical";
 import Input from "../../ui/Input";
 // import NaverLogin from "./NaverLogin";
+import Spinner from "../../ui/Spinner";
 import { useSignup } from "./useSignup";
 
 // Email regex: /\S+@\S+\.\S+/
@@ -22,10 +23,11 @@ function SignupForm() {
     signup(
       { username, email, password },
       {
-        onSettled: () => navigate("/dashboard"),
+        onSettled: () => navigate("/login"),
       }
     );
   }
+  if (isPending) return <Spinner />;
 
   return (
     <>
@@ -157,7 +159,7 @@ function SignupForm() {
       </Form>
 
       {/* To LoginForm */}
-      <FormRow>
+      <FormRow hasButton>
         <Button variation="secondary" onClick={() => navigate("/login")}>
           {formatMessage({
             id: "signup.alreadyRegistered",

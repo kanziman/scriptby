@@ -33,12 +33,11 @@ const StyledMenus = styled.div`
 function HeaderMenu() {
   const isBrowserSmall = useIsBrowser();
   // const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const { isDarkMode, toggleDarkMode, locale, changeLanguage } = useSettings();
+  const { darkMode, toggleDarkMode, locale, changeLanguage } = useSettings();
   const { logout, isPending } = useLogout();
   const navigate = useNavigate();
   const { user: currentUser } = useUser();
   // const { locale, changeLanguage } = useLanguage();
-
   const handleClick = () => {
     if (currentUser) {
       navigate("/account");
@@ -90,7 +89,7 @@ function HeaderMenu() {
                 <FormattedMessage id="menu.language" />
               </Menus.Button>
               <Menus.Button
-                icon={isDarkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
+                icon={darkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
                 onClick={toggleDarkMode}
               >
                 <FormattedMessage id="menu.darkMode" />

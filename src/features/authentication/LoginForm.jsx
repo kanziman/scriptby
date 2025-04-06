@@ -84,11 +84,11 @@ function LoginForm() {
         </FormRowVertical>
 
         <FormRowVertical>
-          {!isPending ? <GoogleLogin /> : <SpinnerMini />}
+          <GoogleLogin />
         </FormRowVertical>
       </Form>
 
-      <FormRow>
+      <FormRow hasButton>
         <Button variation="secondary" onClick={() => navigate("/signup")}>
           {formatMessage({
             id: "login.noAccount",

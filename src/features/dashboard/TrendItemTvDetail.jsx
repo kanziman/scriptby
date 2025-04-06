@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ActionContainer from "../../ui/ActionContainer";
 import Spinner from "../../ui/Spinner";
+import SpinnerMini from "../../ui/SpinnerMini";
 import { TMDB_BASE_URL, TMDB_KEY } from "../../utils/constants";
 
 // 전체 페이지를 감싸는 래퍼 (배경 이미지를 위한 relative container)
@@ -164,8 +165,8 @@ function TVDetail({ play }) {
     }
   }, [tv?.backdrop_path]);
 
+  if (loading || !isBackdropLoaded) return <Spinner />;
   if (!tv) return <div>No data available</div>;
-  if (loading && !isBackdropLoaded) return <Spinner />;
 
   return (
     <DetailWrapper>

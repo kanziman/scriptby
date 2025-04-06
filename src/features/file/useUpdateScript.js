@@ -1,14 +1,18 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { useIntl } from "react-intl";
 import { updateShowAndScript } from "../../services/apiShowScripts";
 
 export function useUpdateScript() {
-  const queryClient = useQueryClient();
-
-  const { mutate: editAll, isLoading: isUpdating } = useMutation({
+  const intl = useIntl();
+  const message = intl.formatMessage({
+    id: "toast.updated",
+    defaultMessage: "Script successfully updated.",
+  });
+  const { mutate: editAll, isPending: isUpdating } = useMutation({
     mutationFn: updateShowAndScript,
     onSuccess: () => {
-      toast.success("Script successfully updated");
+      toast.success(message);
     },
     onError: (err) => toast.error(err.message),
   });

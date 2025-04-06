@@ -174,8 +174,8 @@ function MovieDetail({ play }) {
     }
   }, [movie?.backdrop_path]);
 
-  if (!movie) return <div>No data available</div>;
   if (loading && !isBackdropLoaded) return <Spinner />;
+  if (!movie) return <div>No data available</div>;
 
   return (
     <DetailWrapper>

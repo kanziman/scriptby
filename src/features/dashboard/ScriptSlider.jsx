@@ -14,11 +14,13 @@
 
 // export default ScriptSlider;
 
+import { useIntl } from "react-intl";
 import styled from "styled-components";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Empty from "../../ui/Empty";
 import ScriptSliderItem from "./ScriptSliderItem";
 
 const StyledSlider = styled.div`
@@ -26,6 +28,11 @@ const StyledSlider = styled.div`
 `;
 
 function ScriptSlider({ items = [] }) {
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.scripts" });
+
+  if (!items?.length) return <Empty resource={resourceName} />;
+
   return (
     <StyledSlider>
       <Swiper

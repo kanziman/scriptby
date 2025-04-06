@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineCheckCircle, HiOutlineXCircle } from "react-icons/hi2";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
@@ -43,7 +43,7 @@ const Backdrop = styled.div`
   background-size: cover;
   background-position: center;
   filter: brightness(0.5);
-  height: 25vh;
+  height: 30vh;
   width: 100%;
 `;
 const ContentWrapper = styled.div`
@@ -51,9 +51,13 @@ const ContentWrapper = styled.div`
   top: 5%;
   left: 5%;
   display: flex;
+  flex-direction: column;
   gap: 2rem;
   width: 90%;
   flex-wrap: nowrap;
+  @media (max-width: 34em) {
+    gap: 1rem;
+  }
 `;
 const Header = styled.header`
   padding: 1rem;
@@ -61,6 +65,21 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-brand-500);
+  @media (max-width: 34em) {
+    h1 {
+      gap: 0;
+      margin: 0;
+    }
+  }
+`;
+const OverView = styled.div`
+  color: #d1d5db;
+  font-style: italic;
+  font-size: 1.2rem;
+  padding: 1rem;
+  @media (max-width: 34em) {
+    font-size: 1rem;
+  }
 `;
 const Section = styled.section`
   padding: 3.2rem 4rem 2.4rem;
@@ -126,6 +145,10 @@ function prepareShowData(selectedShow, category) {
 }
 
 function AddScriptForm() {
+  const intl = useIntl();
+  const errMessage = intl.formatMessage({
+    id: "toast.error.auth",
+  });
   const navigate = useNavigate();
   const { selectedShow, selectedEpisode, cleanedShow } = useQuery();
   const { user: currentUser } = useUser();
@@ -140,6 +163,7 @@ function AddScriptForm() {
     backdropPath,
     date,
     isTv,
+    overview,
   } = cleanedShow;
 
   const category = isTv ? "tv" : "movie";
@@ -191,7 +215,8 @@ function AddScriptForm() {
 
   function handleOnClick() {
     if (!userId) {
-      toast.error("Should be logged in");
+      toast.error(errMessage);
+
       return;
     }
     // newScript가 이미 세팅되어 있으면 그대로, 아니면 현재 폼 상태로 baseScript를 생성
@@ -262,6 +287,8 @@ function AddScriptForm() {
               )}
             </ShowInfoWrapper>
           </Header>
+
+          <OverView>{overview}</OverView>
         </ContentWrapper>
 
         <Section>

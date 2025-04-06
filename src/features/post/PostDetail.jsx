@@ -8,17 +8,20 @@ import PostDataBox from "./PostDataBox";
 import { usePost } from "./usePost";
 
 // Import CSS
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import "reactjs-tiptap-editor/style.css";
 
 function PostDetail() {
   const { post, isPending } = usePost();
   const { action } = useParams();
 
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.posts" });
+
   if (isPending) return <Spinner />;
 
   if (!post) {
-    return <Empty resourceName={<FormattedMessage id="empty.post" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (

@@ -90,7 +90,7 @@ function AddPostForm() {
             id="category"
             options={categoryOptions}
             type="white"
-            disabled={!currentUser?.isMaster}
+            // disabled={!currentUser?.isMaster}
             {...register("category", {
               required: "This field is required",
             })}
@@ -130,7 +130,7 @@ function AddPostForm() {
           />
         </FormRow>
 
-        <FormRow>
+        <FormRow hasButton>
           <Button
             variation="secondary"
             type="reset"

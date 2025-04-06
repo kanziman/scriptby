@@ -39,7 +39,7 @@ const UserInfoRow = styled.div`
   align-items: center;
   gap: 1.2rem;
   flex-wrap: wrap;
-  justify-content: space-between; // 요소들 사이에 공간을 균등하게 분배
+  /* justify-content: space-between; */
 `;
 const UserInfo = styled.div`
   display: flex;
@@ -85,6 +85,7 @@ const TimeStamp = styled.time`
 
 const WriterGroupButton = styled.div`
   display: flex;
+  margin-left: auto;
   gap: 1rem;
 `;
 
@@ -140,12 +141,6 @@ function PostData({ post }) {
           {(isWriter || currentUser?.isMaster) && (
             <WriterGroupButton>
               <Modal>
-                <Modal.Open opens="delete">
-                  <Button size="small" variation="danger">
-                    <FormattedMessage id="modal.menu.delete" />
-                  </Button>
-                </Modal.Open>
-
                 <Button
                   size="small"
                   onClick={() => navigate(`/posts/edit/${postId}`)}
@@ -153,10 +148,16 @@ function PostData({ post }) {
                   <FormattedMessage id="modal.menu.edit" />
                 </Button>
 
+                <Modal.Open opens="delete">
+                  <Button size="small" variation="danger">
+                    <FormattedMessage id="modal.menu.delete" />
+                  </Button>
+                </Modal.Open>
+
                 {/* Modal Windows */}
                 <Modal.Window name="delete">
                   <ConfirmDelete
-                    resource="post"
+                    resource={<FormattedMessage id="menu.posts" />}
                     onConfirm={() => handleDelete(postId)}
                   />
                 </Modal.Window>

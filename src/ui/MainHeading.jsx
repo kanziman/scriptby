@@ -18,6 +18,7 @@ const HeadingGroup = styled.div`
   }
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--color-grey-200);
+  color: var(--color-grey-600);
 `;
 
 const HoverHeading = styled(Heading)`

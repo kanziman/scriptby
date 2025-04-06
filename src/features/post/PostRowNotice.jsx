@@ -89,6 +89,7 @@ function PostRowNotice({ data }) {
   } = data;
   const { user: currentUser } = useUser();
   const { isDeleting, deletePost } = useDeletePost();
+  const isWriter = currentUser?.id === userId;
   const typeLabel = POST_TYPE_OPTIONS.find(
     (option) => option.value === type
   )?.label;
@@ -118,7 +119,7 @@ function PostRowNotice({ data }) {
         </RowGrid>
       </StyledLink>
 
-      {currentUser?.isManager && (
+      {(isWriter || currentUser?.isMaster) && (
         <>
           <Modal>
             <Menus.Menu>
@@ -143,7 +144,7 @@ function PostRowNotice({ data }) {
             </Menus.Menu>
             <Modal.Window name="delete">
               <ConfirmDelete
-                resource="posts"
+                resource={<FormattedMessage id="menu.posts" />}
                 disabled={isDeleting}
                 onConfirm={() => deletePost(postId)}
               />

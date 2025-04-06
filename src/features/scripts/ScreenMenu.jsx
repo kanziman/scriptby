@@ -7,8 +7,10 @@ import {
 } from "react-icons/pi";
 import { useIntl } from "react-intl";
 import styled from "styled-components";
+import { useSidebar } from "../../context/SidebarContext";
 import ButtonIcon from "../../ui/ButtonIcon";
 import FilterGroup from "../../ui/FilterGroup";
+import SidebarToggleButton from "../../ui/SidebarToggleButton";
 import TableOperations from "../../ui/TableOperations";
 
 const StyledScreenMenu = styled.ul`
@@ -70,9 +72,16 @@ function ScreenMenu({
       }),
     },
   ];
+  const { sidebarToggled, toggleSidebar } = useSidebar();
+
   return (
     <>
       <StyledScreenMenu type="start">
+        <SidebarToggleButton
+          sidebarToggled={sidebarToggled}
+          onToggle={toggleSidebar}
+        />
+
         <TableOperations>
           <FilterGroup size="small" filterField="dataType" options={options} />
         </TableOperations>

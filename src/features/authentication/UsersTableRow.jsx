@@ -51,7 +51,7 @@ const NEXT_ROLE = {
 };
 
 function UsersTableRow({ user }) {
-  const { email, id, role, username, created_at, alive, play } = user;
+  const { email, id, role, username, created_at, useyn: alive, play } = user;
   const { updateUser, isUpdating } = useUpdateUser();
   const { user: currentUser } = useUser();
   const avatar = user?.avatar_url || "/default-user.jpg";

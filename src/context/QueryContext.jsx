@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { cleansingData } from "../utils/helpers";
 import { useSettings } from "./SettingsContext"; // settings context 경로에 맞게 수정
 import { useFetch } from "./useFetch";

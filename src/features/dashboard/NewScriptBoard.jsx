@@ -29,6 +29,9 @@ const StyledTrendBoard = styled.div`
 
 const RightAlignedButtonText = styled(ButtonText)`
   margin-left: auto;
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
+  }
 `;
 
 function NewScriptBoard({ title, baseType }) {
@@ -89,16 +92,17 @@ function NewScriptBoard({ title, baseType }) {
           options={filterOptions}
           onChange={(newFilter) => setFilter(newFilter)}
         />
+
         <RightAlignedButtonText
           onClick={() => {
             navigate("/scripts");
           }}
         >
-          <span>
-            <FormattedMessage id="newScriptBoard.seeAll" /> &rarr;
-          </span>
+          <FormattedMessage id="newScriptBoard.seeAll" /> &rarr;
         </RightAlignedButtonText>
       </HeadingGroup>
+
+      {/* MAIN */}
       <ScriptSlider items={items} />
     </StyledTrendBoard>
   );

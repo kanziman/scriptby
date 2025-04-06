@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 const StyledFormRow = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
 
   grid-template-columns: ${(props) =>

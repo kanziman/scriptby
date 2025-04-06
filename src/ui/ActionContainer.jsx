@@ -65,6 +65,10 @@ function ActionContainer({ play, baseType, showId, name, isTv }) {
     id: "action.login",
   });
 
+  const NOTICE_READY = intl.formatMessage({
+    id: "notice.ready",
+    defaultMessage: "스크립트를 등록해보세요.",
+  });
   const NOTICE_EPISODE_REQUIRED = intl.formatMessage({
     id: "notice.episodeRequired",
     defaultMessage: "스크립트를 등록하려면, Episode를 선택해야 합니다.",
@@ -88,8 +92,8 @@ function ActionContainer({ play, baseType, showId, name, isTv }) {
     case "tutor":
       buttonText = TEXT_REGISTER_SCRIPT;
       navAddress = NAV_ADD_SCRIPT;
-      noticeText = NOTICE_EPISODE_REQUIRED;
-      disabled = play !== "tutor";
+      noticeText = isTv ? NOTICE_EPISODE_REQUIRED : NOTICE_READY;
+      disabled = isTv;
       break;
     case "student":
       buttonText = TEXT_APPLY_TUTOR;
@@ -113,24 +117,29 @@ function ActionContainer({ play, baseType, showId, name, isTv }) {
   }
 
   function handleClick() {
+    // NOT LOGGED IN
+    if (!user) {
+      navigate(NAV_LOGIN);
+      return;
+    }
+
+    if (play !== "tutor") {
+      navigate(NAV_ACCOUNT);
+      return;
+    }
+
+    // WHEN LOGGED IN
     if (baseType === "tv") {
-      // tv
-      dispatch({
-        type: `trend/${baseType}/clicked`,
-        payload: { showId, query: name, filter: baseType },
-      });
       navigate(`${NAV_FIND}`);
     } else {
-      // movie
-      dispatch({
-        type: `trend/${baseType}/clicked`,
-        payload: { showId, query: name, filter: baseType },
-      });
       navigate(navAddress);
     }
-  }
 
-  console.log("user :>> ", user);
+    dispatch({
+      type: `trend/${baseType}/clicked`,
+      payload: { showId, query: name, filter: baseType },
+    });
+  }
 
   return (
     <ActionContainerWrapper>
@@ -145,7 +154,7 @@ function ActionContainer({ play, baseType, showId, name, isTv }) {
           })}
         </StyledButton>
       )}
-      {user && !isTv && (
+      {user && (
         <StyledButton
           onClick={handleClick}
           disabled={disabled}
@@ -155,7 +164,7 @@ function ActionContainer({ play, baseType, showId, name, isTv }) {
         </StyledButton>
       )}
 
-      {noticeText && (play !== "tutor" || isTv) && (
+      {noticeText && (
         <TutorNotice>
           <CiCircleInfo />
           <span>{noticeText}</span>

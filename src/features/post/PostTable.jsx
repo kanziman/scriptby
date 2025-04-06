@@ -2,7 +2,7 @@ import Empty from "../../ui/Empty";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import Spinner from "../../ui/Spinner";
 import ScreenPagenation from "../scripts/ScreenPagenation";
 import PostRow from "./PostRow";
@@ -10,13 +10,16 @@ import PostRowNotice from "./PostRowNotice";
 import { usePosts } from "./usePosts";
 
 function PostTable({ isToggled }) {
+  const intl = useIntl();
   const { posts, count, isPending } = usePosts();
+  const resourceName = intl.formatMessage({ id: "menu.posts" });
 
   if (isPending) return <Spinner />;
-  if (!posts) {
-    return <Empty resourceName={<FormattedMessage id="empty.noPosts" />} />;
-  }
+
   const { noticePosts, generalPosts } = posts;
+  if (!noticePosts.length > 0 && !generalPosts.length > 0) {
+    return <Empty resource={resourceName} />;
+  }
   return (
     <Menus>
       <Table columns={"1fr 3rem"} minWidth={"300"}>

@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
 import { useQuery } from "../../context/QueryContext";
 import Empty from "../../ui/Empty";
@@ -28,8 +28,11 @@ function EditScript() {
 
   const episode = { episodeName, episodeNumber, seasonNumber };
 
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.show" });
+
   if (!show) {
-    return <Empty resourceName={<FormattedMessage id="empty.show" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (

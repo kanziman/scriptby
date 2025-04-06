@@ -8,12 +8,14 @@ import SpinnerMini from "../../ui/SpinnerMini";
 const GoogleIcon = styled.img`
   width: 50%;
   cursor: pointer;
+  align-self: center;
 `;
 
 function GoogleLogin() {
   const [loading, setLoading] = useState(false);
   const { darkMode } = useSettings();
   const src = darkMode ? "google-dark.png" : "google-light.png";
+
   const handleGoogleLogin = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOAuth({

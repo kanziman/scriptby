@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import Button from "./Button";
 import Heading from "./Heading";
@@ -33,10 +34,19 @@ function ConfirmDelete({ resource, onConfirm, disabled, onCloseModal }) {
 
   return (
     <StyledConfirmDelete>
-      <Heading type="h3">Delete {resource}</Heading>
+      <Heading type="h3">
+        <FormattedMessage
+          id="modal.delete.title"
+          defaultMessage="Delete {resource}"
+          values={{ resource }}
+        />
+      </Heading>
       <p>
-        Are you sure you want to delete this {resource} permanently? This action
-        cannot be undone.
+        <FormattedMessage
+          id="modal.delete.description"
+          defaultMessage="Are you sure you want to delete this {resource} permanently? This action cannot be undone."
+          values={{ resource }}
+        />
       </p>
 
       <div>
@@ -45,10 +55,10 @@ function ConfirmDelete({ resource, onConfirm, disabled, onCloseModal }) {
           onClick={handleCancel}
           disabled={disabled}
         >
-          Cancel
+          <FormattedMessage id="modal.delete.cancel" defaultMessage="Cancel" />
         </Button>
         <Button variation="danger" onClick={handleDelete} disabled={disabled}>
-          Delete
+          <FormattedMessage id="modal.delete.delete" defaultMessage="Delete" />
         </Button>
       </div>
     </StyledConfirmDelete>

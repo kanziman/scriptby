@@ -53,7 +53,9 @@ export default function SearchedShows() {
           </GridRow>
 
           {shows && visibleCount < shows.length && (
-            <LoadMoreButton onClick={handleLoadMore}>더보기</LoadMoreButton>
+            <LoadMoreButton onClick={handleLoadMore}>
+              <FormattedMessage id="loadMore" defaultMessage="더보기" />
+            </LoadMoreButton>
           )}
         </>
       ) : (

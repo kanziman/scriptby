@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useSidebar } from "../context/SidebarContext";
 import Header from "./Header";
 import MainFooter from "./Layout/MainFooter";
 import Sidebar from "./Sidebar";
-import SidebarToggleButton from "./SidebarToggleButton";
 
 const StyledAppLayout = styled.div`
   display: grid;
@@ -80,31 +79,22 @@ const SidebarModal = styled.div`
 
 function AppLayout() {
   const { scriptId } = useParams();
-  const [sidebarToggled, setSidebarToggled] = useState(false);
-  const handleSidebarToggled = () => {
-    setSidebarToggled((prev) => !prev);
-  };
+  const { sidebarToggled, toggleSidebar } = useSidebar();
 
   return (
     <StyledAppLayout>
       <Header />
 
-      {scriptId && (
-        <SidebarToggleButton
-          sidebarToggled={sidebarToggled}
-          onToggle={handleSidebarToggled}
-        />
-      )}
       <Main>
         <Container>
-          <Outlet context={{ sidebarToggled }} />
+          <Outlet />
         </Container>
       </Main>
 
       <MainFooter></MainFooter>
 
       {scriptId && (
-        <Overlay visible={sidebarToggled} onClick={handleSidebarToggled}>
+        <Overlay visible={sidebarToggled} onClick={toggleSidebar}>
           <SidebarModal onClick={(e) => e.stopPropagation()}>
             <Sidebar />
           </SidebarModal>

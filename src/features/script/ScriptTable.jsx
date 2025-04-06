@@ -7,7 +7,7 @@ import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import ScriptRow from "./ScriptRow";
 // import ScriptTableOperations from "./ScriptTableOperations";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import { useScript } from "./useScript";
 function ScriptTable() {
@@ -18,9 +18,11 @@ function ScriptTable() {
   // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
   const userColumns = `6rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
 
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.scripts" });
   if (isLoading) return <Spinner />;
   if (!scripts?.length) {
-    return <Empty resourceName={<FormattedMessage id="empty.scripts" />} />;
+    return <Empty resource={resourceName} />;
   }
 
   return (

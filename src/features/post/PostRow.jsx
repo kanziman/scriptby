@@ -8,6 +8,8 @@ import Menus from "../../ui/Menus";
 import MetaData from "../../ui/MetaData";
 import Modal from "../../ui/Modal";
 import Table from "../../ui/Table";
+import Tag from "../../ui/Tag";
+import { POST_CATEGORY_OPTIONS, statusToTagName } from "../../utils/constants";
 import { useUser } from "../authentication/useUser";
 import { useDeletePost } from "./useDeletePost";
 
@@ -49,7 +51,16 @@ const StyledLink = styled(Link)`
   }
   color: var(--color-grey-600);
 `;
+const Sided = styled.div`
+  display: flex;
+  gap: 0.8rem;
 
+  @media (max-width: 34em) {
+    & span {
+      font-size: 0.8rem;
+    }
+  }
+`;
 const Title = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
@@ -74,17 +85,29 @@ function PostRow({ data }) {
     view,
     profile,
     thumb,
+    category,
   } = data;
   const { user: currentUser } = useUser();
   const isWriter = currentUser?.id === userId;
-  // const avatar = user?.user_metadata?.avatar || "/default-user.jpg";
+  const typeLabel = POST_CATEGORY_OPTIONS.find(
+    (option) => option.value === category
+  )?.label;
 
   return (
     <Table.Row>
       <StyledLink to={`/posts/${postId}`}>
         <RowGrid>
           <Stacked>
-            <Title>{title}</Title>
+            <Sided>
+              <Tag round="square" type={statusToTagName[category]}>
+                <FormattedMessage
+                  id={`post.type.${category}`}
+                  defaultMessage={typeLabel}
+                />
+              </Tag>
+              <Title>{title}</Title>
+            </Sided>
+
             <MetaData
               username={profile.username}
               createdAt={createdAt}
@@ -125,7 +148,7 @@ function PostRow({ data }) {
             </Menus>
             <Modal.Window name="delete">
               <ConfirmDelete
-                resource="post"
+                resource={<FormattedMessage id="menu.posts" />}
                 disabled={isDeleting}
                 onConfirm={() => deletePost(postId)}
               />

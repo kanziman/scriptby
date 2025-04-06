@@ -27,8 +27,9 @@ export const SELECT_OPTIONS = [{ value: "0", label: "0" }];
 export const statusToTagName = {
   notice: "red",
   general: "grey",
-  "checked-in": "green",
-  "checked-out": "silver",
+  "q&a": "blue",
+  error: "yellow",
+  request: "indigo",
 };
 
 export const getPostCategoryOptions = (intl) => [
