@@ -19,7 +19,7 @@ const ShowTitle = styled.h1`
 
   @media (max-width: 34em) {
     flex-direction: column;
-    align-items: flex-start;
+    /* align-items: flex-start; */
   }
 `;
 
@@ -72,6 +72,10 @@ const EpisodeLabel = styled.span`
   font-weight: 500;
   font-size: 1.4rem;
   text-transform: uppercase;
+
+  @media (max-width: 34em) {
+    font-size: 1rem;
+  }
 `;
 
 // 에피소드 제목 스타일 (짧게 줄인 제목)
@@ -80,6 +84,9 @@ const EpisodeName = styled.div`
   font-style: italic;
   color: var(--color-grey-500);
   color: ${(props) => props.backdropColor && `#ddd`};
+  @media (max-width: 34em) {
+    font-size: 1rem;
+  }
 `;
 
 export {

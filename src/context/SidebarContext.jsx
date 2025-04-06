@@ -6,7 +6,6 @@ function SidebarProvider({ children }) {
   const [sidebarToggled, setSidebarToggled] = useState(false);
 
   function toggleSidebar() {
-    console.log("toggled");
     setSidebarToggled((prev) => !prev);
   }
 

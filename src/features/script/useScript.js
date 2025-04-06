@@ -51,10 +51,9 @@ export function useScript(pageSize) {
   // FILTER
   const query = searchParams.get("query");
   const filterValue = searchParams.get("category");
-  const show_id = searchParams.get("showId");
-  const episode_number = searchParams.get("epNumber");
+  const show_id = searchParams.get("show_id");
+  const episode_number = searchParams.get("episode_number");
   const status = searchParams.get("status");
-  console.log("status :>> ", status);
 
   let filter = [];
   if (filterValue && filterValue !== "all") {

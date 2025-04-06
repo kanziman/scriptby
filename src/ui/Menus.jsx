@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
@@ -72,9 +78,34 @@ const MenusContext = createContext();
 function Menus({ children }) {
   const [openId, setOpenId] = useState("");
   const [position, setPosition] = useState(null);
-
+  const [lastScrollPosition, setLastScrollPosition] = useState(0);
   const close = () => setOpenId("");
   const open = setOpenId;
+  useEffect(() => {
+    if (openId !== "") {
+      setLastScrollPosition(window.scrollY);
+
+      const handleScroll = () => {
+        const currentScrollPosition = window.scrollY;
+        const scrollDifference = Math.abs(
+          currentScrollPosition - lastScrollPosition
+        );
+
+        const SCROLL_THRESHOLD = 20;
+        if (scrollDifference > SCROLL_THRESHOLD) {
+          close();
+        }
+      };
+
+      // 스크롤 이벤트 리스너 등록
+      window.addEventListener("scroll", handleScroll, true);
+
+      // 컴포넌트 언마운트 또는 openId가 변경될 때 이벤트 리스너 제거
+      return () => {
+        window.removeEventListener("scroll", handleScroll, true);
+      };
+    }
+  }, [openId, lastScrollPosition]);
 
   return (
     <MenusContext.Provider

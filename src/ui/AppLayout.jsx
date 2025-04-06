@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { HiX } from "react-icons/hi";
 import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSidebar } from "../context/SidebarContext";
@@ -14,7 +16,6 @@ const StyledAppLayout = styled.div`
 const Main = styled.main`
   background-color: var(--color-grey-50);
   padding: 2rem 4.8rem 6.4rem;
-
   width: 100%;
   @media (max-width: 34em) {
     padding: 2rem 0rem 3.2rem;
@@ -29,15 +30,11 @@ const Container = styled.div`
   @media (max-width: 34em) {
     padding: 0 1rem;
   }
-  /* width: 100%; */
   max-width: ${({ theme }) => theme.breakpoints.desktop};
 
   @media (max-width: 84em) {
     max-width: ${({ theme }) => theme.breakpoints.smallDesktop};
   }
-  /* @media (max-width: 75em) {
-max-width: ${({ theme }) => theme.breakpoints.landScapeTablet};
-} */
   @media (max-width: 60em) {
     max-width: ${({ theme }) => theme.breakpoints.tablet};
   }
@@ -46,7 +43,6 @@ max-width: ${({ theme }) => theme.breakpoints.landScapeTablet};
   }
   @media (max-width: 34em) {
     max-width: ${({ theme }) => theme.breakpoints.mobile};
-    /* max-width: 100%; */
   }
 `;
 
@@ -72,14 +68,26 @@ const SidebarModal = styled.div`
   @media (max-width: 80rem) {
     width: 70%;
   }
-  @media (max-width: 50rem) {
-    width: 90%;
+  @media (max-width: 34rem) {
+    width: 100%;
   }
 `;
 
 function AppLayout() {
   const { scriptId } = useParams();
   const { sidebarToggled, toggleSidebar } = useSidebar();
+
+  useEffect(() => {
+    if (sidebarToggled) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    // 컴포넌트 언마운트 시 복원
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [sidebarToggled]);
 
   return (
     <StyledAppLayout>
@@ -91,7 +99,7 @@ function AppLayout() {
         </Container>
       </Main>
 
-      <MainFooter></MainFooter>
+      <MainFooter />
 
       {scriptId && (
         <Overlay visible={sidebarToggled} onClick={toggleSidebar}>

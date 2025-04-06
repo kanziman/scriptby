@@ -43,8 +43,6 @@ function ShowInfoSub() {
     numberOfEpisodes,
   } = cleanedShow;
 
-  console.log("cleanedShow :>> ", cleanedShow);
-
   return (
     <DescriptionSection>
       {overview && (

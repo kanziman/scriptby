@@ -36,7 +36,7 @@ export function useEpisode(showId) {
       if (JSON.stringify(updatedEpisodes) !== JSON.stringify(episodes)) {
         dispatch({ type: "episodes/update", payload: updatedEpisodes });
       }
-      console.log("updatedEpisodes:", updatedEpisodes);
+      // console.log("updatedEpisodes:", updatedEpisodes);
     }
   }, [scripts, episodes, dispatch, showId]);
 

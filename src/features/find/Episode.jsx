@@ -182,8 +182,9 @@ export default function Episode({ episode }) {
     });
     navigate(`/script/add`);
   }
+
   function handleSeeDetail(showId, epNumber) {
-    navigate(`/scripts?showId=${showId}&epNumber=${epNumber}`);
+    navigate(`/scripts?show_id=${showId}&episode_number=${epNumber}`);
   }
 
   return (

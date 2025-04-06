@@ -61,7 +61,7 @@ function SideScreen() {
         />
       </TableOperations>
       <Menus>
-        <Table columns={"1fr 1fr"} minWidth="300px">
+        <Table columns={"1fr 1fr"} minWidth="250px">
           {/* <Table.Header color={"brand"}></Table.Header> */}
           <Table.Body
             data={sliced}
