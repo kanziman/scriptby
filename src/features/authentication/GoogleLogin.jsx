@@ -37,6 +37,7 @@ function GoogleLogin() {
   };
 
   if (loading) return <SpinnerMini></SpinnerMini>;
+
   return (
     <GoogleIcon src={src} alt="google login icon" onClick={handleGoogleLogin} />
   );

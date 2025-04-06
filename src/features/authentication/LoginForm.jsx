@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
@@ -10,6 +11,15 @@ import SocialButton from "../../ui/SocialButton";
 import SpinnerMini from "../../ui/SpinnerMini";
 import GoogleLogin from "./GoogleLogin";
 import { useLogin } from "./useLogin";
+
+const StyledButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.6rem;
+  min-width: 30rem;
+`;
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -84,7 +94,9 @@ function LoginForm() {
         </FormRowVertical>
 
         <FormRowVertical>
-          <GoogleLogin />
+          <StyledButton>
+            <GoogleLogin />
+          </StyledButton>
         </FormRowVertical>
       </Form>
 
