@@ -30,7 +30,7 @@ const StyledTrendBoard = styled.div`
 const RightAlignedButtonText = styled(ButtonText)`
   margin-left: auto;
   @media (max-width: 34em) {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 

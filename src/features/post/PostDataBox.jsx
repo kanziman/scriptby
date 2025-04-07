@@ -21,6 +21,10 @@ const Footer = styled.footer`
 const PostSection = styled.div`
   margin: 0 auto;
   padding: 4rem;
+
+  @media (max-width: 34em) {
+    padding: 2rem;
+  }
 `;
 const ContentContainer = styled.div`
   .ql-editor {

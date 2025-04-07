@@ -205,6 +205,16 @@ export function transform(uploadData) {
   };
 }
 
+export function formatDate(dateString, locale) {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 export function cleansingData(showOrMovie) {
   const id = showOrMovie?.id;
   const backdropPath = showOrMovie?.backdrop_path;

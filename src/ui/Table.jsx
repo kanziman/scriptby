@@ -27,7 +27,8 @@ const StyledHeader = styled(CommonRow)`
   letter-spacing: 0.4px;
   font-weight: 600;
   color: var(--color-grey-600);
-  min-width: ${(props) => props.minWidth || "600px"};
+  min-width: ${(props) => props.minWidth || "700px"};
+  word-break: keep-all;
   /* text-align: center; */
   @media (max-width: 50em) {
     font-size: 1.2rem;
@@ -37,7 +38,7 @@ const StyledHeader = styled(CommonRow)`
 
 const StyledRow = styled(CommonRow)`
   padding: 1.2rem 2.4rem;
-  min-width: ${(props) => props.minWidth || "600px"};
+  min-width: ${(props) => props.minWidth || "700px"};
 
   &:hover {
     background-color: var(--color-grey-50);

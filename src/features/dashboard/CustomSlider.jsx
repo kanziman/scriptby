@@ -6,6 +6,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSettings } from "../../context/SettingsContext";
+import { MetaContainer, MetaSubGroup } from "../../ui/MetaSubGroup";
 
 const StyledSwiperContainer = styled.div`
   width: 100%;
@@ -28,7 +29,7 @@ const StyledItem = styled.div`
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); */
   }
 `;
 
@@ -67,47 +68,12 @@ const Badge = styled.div`
   z-index: 2;
 `;
 
-const Title = styled.h3`
-  font-size: 1.6rem;
-  color: var(--color-grey-800);
-  margin-bottom: 0.5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* 최대 2줄로 제한 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const RatingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-`;
-
-const RatingStars = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 0.5rem;
-`;
-
 const Star = styled.span`
   color: ${(props) => (props.filled ? "#FFD700" : "#E0E0E0")};
   font-size: 1.2rem;
-`;
-
-const RatingValue = styled.span`
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--color-grey-700);
-`;
-
-const ReleaseDate = styled.p`
-  font-size: 1.2rem;
-  color: var(--color-grey-600);
-  margin-bottom: 0.5rem;
-  align-self: center;
-  font-weight: 300;
+  @media (max-width: 34em) {
+    font-size: 1cqmax;
+  }
 `;
 
 const Genres = styled.div`
@@ -207,18 +173,24 @@ function CustomSlider({ trends, mediaType, genres = {} }) {
                   </Badge>
                 )}
               </ImageWrapper>
-              <Title>{trend.title || trend.name}</Title>
 
-              <RatingContainer>
-                <RatingStars>{renderStars(trend.vote_average)}</RatingStars>
-                <RatingValue>
-                  {trend.vote_average ? trend.vote_average.toFixed(1) : "N/A"}
-                </RatingValue>
-              </RatingContainer>
-
-              <ReleaseDate>
-                {formatDate(trend.release_date || trend.first_air_date, locale)}
-              </ReleaseDate>
+              <MetaContainer title={trend.title || trend.name}>
+                <MetaSubGroup
+                  label={renderStars(trend.vote_average)}
+                  value={
+                    trend.vote_average ? trend.vote_average.toFixed(1) : "N/A"
+                  }
+                />
+                <MetaSubGroup
+                  label={intl.formatMessage({
+                    id: "meta.released",
+                  })}
+                  value={formatDate(
+                    trend.release_date || trend.first_air_date,
+                    locale
+                  )}
+                />
+              </MetaContainer>
             </StyledItem>
           </SwiperSlide>
         ))}

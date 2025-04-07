@@ -3,7 +3,7 @@ import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import FlagTextVertical from "../../ui/FlagTextVertical";
-import { MetaSubGroup } from "../../ui/MetaSubGroup";
+import { MetaContainer, MetaSubGroup } from "../../ui/MetaSubGroup";
 import Row from "../../ui/Row";
 import { IMG_PATH } from "../../utils/constants";
 import { cleansingData } from "../../utils/helpers";
@@ -72,54 +72,7 @@ const FlagTextWrapper = styled.div`
   justify-content: center;
   z-index: 2;
   border-radius: 0 0 0.5rem 0.5rem;
-`;
-
-const TextContainer = styled.div`
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-`;
-
-const EpisodeTitle = styled.h3`
-  font-size: 1.6rem;
-  color: var(--color-grey-800);
-  margin-bottom: 0.5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 4.6rem;
-
-  @media (max-width: 50em) {
-    /* font-size: 1.4rem; */
-    /* -webkit-line-clamp: 2; */
-    /* height: 2rem; */
-  }
-`;
-
-const MetaContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--color-grey-100);
-  padding: 1.2rem 2rem;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--color-grey-600);
-  margin-top: 0.8rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-
-  @media (max-width: 34em) {
-    padding: 0.6rem 1rem;
-  }
-`;
-
-const SubRow = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  margin-bottom: 1rem;
 `;
 
 function ScriptSliderItem({ item: script }) {
@@ -177,44 +130,39 @@ function ScriptSliderItem({ item: script }) {
         </Row>
       </FlagTextWrapper>
 
-      <TextContainer>
-        <EpisodeTitle>{originalName}</EpisodeTitle>
-        <MetaContainer>
-          <SubRow>
-            {isTv ? (
-              <Row type="horizontal" gap="0.4rem">
-                <MetaSubGroup
-                  label={intl.formatMessage({
-                    id: "meta.season",
-                  })}
-                  boldValue={seasonNumber}
-                  delimeter={"|"}
-                />
-                <MetaSubGroup
-                  label={intl.formatMessage({
-                    id: "meta.episode",
-                  })}
-                  boldValue={episodeNumber}
-                />
-              </Row>
-            ) : (
+      <Row>
+        <MetaContainer title={originalName}>
+          {isTv ? (
+            <>
               <MetaSubGroup
                 label={intl.formatMessage({
-                  id: "meta.released",
+                  id: "meta.season",
                 })}
-                boldValue={format(new Date(date), "yyyy.MM.dd.")}
+                value={seasonNumber}
+                delimiter={"|"}
+                label1={intl.formatMessage({
+                  id: "meta.episode",
+                })}
+                value1={episodeNumber}
               />
-            )}
-
+            </>
+          ) : (
             <MetaSubGroup
               label={intl.formatMessage({
-                id: "meta.createdBy",
+                id: "meta.released",
               })}
-              boldValue={username}
+              value={format(new Date(date), "yyyy.MM.dd.")}
             />
-          </SubRow>
+          )}
+
+          <MetaSubGroup
+            label={intl.formatMessage({
+              id: "meta.createdBy",
+            })}
+            value={username}
+          />
         </MetaContainer>
-      </TextContainer>
+      </Row>
     </StyledItem>
   );
 }

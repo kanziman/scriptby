@@ -154,7 +154,7 @@
   "emptyMessage": "현재 데이터가 없습니다.",
 
   "toast.incorrectCredentials": "이메일 혹은 비밀번호가 일치하지 않습니다.",
-  "toast.scriptUploaded": "스크립트가 성공적으로 등록되었습니다.(승인 후 열람 가능합니다)",
+  "toast.scriptUploaded": "스크립트가 성공적으로 등록되었습니다.\n(승인 후 모두 열람 가능합니다)",
   "toast.success.deleted": "성공적으로 삭제되었습니다.",
   "toast.success.updated": "성공적으로 수정되었습니다.",
   "toast.success.created": "성공적으로 생성되었습니다.",

@@ -29,8 +29,7 @@ const Stacked = styled.div`
       font-size: 1rem;
     }
   }
-
-  & span:last-child {
+  & span:not(:first-child) {
     color: var(--color-grey-500);
     font-size: 1rem;
     @media (max-width: 50em) {
@@ -41,6 +40,13 @@ const Stacked = styled.div`
   & button {
     font-size: 0.6rem;
   }
+`;
+const StyledTitle = styled.span`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const StyledButton = styled.div`
   display: inline-block;
@@ -113,8 +119,10 @@ function ScriptRow({
   return (
     <>
       <Table.Row
-        onClick={isConfirmed ? hanldeClick : undefined}
-        style={{ cursor: isConfirmed ? "pointer" : "not-allowed" }}
+        onClick={isConfirmed || canDeleteUpdate ? hanldeClick : undefined}
+        style={{
+          cursor: isConfirmed || canDeleteUpdate ? "pointer" : "not-allowed",
+        }}
       >
         {/* STATUS -  */}
         <StyledButton>
@@ -130,23 +138,26 @@ function ScriptRow({
           </Button>
         </StyledButton>
         <Stacked>
-          {category === "tv" ? <span>📺 Tv</span> : <span>🎬 Movie</span>}
-          <span></span>
-        </Stacked>
-        <Stacked>
-          <span>
-            <>{originalName}</>
-          </span>
+          <StyledTitle>{originalName}</StyledTitle>
           <span>{format(new Date(firstAirDate), "yyyy.MM.dd")}</span>
         </Stacked>
         <Stacked>
+          {category === "tv" ? <span>📺 Tv</span> : <span>🎬 Movie</span>}
+          <span></span>
+        </Stacked>
+
+        <Stacked>
           {category === "tv" ? (
             <>
+              <span></span>
               <span>{`Season ${seasonNumber}`}</span>
               <span>{`Episode ${episodeNumber}`}</span>
             </>
           ) : (
-            <>&mdash;</>
+            <>
+              <span></span>
+              <span>&mdash;</span>
+            </>
           )}
         </Stacked>
         <Stacked>
@@ -176,7 +187,7 @@ function ScriptRow({
             <Menus.Menu>
               <Menus.Toggle id={scriptId} />
               <Menus.List id={scriptId}>
-                {isConfirmed && (
+                {(isConfirmed || canDeleteUpdate) && (
                   <Menus.Button
                     icon={<HiEye />}
                     onClick={() => navigate(`/scripts/${scriptId}`)}

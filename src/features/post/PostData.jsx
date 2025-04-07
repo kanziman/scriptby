@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../ui/Button";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import MetaData from "../../ui/MetaData";
 import Modal from "../../ui/Modal";
 import Tag from "../../ui/Tag";
 import { POST_TYPE_OPTIONS, statusToTagName } from "../../utils/constants";
-import { customTimeFormat } from "../../utils/helpers";
 import { useUser } from "../authentication/useUser";
 import { useDeletePost } from "./useDeletePost";
 
 const Title = styled.h1`
   font-size: 3rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.4rem;
   color: var(--color-grey-600);
   @media (max-width: 50em) {
     font-size: 2rem;
@@ -22,8 +22,8 @@ const Title = styled.h1`
 const MetaInfo = styled.div`
   color: var(--color-grey-600);
   font-size: 1.4rem;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1.4rem;
   border-bottom: 1px solid var(--color-grey-200);
   @media (max-width: 50em) {
     font-size: 1.2rem;
@@ -31,25 +31,15 @@ const MetaInfo = styled.div`
 `;
 
 const CategoryWrapper = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 0.4rem;
 `;
 
 const UserInfoRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.2rem;
   flex-wrap: wrap;
   /* justify-content: space-between; */
-`;
-const UserInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-`;
-const MetaGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
 `;
 
 const Avatar = styled.img`
@@ -59,28 +49,6 @@ const Avatar = styled.img`
   object-position: center;
   border-radius: 50%;
   outline: 1px solid var(--color-grey-100);
-`;
-
-const Username = styled.span`
-  font-weight: 500;
-`;
-
-const ViewCount = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  &::before {
-    content: "•";
-    margin-right: 2px;
-  }
-`;
-
-const TimeStamp = styled.time`
-  &::before {
-    content: "•";
-    margin-right: 4px;
-  }
 `;
 
 const WriterGroupButton = styled.div`
@@ -125,18 +93,9 @@ function PostData({ post }) {
         </CategoryWrapper>
 
         <UserInfoRow>
-          <MetaGroup>
-            <UserInfo>
-              <Avatar src={avatarImg} alt={`Avatar of ${username}`} />
-              <Username>{username}</Username>
-            </UserInfo>
-            <TimeStamp dateTime={createdAt}>
-              {customTimeFormat(createdAt)}
-            </TimeStamp>
-            <ViewCount>
-              {view} <FormattedMessage id="post.count" />
-            </ViewCount>
-          </MetaGroup>
+          <MetaData username={username} createdAt={createdAt} view={view}>
+            <Avatar src={avatarImg} alt={`Avatar of ${username}`} />
+          </MetaData>
 
           {(isWriter || currentUser?.isMaster) && (
             <WriterGroupButton>

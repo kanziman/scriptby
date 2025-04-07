@@ -2,12 +2,11 @@ import Empty from "../../ui/Empty";
 import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 
+import { FormattedMessage, useIntl } from "react-intl";
 import { useLocation } from "react-router-dom";
 import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import ScriptRow from "./ScriptRow";
-// import ScriptTableOperations from "./ScriptTableOperations";
-import { FormattedMessage, useIntl } from "react-intl";
 
 import { useScript } from "./useScript";
 function ScriptTable() {
@@ -17,8 +16,7 @@ function ScriptTable() {
 
   // const adminColumns = "0.6fr 1fr 1fr 0.4fr 0.4fr 0.4fr 0.8fr 1fr 2rem";
   // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
-  // const userColumns = `6rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
-  const userColumns = `1fr 1fr 3fr 1.2fr 1fr 1fr 1.2fr 3fr 1rem `;
+  const userColumns = `9rem 14rem  repeat(auto-fit, minmax(50px, 1fr))`;
 
   const intl = useIntl();
   const resourceName = intl.formatMessage({ id: "menu.scripts" });
@@ -36,10 +34,10 @@ function ScriptTable() {
               <FormattedMessage id="table.header.status" />
             </div>
             <div>
-              <FormattedMessage id="table.header.type" />
+              <FormattedMessage id="table.header.title" />
             </div>
             <div>
-              <FormattedMessage id="table.header.title" />
+              <FormattedMessage id="table.header.type" />
             </div>
             <div>
               <FormattedMessage id="table.header.info" />

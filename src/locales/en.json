@@ -68,7 +68,7 @@
   "table.header.status": "status",
   "table.header.type": "type",
   "table.header.title": "title",
-  "table.header.original": "original",
+  "table.header.original": "from",
   "table.header.info": "info",
   "table.header.to": "to",
   "table.header.date": "date",
@@ -133,7 +133,7 @@
   "tutor.uploadScriptMessage": "Now go upload your own script ->",
 
   "toast.incorrectCredentials": "Provided email or password are incorrect",
-  "toast.scriptUploaded": "Script successfully uploaded.(After confirmation, everyone can see)",
+  "toast.scriptUploaded": "Script successfully uploaded.\n(After confirmation, everyone can see)",
   "toast.success.deleted": "Successfully deleted.",
   "toast.success.updated": "Successfully updated.",
   "toast.success.created": "Successfully created.",
