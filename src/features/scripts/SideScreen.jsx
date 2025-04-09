@@ -30,8 +30,8 @@ function SideScreen() {
     {
       value: "phrases",
       label: intl.formatMessage({
-        id: "filter.phrase",
-        defaultMessage: "PHRASE",
+        id: "filter.phrases",
+        defaultMessage: "PHRASES",
       }),
     },
     {

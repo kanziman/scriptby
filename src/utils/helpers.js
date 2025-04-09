@@ -65,18 +65,40 @@ export const escapeRegExp = (string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
+// export const sliceDataLeftRight = (data) => {
+//   if (!data) return;
+//   const half = Math.ceil(data.length / 2);
+//   const lines1 = data.slice(0, half);
+//   const lines2 = data.slice(half, data.length);
+//   const rowCount = Math.max(lines1.length, lines2.length);
+
+//   // {left, right}
+//   const dividedData = Array.from({ length: rowCount }, (_, i) => ({
+//     left: lines1[i],
+//     right: lines2[i],
+//   }));
+//   return dividedData;
+// };
 export const sliceDataLeftRight = (data) => {
   if (!data) return;
-  const half = Math.ceil(data.length / 2);
-  const lines1 = data.slice(0, half);
-  const lines2 = data.slice(half, data.length);
-  const rowCount = Math.max(lines1.length, lines2.length);
 
-  // {left, right}
+  const left = [];
+  const right = [];
+
+  for (let i = 0; i < data.length; i++) {
+    if (i % 2 === 0) {
+      left.push(data[i]); // 짝수 인덱스
+    } else {
+      right.push(data[i]); // 홀수 인덱스
+    }
+  }
+
+  const rowCount = Math.max(left.length, right.length);
   const dividedData = Array.from({ length: rowCount }, (_, i) => ({
-    left: lines1[i],
-    right: lines2[i],
+    left: left[i],
+    right: right[i],
   }));
+
   return dividedData;
 };
 
@@ -203,16 +225,6 @@ export function transform(uploadData) {
       "translated_idioms"
     ),
   };
-}
-
-export function formatDate(dateString, locale) {
-  if (!dateString) return "";
-  const date = new Date(dateString);
-  return date.toLocaleDateString(locale, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 export function cleansingData(showOrMovie) {

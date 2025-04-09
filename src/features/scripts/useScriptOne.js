@@ -48,9 +48,10 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
   } = script;
 
   const lines = script["lines"] || [];
-  const slicedLines = isToggled
-    ? lines.slice((page - 1) * 2 * PAGE_SIZE, page * 2 * PAGE_SIZE)
-    : lines.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pageSize = isToggled ? 2 * PAGE_SIZE : PAGE_SIZE;
+  const start = (page - 1) * pageSize;
+
+  const slicedLines = lines.slice(start, start + pageSize);
 
   let dataToRender;
   if (isToggled) {
@@ -58,6 +59,7 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
   } else {
     dataToRender = slicedLines;
   }
+  console.log("dataToRender :>> ", dataToRender);
 
   const count = script["lines"].length;
 

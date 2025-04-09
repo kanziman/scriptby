@@ -60,8 +60,8 @@ function ScreenMenu({
     {
       value: "phrases",
       label: intl.formatMessage({
-        id: "filter.phrase",
-        defaultMessage: "PHRASE",
+        id: "filter.phrases",
+        defaultMessage: "PHRASES",
       }),
     },
     {
@@ -76,6 +76,7 @@ function ScreenMenu({
 
   return (
     <>
+      {/* LINE WORDS PHRASE IDIOMS */}
       <StyledScreenMenu type="start">
         <SidebarToggleButton
           sidebarToggled={sidebarToggled}
@@ -86,6 +87,7 @@ function ScreenMenu({
           <FilterGroup size="small" filterField="dataType" options={options} />
         </TableOperations>
       </StyledScreenMenu>
+      {/* SPLIT HIDE EXPAND  */}
       <StyledScreenMenu type="end">
         <li onClick={onToggle}>
           <ButtonIcon>

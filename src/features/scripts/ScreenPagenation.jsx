@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
@@ -24,6 +25,8 @@ const P = styled.p`
     gap: 0.4rem;
   }
 `;
+
+const Span = styled.span``;
 
 const Buttons = styled.div`
   display: flex;
@@ -71,22 +74,34 @@ const PaginationButton = styled.button`
 
 function ScreenPagenation({ count, isToggled }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = !searchParams.get("page")
-    ? 1
-    : Number(searchParams.get("page"));
+  const currentPage = Number(searchParams.get("page")) || 1;
 
-  const pageCount = Math.ceil(count / (isToggled ? 2 * PAGE_SIZE : PAGE_SIZE));
+  const rawPageSize = PAGE_SIZE;
+  const pageSize = isToggled ? 2 * rawPageSize : rawPageSize;
+
+  // 🔁 토글 변경 시 현재 start index 기반으로 새로운 page 설정
+  useEffect(() => {
+    const currentRawPage = Number(searchParams.get("page")) || 1;
+    const currentStartIndex =
+      (currentRawPage - 1) * (isToggled ? rawPageSize : 2 * rawPageSize);
+    const newPage = Math.floor(currentStartIndex / pageSize) + 1;
+
+    searchParams.set("page", newPage);
+    setSearchParams(searchParams);
+  }, [isToggled]);
+
+  const pageCount = Math.ceil(count / pageSize);
+  const startIndex = (currentPage - 1) * pageSize + 1;
+  const endIndex = Math.min(startIndex + pageSize - 1, count);
 
   function nextPage() {
-    const next = currentPage === pageCount ? currentPage : currentPage + 1;
-
+    const next = currentPage < pageCount ? currentPage + 1 : currentPage;
     searchParams.set("page", next);
     setSearchParams(searchParams);
   }
 
   function prevPage() {
-    const prev = currentPage === 1 ? currentPage : currentPage - 1;
-
+    const prev = currentPage > 1 ? currentPage - 1 : currentPage;
     searchParams.set("page", prev);
     setSearchParams(searchParams);
   }
@@ -95,53 +110,32 @@ function ScreenPagenation({ count, isToggled }) {
 
   return (
     <StyledScreenPagenation>
-      {isToggled ? (
-        <P>
-          <FormattedMessage
-            id="results.summary.pagination"
-            defaultMessage="{start} ~ {end} of {count} results"
-            values={{
-              start: (currentPage - 1) * 2 * PAGE_SIZE + 1,
-              end:
-                currentPage === pageCount ? count : currentPage * 2 * PAGE_SIZE,
-              count,
-            }}
-          />
-        </P>
-      ) : (
-        <P>
-          <FormattedMessage
-            id="results.summary.pagination"
-            defaultMessage="{start} ~ {end} of {count} results"
-            values={{
-              start: (currentPage - 1) * PAGE_SIZE + 1,
-              end: currentPage === pageCount ? count : currentPage * PAGE_SIZE,
-              count,
-            }}
-          />
-        </P>
-      )}
+      <P>
+        <FormattedMessage
+          id="results.summary.pagination"
+          defaultMessage="{start} ~ {end} of {count} results"
+          values={{ start: startIndex, end: endIndex, count }}
+        />
+      </P>
 
       <Buttons>
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
-          <HiChevronLeft />{" "}
-          <span>
-            {" "}
+          <HiChevronLeft />
+          <Span>
             <FormattedMessage
               id="pagination.previous"
               defaultMessage="Previous"
             />
-          </span>
+          </Span>
         </PaginationButton>
 
         <PaginationButton
           onClick={nextPage}
           disabled={currentPage === pageCount}
         >
-          <span>
-            {" "}
+          <Span>
             <FormattedMessage id="pagination.next" defaultMessage="Next" />
-          </span>
+          </Span>
           <HiChevronRight />
         </PaginationButton>
       </Buttons>

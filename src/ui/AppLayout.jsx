@@ -57,6 +57,7 @@ const Overlay = styled.div`
   transition: opacity 0.3s;
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   pointer-events: ${({ visible }) => (visible ? "auto" : "none")};
+  overscroll-behavior: none; /* 스크롤 전파 차단 */
 `;
 
 const SidebarModal = styled.div`

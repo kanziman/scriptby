@@ -58,6 +58,7 @@ function TextContent({ original, translated, hideTranslation, subData }) {
 
 function ScreenRow({ data, isToggled, hideTranslation, subData }) {
   const { original, translated, left, right } = data;
+
   if (!isToggled) {
     return (
       <Table.Row>

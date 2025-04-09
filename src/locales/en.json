@@ -180,7 +180,7 @@
 
   "filter.lines": "LINES",
   "filter.words": "WORDS",
-  "filter.phrase": "PHRASE",
+  "filter.phrases": "PHRASES",
   "filter.idioms": "IDIOMS",
 
   "modal.menu.edit": "Edit",
