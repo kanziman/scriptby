@@ -64,6 +64,7 @@ function ScriptRow({
     // air_date: airDate,
     // vote_count: voteCount,
     created_at: createdAt,
+    updated_at: updatedAt,
     original_language: originalLanguage,
     translated_language: translatedLanguage,
     user_id: scriptUserId,
@@ -170,12 +171,12 @@ function ScriptRow({
         </Stacked>
 
         <Stacked>
-          {isToday(new Date(createdAt)) ? (
+          {isToday(new Date(updatedAt)) ? (
             <span>{"Today"}</span>
           ) : (
-            <span>{format(new Date(createdAt), "yyyy.MM.dd")}</span>
+            <span>{format(new Date(updatedAt), "yyyy.MM.dd")}</span>
           )}
-          <span>{format(new Date(createdAt), "HH:mm:ss")}</span>
+          <span>{format(new Date(updatedAt), "HH:mm:ss")}</span>
         </Stacked>
 
         <Stacked>

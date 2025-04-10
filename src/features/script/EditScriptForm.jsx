@@ -162,6 +162,7 @@ function EditScriptForm({
   scriptId,
   show,
   episode,
+  profile,
 }) {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -172,7 +173,8 @@ function EditScriptForm({
   const { selectedShow, selectedEpisode } = useQuery();
   const { user: currentUser } = useUser();
   const { editAll, isUpdating } = useUpdateScript();
-  const userId = currentUser?.id;
+  const userId = profile?.id;
+
   const {
     name,
     originalLanguage,
@@ -215,11 +217,11 @@ function EditScriptForm({
       show_category: category,
       status: "pending",
     };
-    if (selectedEpisode && category === "tv") {
-      // selectedEpisode에서 불필요한 scripts 속성은 제거
-      const { id, scripts, ...rest } = selectedEpisode;
-      baseScript = { ...baseScript, ...rest, episode_id: id };
-    }
+    // if (selectedEpisode && category === "tv") {
+    //   // selectedEpisode에서 불필요한 scripts 속성은 제거
+    //   const { id, scripts, ...rest } = selectedEpisode;
+    //   baseScript = { ...baseScript, ...rest, episode_id: id };
+    // }
     return baseScript;
   };
 
@@ -251,7 +253,7 @@ function EditScriptForm({
       },
       {
         onSuccess: () => {
-          navigate("/scripts");
+          navigate("/scripts?status=pending");
         },
       }
     );
@@ -369,12 +371,7 @@ function EditScriptForm({
               icon={<HiOutlineCheckCircle />}
               label={<FormattedMessage id="scriptAdd.creator" />}
             >
-              <Input
-                id="email"
-                type="text"
-                value={currentUser?.email}
-                disabled
-              />
+              <Input id="email" type="text" value={profile?.email} disabled />
             </DataItem>
           </DataItemContainer>
 

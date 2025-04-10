@@ -4,7 +4,7 @@ import HeaderMenu from "./HeaderMenu";
 import HeaderNavMenu from "./HeaderNavMenu";
 
 import { useEffect, useRef, useState } from "react";
-import { useIsBrowser } from "../hooks/useIsBrowser";
+import { useBrowser } from "../hooks/useBrowser";
 
 const StyledHeader = styled.header`
   position: relative;
@@ -40,7 +40,7 @@ const StyledHeader = styled.header`
 `;
 
 function Header() {
-  const isBrowserSmall = useIsBrowser();
+  const isBrowserSmall = useBrowser();
   const headerRef = useRef(null);
   const [isSticky, setIsSticky] = useState(false);
   const headerHeight = "8rem";

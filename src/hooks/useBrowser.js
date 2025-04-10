@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useIsBrowser() {
+export function useBrowser() {
   const [isSmall, setIsSmall] = useState(window.innerWidth <= 800);
 
   useEffect(() => {

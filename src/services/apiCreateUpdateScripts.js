@@ -61,7 +61,12 @@ export async function updateShowAndScript({ newScript, show }) {
     console.log("UPDATE COMPLETE updatedTv:>> ", updatedTv);
 
     // B) newScript에 tv_id를 병합한 후 스크립트 업데이트 (업데이트 시 newScript에는 id가 포함되어야 함)
-    const scriptData = { ...newScript, tv_id: updatedTv.id };
+    // const scriptData = { ...newScript, tv_id: updatedTv.id };
+    const scriptData = {
+      ...newScript,
+      tv_id: updatedTv.id,
+      updated_at: new Date().toISOString(), // 현재 시간으로 업데이트
+    };
     console.log("UPDATE B FINISH scriptData:>> ", scriptData);
 
     const { data: updatedScriptData, error: scriptError } = await supabase

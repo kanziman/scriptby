@@ -3,6 +3,8 @@ import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { useBrowser } from "../../hooks/useBrowser";
+import MobilePagination from "../../ui/MobilePagination";
 import { PAGE_SIZE } from "../../utils/constants";
 
 const StyledScreenPagenation = styled.div`
@@ -37,6 +39,14 @@ const PaginationButton = styled.button`
   background-color: ${(props) =>
     props.active ? " var(--color-brand-600)" : "var(--color-grey-50)"};
   color: ${(props) => (props.active ? " var(--color-brand-50)" : "inherit")};
+
+  color: ${(props) =>
+    props.active
+      ? "var(--color-brand-50)"
+      : props.disabled
+      ? "var(--color-grey-300)"
+      : "inherit"};
+
   border: none;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -75,6 +85,7 @@ const PaginationButton = styled.button`
 function ScreenPagenation({ count, isToggled }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
+  const isSmall = useBrowser();
 
   const rawPageSize = PAGE_SIZE;
   const pageSize = isToggled ? 2 * rawPageSize : rawPageSize;
@@ -86,8 +97,10 @@ function ScreenPagenation({ count, isToggled }) {
       (currentRawPage - 1) * (isToggled ? rawPageSize : 2 * rawPageSize);
     const newPage = Math.floor(currentStartIndex / pageSize) + 1;
 
-    searchParams.set("page", newPage);
-    setSearchParams(searchParams);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", newPage);
+
+    setSearchParams(newParams, { replace: true });
   }, [isToggled]);
 
   const pageCount = Math.ceil(count / pageSize);
@@ -117,6 +130,16 @@ function ScreenPagenation({ count, isToggled }) {
           values={{ start: startIndex, end: endIndex, count }}
         />
       </P>
+
+      {isSmall && (
+        <MobilePagination
+          currentPage={currentPage}
+          count={count}
+          pageCount={pageCount}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
+      )}
 
       <Buttons>
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>

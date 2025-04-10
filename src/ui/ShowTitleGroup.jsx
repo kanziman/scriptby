@@ -4,7 +4,7 @@ import styled from "styled-components";
 const ShowInfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
 `;
 
 // 메인 타이틀 스타일
@@ -19,6 +19,7 @@ const ShowTitle = styled.h1`
 
   @media (max-width: 34em) {
     flex-direction: column;
+    font-size: 2rem;
     /* align-items: flex-start; */
   }
 `;
@@ -40,7 +41,7 @@ const LocalizedTitle = styled.span`
   font-style: italic;
 
   @media (max-width: 34em) {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin-top: 0.3rem;
   }
 `;
@@ -52,7 +53,7 @@ const YearLabel = styled.span`
   font-weight: normal;
 
   @media (max-width: 34em) {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-left: 0;
     margin-top: 0.2rem;
   }

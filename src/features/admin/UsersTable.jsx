@@ -18,13 +18,13 @@ function UsersTable() {
 
   if (isPending) return <Spinner />;
 
-  const userColumns = `15rem 6rem 6rem 8rem 6rem repeat(auto-fit, minmax(50px, 1fr))`;
+  const userColumns = `15rem  repeat(auto-fit, minmax(70px, 1fr)) 1rem`;
 
   return (
     <>
       <UsersTableOperations />
       <Menus>
-        <Table columns={userColumns}>
+        <Table columns={userColumns} minWidth={"800px"}>
           <Table.Header>
             <div>email</div>
             <div>avatar</div>

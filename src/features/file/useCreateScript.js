@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { useIntl } from "react-intl";
-import { createShowAndScript } from "../../services/apiShowScripts";
+import { createShowAndScript } from "../../services/apiCreateUpdateScripts";
 
 export function useCreateScript() {
   const intl = useIntl();

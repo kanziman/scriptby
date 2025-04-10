@@ -7,19 +7,18 @@ import { useLocation } from "react-router-dom";
 import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import ScriptRow from "./ScriptRow";
-
 import { useScript } from "./useScript";
 function ScriptTable() {
-  const { scripts, isLoading, count } = useScript();
+  const intl = useIntl();
+  const resourceName = intl.formatMessage({ id: "menu.scripts" });
   const location = useLocation();
   const isAdminPage = location.pathname.includes("users") ? true : false;
+  const { scripts, isLoading, count } = useScript();
 
   // const adminColumns = "0.6fr 1fr 1fr 0.4fr 0.4fr 0.4fr 0.8fr 1fr 2rem";
   // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
   const userColumns = `9rem 14rem  repeat(auto-fit, minmax(50px, 1fr))`;
 
-  const intl = useIntl();
-  const resourceName = intl.formatMessage({ id: "menu.scripts" });
   if (isLoading) return <Spinner />;
   if (!scripts?.length) {
     return <Empty resource={resourceName} />;

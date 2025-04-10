@@ -187,7 +187,7 @@ function AddScriptForm() {
     let baseScript = {
       original_language: originalLanguage,
       translated_language: selectedLanguage,
-      name,
+      name: episodeName ? episodeName : name,
       original_name: originalName,
       user_id: userId,
       file_name: fName,
@@ -229,7 +229,7 @@ function AddScriptForm() {
       },
       {
         onSuccess: () => {
-          navigate("/scripts");
+          navigate("/scripts?status=pending");
         },
       }
     );
@@ -260,11 +260,6 @@ function AddScriptForm() {
         <ContentWrapper>
           <Header>
             <ShowInfoWrapper>
-              {/* <ShowTitle backdropColor>
-                {originalName}
-                {date && <span> ({format(new Date(date), "yyyy")})</span>}(
-                {name})
-              </ShowTitle> */}
               <ShowTitle backdropColor>
                 <OriginalTitle>{originalName}</OriginalTitle>
                 {date && (
@@ -279,6 +274,7 @@ function AddScriptForm() {
                 <>
                   <EpisodeInfo backdropColor>
                     <EpisodeLabel>Season {seasonNumber}</EpisodeLabel>
+                    {" | "}
                     <EpisodeLabel>Episode {episodeNumber}</EpisodeLabel>
                   </EpisodeInfo>
                   <EpisodeName backdropColor>

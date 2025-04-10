@@ -7,8 +7,18 @@ import { cleansingData, sliceDataLeftRight } from "../../utils/helpers";
 
 // export function useScriptOne({ scriptId, isToggled }) {
 export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+
+  // useEffect(() => {
+  //   if (!searchParams.has("page")) {
+  //     const newParams = new URLSearchParams(searchParams);
+  //     newParams.set("page", "1");
+  //     setSearchParams(newParams, { replace: true });
+  //   }
+  // }, []);
+
+  // console.log("how many times...");
 
   // FILTER
   const filterValue = searchParams.get("dataType");
@@ -44,13 +54,14 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
     season_number: seasonNumber,
     translated_language: translatedLanguage,
     file_name: fileName,
+    created_at: createdAt,
+    profile,
     // show_category: showCategory,
   } = script;
 
   const lines = script["lines"] || [];
   const pageSize = isToggled ? 2 * PAGE_SIZE : PAGE_SIZE;
   const start = (page - 1) * pageSize;
-
   const slicedLines = lines.slice(start, start + pageSize);
 
   let dataToRender;
@@ -59,10 +70,8 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
   } else {
     dataToRender = slicedLines;
   }
-  console.log("dataToRender :>> ", dataToRender);
 
   const count = script["lines"].length;
-
   const subData = filter.value === "lines" ? null : script[filter.value];
   const tabData = script[activeTabValue];
 
@@ -79,6 +88,8 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
     seasonNumber,
     translatedLanguage,
     fileName,
+    createdAt,
+    profile,
     // tvId,
     // showCategory,
     // movieTitle,

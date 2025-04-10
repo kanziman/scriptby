@@ -17,6 +17,7 @@ import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import LoadingPage from "./pages/Callback";
 import Checkin from "./pages/Checkin";
+import ConvertPage from "./pages/ConvertPage";
 import DashboardPage from "./pages/DashboardPage";
 import FindPage from "./pages/Find";
 import Login from "./pages/Login";
@@ -57,6 +58,12 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
+  }, []);
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
   }, []);
 
   return (
@@ -126,6 +133,7 @@ function App() {
                       element={<ProtectedRoute requiredRole={["master"]} />}
                     >
                       <Route path="users" element={<Users />} />
+                      <Route path="convert" element={<ConvertPage />} />
                     </Route>
 
                     <Route element={<ProtectedRoute />}>

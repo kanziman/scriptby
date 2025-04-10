@@ -58,7 +58,9 @@ function ScriptTableOperations() {
     if (!searchParams.has("status")) {
       const newParams = new URLSearchParams(searchParams);
       newParams.set("status", "confirmed");
-      setSearchParams(newParams);
+
+      setSearchParams(newParams, { replace: true });
+      // setSearchParams(newParams);
     }
   }, [searchParams, setSearchParams]);
 

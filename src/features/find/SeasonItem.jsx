@@ -144,7 +144,7 @@ export default function SeasonItem({ index, seasonIndex, season, dispatch }) {
             <span aria-hidden="true">📹</span>
             <span>
               <FormattedMessage
-                id="season.episodeCount"
+                id="season.episodes"
                 defaultMessage="{count} episodes"
                 values={{ count: season.episode_count }}
               />

@@ -2,7 +2,9 @@ import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { useBrowser } from "../hooks/useBrowser";
 import { PAGE_SIZE } from "../utils/constants";
+import MobilePagination from "./MobilePagination";
 
 const StyledPagination = styled.div`
   width: 100%;

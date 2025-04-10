@@ -22,6 +22,7 @@ function EditScript() {
     episodeName,
     episodeNumber,
     seasonNumber,
+    profile,
   } = useScriptOne({
     scriptId,
   });
@@ -48,6 +49,7 @@ function EditScript() {
         isEdit
         scriptId={scriptId}
         show={show}
+        profile={profile}
         translatedLanguage={translatedLanguage}
         uploadFileName={fileName}
         episode={episode}

@@ -27,7 +27,8 @@ export function useEpisode(showId) {
           (s) =>
             showId === s.show_id &&
             s.season_number === ep.season_number &&
-            s.episode_number === ep.episode_number
+            s.episode_number === ep.episode_number &&
+            s?.status === "confirmed"
         );
         // console.log("matching scripts for ep:", showId, matchingScripts);
         return { ...ep, scripts: matchingScripts };

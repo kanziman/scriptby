@@ -59,6 +59,7 @@ const DateTime = styled.time`
 `;
 
 function MetaData({ username, createdAt, view, children }) {
+  if (!createdAt) return <Divider>&bull;</Divider>;
   return (
     <MetadataContainer>
       <MetaItem>
@@ -77,14 +78,17 @@ function MetaData({ username, createdAt, view, children }) {
         </DateTime>
       </MetaItem>
 
-      <Divider>&bull;</Divider>
-
-      <MetaItem>
-        <ViewCount>
-          <HiMiniEye />
-          {view.toLocaleString()}
-        </ViewCount>
-      </MetaItem>
+      {view && (
+        <>
+          <Divider>&bull;</Divider>
+          <MetaItem>
+            <ViewCount>
+              <HiMiniEye />
+              {view.toLocaleString()}
+            </ViewCount>
+          </MetaItem>
+        </>
+      )}
     </MetadataContainer>
   );
 }

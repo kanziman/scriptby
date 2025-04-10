@@ -15,7 +15,7 @@ import { useSettings } from "../context/SettingsContext";
 import Logout from "../features/authentication/Logout";
 import { useLogout } from "../features/authentication/useLogout";
 import { useUser } from "../features/authentication/useUser";
-import { useIsBrowser } from "../hooks/useIsBrowser";
+import { useBrowser } from "../hooks/useBrowser";
 import ButtonIcon from "../ui/ButtonIcon";
 import DarkModeToggle from "../ui/DarkModeToggle";
 import Menus from "./Menus";
@@ -31,7 +31,7 @@ const StyledMenus = styled.div`
 `;
 
 function HeaderMenu() {
-  const isBrowserSmall = useIsBrowser();
+  const isBrowserSmall = useBrowser();
   // const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { darkMode, toggleDarkMode, locale, changeLanguage } = useSettings();
   const { logout, isPending } = useLogout();

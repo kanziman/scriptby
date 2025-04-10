@@ -34,7 +34,7 @@ function MainHeading({ headName, right, link, children }) {
 
   return (
     <HeadingGroup>
-      <span>{children}</span>
+      <>{children}</>
 
       {right === "moveBack" && (
         <ButtonText onClick={moveBack}>

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import ScrollToContainerTop from "../../ui/ScrollToContainerTop";
 import ScreenMenu from "./ScreenMenu";
 import ScreenTable from "./ScreenTable";
+
 const StyledScreenContainer = styled.div`
   width: ${(props) => (props.isExpanded ? "100vw" : "auto")};
   height: ${(props) => (props.isExpanded ? "100vh" : "auto")};
@@ -11,7 +13,6 @@ const StyledScreenContainer = styled.div`
   background: ${(props) => (props.isExpanded ? "white" : "transparent")};
   z-index: ${(props) => (props.isExpanded ? "1000" : "auto")};
   overflow: auto;
-
   display: flex;
 `;
 
@@ -36,7 +37,10 @@ function Screen() {
           hideTranslation={hideTranslation}
         />
       </ScreenTable>
+
+      <ScrollToContainerTop />
     </StyledScreenContainer>
   );
 }
+
 export default Screen;

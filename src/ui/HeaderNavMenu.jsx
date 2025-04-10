@@ -101,6 +101,15 @@ function HeaderNavMenu() {
           </StyledNavLink>
         </li>
       )}
+      {user?.isMaster && (
+        <li>
+          <StyledNavLink to="/convert">
+            <span>
+              <FormattedMessage id="menu.convert" />
+            </span>
+          </StyledNavLink>
+        </li>
+      )}
     </StyledHeaderPageMenu>
   );
 }

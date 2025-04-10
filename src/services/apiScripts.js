@@ -175,7 +175,7 @@ export async function getScriptsWithFilterV1({
 export async function getScriptDataById(id) {
   const { data, error } = await supabase
     .from("scripts")
-    .select("*, tv:tvs(*), profile:profiles(email,username)")
+    .select("*, tv:tvs(*), profile:profiles(id,email,username)")
     .eq("id", id)
     .single();
   // console.log("data :>> ", data);

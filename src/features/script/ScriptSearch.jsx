@@ -136,7 +136,9 @@ function ScriptSearch() {
     params.query = debouncedQuery;
     delete params.showId;
     delete params.epNumber;
-    setSearchParams(params);
+    // setSearchParams(params);
+    setSearchParams(params, { replace: true });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
@@ -153,6 +155,8 @@ function ScriptSearch() {
     delete params.showId;
     delete params.epNumber;
     setSearchParams(params);
+    // setSearchParams(params, { replace: true });
+
     if (inputEl.current) inputEl.current.focus();
   };
 
