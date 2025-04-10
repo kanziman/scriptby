@@ -1,6 +1,5 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
-import { useQuery } from "../../context/QueryContext";
 import Empty from "../../ui/Empty";
 import Heading from "../../ui/Heading";
 import MainHeading from "../../ui/MainHeading";
@@ -8,12 +7,6 @@ import { useScriptOne } from "../scripts/useScriptOne";
 import EditScriptForm from "./EditScriptForm";
 
 function EditScript() {
-  const { selectedShow } = useQuery();
-  const { id: showId } = selectedShow;
-
-  const { action } = useParams();
-  const isEdit = action === "edit";
-
   const { scriptId } = useParams();
   const {
     translatedLanguage,
