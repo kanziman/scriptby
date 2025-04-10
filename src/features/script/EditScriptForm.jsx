@@ -5,7 +5,6 @@ import { HiOutlineCheckCircle, HiOutlineXCircle } from "react-icons/hi2";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useQuery } from "../../context/QueryContext";
 import { languages } from "../../data/IOS-639-1";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
@@ -169,8 +168,6 @@ function EditScriptForm({
   const errMessage = intl.formatMessage({
     id: "toast.error.auth",
   });
-  // 편집 시에는 useQuery로부터 selectedShow를 참조(편집 전 페이지의 show 정보)
-  const { selectedShow, selectedEpisode } = useQuery();
   const { user: currentUser } = useUser();
   const { editAll, isUpdating } = useUpdateScript();
   const userId = profile?.id;
@@ -249,7 +246,8 @@ function EditScriptForm({
     editAll(
       {
         newScript: scriptToUse,
-        show: prepareShowData(selectedShow, category),
+        // Don't update show data when EDIT
+        // show: prepareShowData(selectedShow, category),
       },
       {
         onSuccess: () => {

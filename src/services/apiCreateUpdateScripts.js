@@ -42,32 +42,14 @@ export async function createShowAndScript({ newScript, show }) {
 }
 
 /// UPDATE SCRIPT
-export async function updateShowAndScript({ newScript, show }) {
+export async function updateShowAndScript({ newScript }) {
   console.log("update updatedScript:", newScript);
-  console.log("update show:", show);
 
   try {
-    // A) Upsert tv: 같은 id가 있으면 업데이트, 없으면 삽입 (tvs 테이블 사용)
-    const { data: updatedTv, error: tvError } = await supabase
-      .from("tvs")
-      .upsert(show, { onConflict: ["show_id", "category"] })
-      .select()
-      .single();
-
-    if (tvError) {
-      console.error("TV upsert error:", tvError);
-      throw new Error("TV could not be updated");
-    }
-    console.log("UPDATE COMPLETE updatedTv:>> ", updatedTv);
-
-    // B) newScript에 tv_id를 병합한 후 스크립트 업데이트 (업데이트 시 newScript에는 id가 포함되어야 함)
-    // const scriptData = { ...newScript, tv_id: updatedTv.id };
     const scriptData = {
       ...newScript,
-      tv_id: updatedTv.id,
       updated_at: new Date().toISOString(), // 현재 시간으로 업데이트
     };
-    console.log("UPDATE B FINISH scriptData:>> ", scriptData);
 
     const { data: updatedScriptData, error: scriptError } = await supabase
       .from("scripts")
@@ -82,35 +64,9 @@ export async function updateShowAndScript({ newScript, show }) {
     }
     console.log("UPDATE FINISH scriptData:>> ", scriptData);
 
-    return { updatedScript: updatedScriptData, tv: updatedTv };
+    return { updatedScript: updatedScriptData };
   } catch (error) {
     console.error(error);
     throw new Error(error.message || "Failed to update associated data");
   }
-}
-
-export async function getScriptsByShowId({ filter, sortBy, page }) {
-  let query;
-  query = supabase
-    .from("scripts")
-    .select(
-      `
-    *,
-    user:profiles!user_id(*)
-  `,
-      { count: "exact" }
-    )
-    .order("season_number", { ascending: true }) // 시즌 번호 오름차순
-    .order("episode_number", { ascending: true }) // 에피소드 번호 오름차순
-    .order("created_at", { ascending: true }); // 생성 날짜 오름차순
-
-  if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
-
-  const { data, error, count } = await query;
-  if (error) {
-    console.error(error);
-    throw new Error("Scripts could not be loaded");
-  }
-
-  return { data, count };
 }
