@@ -1,9 +1,11 @@
 import { format, isToday } from "date-fns";
-import { useEffect } from "react";
-import { useIntl } from "react-intl";
-import { useLocation, useParams } from "react-router-dom";
+import { FormattedMessage, useIntl } from "react-intl";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../../ui/Button";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import Empty from "../../ui/Empty";
+import Modal from "../../ui/Modal";
 import {
   EpisodeInfo,
   EpisodeLabel,
@@ -13,6 +15,8 @@ import {
 } from "../../ui/ShowTitleGroup";
 import Spinner from "../../ui/Spinner";
 import { formatDistanceFromNow, shortName } from "../../utils/helpers";
+import { useUser } from "../authentication/useUser";
+import { useDeleteScript } from "../script/useDeleteScript";
 import Screen from "./Screen";
 import { useScriptOne } from "./useScriptOne";
 
@@ -29,7 +33,7 @@ const AuthorContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 `;
 
 // Author info styled component
@@ -65,7 +69,16 @@ const ByPrefix = styled.span`
   color: #666;
   margin-right: 0.2rem;
 `;
+
+const WriterGroupButton = styled.div`
+  display: flex;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+`;
 function ScriptDetail() {
+  const navigate = useNavigate();
   const intl = useIntl();
   const resourceName = intl.formatMessage({ id: "menu.script" });
   const { scriptId } = useParams();
@@ -78,12 +91,12 @@ function ScriptDetail() {
     createdAt,
     profile = {},
   } = useScriptOne({ scriptId });
-  const { username } = profile;
+  const { deleteScript, isDeleting } = useDeleteScript();
 
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  const { user: currentUser } = useUser();
+  const { username } = profile;
+  const isWriter = currentUser?.id === profile?.id;
+  const canDeleteUpdate = currentUser?.isMaster || isWriter;
 
   if (isPending) return <Spinner />;
   if (!scriptId) {
@@ -128,6 +141,35 @@ function ScriptDetail() {
             </AuthorDate>
           </AuthorInfoWrapper>
         </AuthorContainer>
+
+        {/* IF WRITER, MENU BUTTONS*/}
+        {canDeleteUpdate && (
+          <WriterGroupButton>
+            <Modal>
+              <Button
+                size="small"
+                onClick={() => navigate(`/scripts/edit/${scriptId}`)}
+              >
+                <FormattedMessage id="modal.menu.edit" />
+              </Button>
+
+              <Modal.Open opens="delete">
+                <Button size="small" variation="danger">
+                  <FormattedMessage id="modal.menu.delete" />
+                </Button>
+              </Modal.Open>
+
+              {/* Modal Windows */}
+              <Modal.Window name="delete">
+                <ConfirmDelete
+                  resource={<FormattedMessage id="menu.scripts" />}
+                  disabled={isDeleting}
+                  onConfirm={() => deleteScript(scriptId)}
+                />
+              </Modal.Window>
+            </Modal>
+          </WriterGroupButton>
+        )}
       </>
 
       {/* MAIN */}

@@ -9,7 +9,6 @@ import { usePost } from "./usePost";
 
 // Import CSS
 import { FormattedMessage, useIntl } from "react-intl";
-import "reactjs-tiptap-editor/style.css";
 
 function PostDetail() {
   const { post, isPending } = usePost();

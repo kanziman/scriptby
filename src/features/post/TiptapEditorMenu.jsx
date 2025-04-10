@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
 import {
   FaBold,

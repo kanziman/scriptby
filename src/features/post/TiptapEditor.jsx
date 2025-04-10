@@ -3,7 +3,7 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ResizableImage } from "./ResizeableImage";
 import TiptapEditorMenu from "./TiptapEditorMenu"; // 경로는 실제 파일 위치에 맞게 수정
 import "./tiptap.scss"; // 기존 SCSS 파일 임포트 (전역 또는 모듈 방식으로 사용)

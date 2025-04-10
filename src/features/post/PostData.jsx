@@ -71,6 +71,7 @@ function PostData({ post }) {
   } = post;
   const postId = post?.id;
   const isWriter = currentUser?.id === post?.user_id;
+  const canUpdateDelete = isWriter || currentUser?.isMaster;
   const avatarImg = avatar || "/default-user.jpg";
   const typeLabel = POST_TYPE_OPTIONS.find(
     (option) => option.value === category
@@ -79,6 +80,8 @@ function PostData({ post }) {
     deletePost(id);
     navigate(`/posts`);
   };
+
+  console.log("avatarImg :>> ", avatarImg);
   return (
     <>
       <Title>{title}</Title>
@@ -94,10 +97,16 @@ function PostData({ post }) {
 
         <UserInfoRow>
           <MetaData username={username} createdAt={createdAt} view={view}>
-            <Avatar src={avatarImg} alt={`Avatar of ${username}`} />
+            <Avatar
+              src={avatarImg}
+              alt={`Avatar of ${username}`}
+              onError={(e) => {
+                e.currentTarget.src = "/default-user.jpg";
+              }}
+            />
           </MetaData>
 
-          {(isWriter || currentUser?.isMaster) && (
+          {canUpdateDelete && (
             <WriterGroupButton>
               <Modal>
                 <Button
@@ -116,6 +125,7 @@ function PostData({ post }) {
                 {/* Modal Windows */}
                 <Modal.Window name="delete">
                   <ConfirmDelete
+                    disabled={isDeleting}
                     resource={<FormattedMessage id="menu.posts" />}
                     onConfirm={() => handleDelete(postId)}
                   />
