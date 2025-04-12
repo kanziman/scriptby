@@ -5,7 +5,7 @@ function ScrollToContainerTop() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+    window.scrollTo({ top: 150, behavior: "auto" });
   }, [location]);
 
   return null;

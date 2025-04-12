@@ -3,6 +3,7 @@ import styled from "styled-components";
 // 메타 정보를 감싸는 컨테이너
 const ShowInfoWrapper = styled.div`
   display: flex;
+  font-family: "Sono", sans-serif;
   flex-direction: column;
   /* align-items: center; */
 `;
@@ -12,14 +13,14 @@ const ShowTitle = styled.h1`
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  font-family: "Sono", sans-serif;
   font-weight: bold;
   margin-bottom: 1.5rem;
   color: ${(props) => (props.backdropColor ? `#ddd` : "var(--color-grey-800)")};
 
   @media (max-width: 34em) {
     flex-direction: column;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.4rem;
     /* align-items: flex-start; */
   }
 `;
@@ -30,7 +31,7 @@ const OriginalTitle = styled.span`
   margin-right: 0.8rem;
 
   @media (max-width: 34em) {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
 `;
 
@@ -75,7 +76,7 @@ const EpisodeLabel = styled.span`
   text-transform: uppercase;
 
   @media (max-width: 34em) {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 `;
 
@@ -86,11 +87,19 @@ const EpisodeName = styled.div`
   color: var(--color-grey-500);
   color: ${(props) => props.backdropColor && `#ddd`};
   @media (max-width: 34em) {
-    font-size: 1rem;
+    font-size: 0.8rem;
+  }
+`;
+
+const Delimiter = styled.span`
+  color: var(--color-grey-400);
+  @media (max-width: 34em) {
+    font-size: 0.8rem;
   }
 `;
 
 export {
+  Delimiter,
   EpisodeInfo,
   EpisodeLabel,
   EpisodeName,

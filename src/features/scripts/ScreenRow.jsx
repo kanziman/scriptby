@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import Table from "../../ui/Table";
 import { escapeRegExp } from "../../utils/helpers";
 
@@ -7,25 +6,28 @@ const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-
   & span:first-child {
     font-weight: 500;
+    /* 글자 크기가 textScale에 따라 변경됨 (기본 1.2rem의 배율 적용) */
+    font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
   }
-
   & span:last-child {
     color: var(--color-grey-500);
-    font-size: 1.2rem;
+    /* 기본 1rem 기준 */
+    font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
+    font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
   }
   @media (max-width: 50em) {
     & span:first-child {
-      font-size: 1.2rem;
+      font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
     }
     & span:last-child {
-      font-size: 1rem;
+      font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
     }
     gap: 0.1rem;
   }
 `;
+
 const Colored = styled.em`
   font-style: italic;
   color: var(--color-brand-500);
@@ -34,7 +36,6 @@ const Colored = styled.em`
 function renderColoredText(text, subData = []) {
   if (!text || !subData) return text;
   const pattern = subData.map((item) => escapeRegExp(item.original)).join("|");
-
   const regex = new RegExp(`(${pattern})`, "gi");
   const parts = text.split(regex);
 
@@ -42,21 +43,26 @@ function renderColoredText(text, subData = []) {
     const isHighlighted = subData.some(
       (item) => part.toLowerCase() === item.original?.toLowerCase()
     );
-
     return isHighlighted ? <Colored key={index}>{part}</Colored> : part;
   });
 }
 
-function TextContent({ original, translated, hideTranslation, subData }) {
+function TextContent({
+  original,
+  translated,
+  hideTranslation,
+  subData,
+  fontSize,
+}) {
   return (
-    <Stacked>
+    <Stacked fontSize={fontSize}>
       <span>{renderColoredText(original, subData)}</span>
       <span>{!hideTranslation && renderColoredText(translated, subData)}</span>
     </Stacked>
   );
 }
 
-function ScreenRow({ data, isToggled, hideTranslation, subData }) {
+function ScreenRow({ data, isToggled, hideTranslation, subData, fontSize }) {
   const { original, translated, left, right } = data;
 
   if (!isToggled) {
@@ -67,6 +73,7 @@ function ScreenRow({ data, isToggled, hideTranslation, subData }) {
           translated={translated}
           hideTranslation={hideTranslation}
           subData={subData}
+          fontSize={fontSize}
         />
       </Table.Row>
     );
@@ -79,56 +86,17 @@ function ScreenRow({ data, isToggled, hideTranslation, subData }) {
         translated={left?.translated}
         hideTranslation={hideTranslation}
         subData={subData}
+        fontSize={fontSize}
       />
       <TextContent
         original={right?.original}
         translated={right?.translated}
         hideTranslation={hideTranslation}
         subData={subData}
+        fontSize={fontSize}
       />
     </Table.Row>
   );
 }
-
-// function ScreenRow({ data, isToggled, hideTranslation, subData }) {
-//   const { original, translated } = data;
-
-//   return (
-//     <Table.Row>
-//       {isToggled ? (
-//         <>
-//           <Stacked>
-//             <span>
-//               {data.left
-//                 ? renderColoredText(data.left.original, subData)
-//                 : ""}
-//             </span>
-
-//             <span>
-//               {!hideTranslation && data.left ? data.left.translated : ""}
-//             </span>
-//           </Stacked>
-//           <Stacked>
-//             <span>
-//               {data.right
-//                 ? renderColoredText(data.right.original, subData)
-//                 : ""}
-//             </span>
-//             <span>
-//               {!hideTranslation && data.right ? data.right.translated : ""}
-//             </span>
-//           </Stacked>
-//         </>
-//       ) : (
-//         <Stacked>
-//           <span>{renderColoredText(original, subData)}</span>
-//           <span>
-//             {!hideTranslation && renderColoredText(translated, subData)}
-//           </span>
-//         </Stacked>
-//       )}
-//     </Table.Row>
-//   );
-// }
 
 export default ScreenRow;

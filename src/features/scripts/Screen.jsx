@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import ScrollToContainerTop from "../../ui/ScrollToContainerTop";
 import ScreenMenu from "./ScreenMenu";
 import ScreenTable from "./ScreenTable";
 
@@ -20,14 +19,22 @@ function Screen() {
   const [isToggled, setIsToggled] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hideTranslation, setHideTranslation] = useState(false);
+  const [textScale, setTextScale] = useState(1.0);
 
   const handleToggle = () => setIsToggled((prev) => !prev);
   const handleExpand = () => setIsExpanded((prev) => !prev);
   const handleHideTranslation = () => setHideTranslation((prev) => !prev);
 
+  const handleBigger = () => setTextScale((prev) => prev + 0.1);
+  const handleSmaller = () => setTextScale((prev) => Math.max(0.5, prev - 0.1));
+
   return (
     <StyledScreenContainer isExpanded={isExpanded}>
-      <ScreenTable isToggled={isToggled} hideTranslation={hideTranslation}>
+      <ScreenTable
+        isToggled={isToggled}
+        hideTranslation={hideTranslation}
+        textScale={textScale}
+      >
         <ScreenMenu
           isToggled={isToggled}
           onToggle={handleToggle}
@@ -35,10 +42,12 @@ function Screen() {
           isExpanded={isExpanded}
           onHide={handleHideTranslation}
           hideTranslation={hideTranslation}
+          onBigger={handleBigger}
+          onSmaller={handleSmaller}
         />
       </ScreenTable>
 
-      <ScrollToContainerTop />
+      {/* <ScrollToContainerTop /> */}
     </StyledScreenContainer>
   );
 }

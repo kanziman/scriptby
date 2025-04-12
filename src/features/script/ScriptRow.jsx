@@ -9,7 +9,6 @@ import Table from "../../ui/Table";
 
 import { format, isToday } from "date-fns";
 import { FormattedMessage } from "react-intl";
-import { useQuery } from "../../context/QueryContext";
 import Button from "../../ui/Button";
 import SpinnerMini from "../../ui/SpinnerMini";
 import { getFlag, getLanguageName, maskEmail } from "../../utils/helpers";
@@ -60,12 +59,10 @@ function ScriptRow({
   script: {
     id: scriptId,
     status,
-    show_id: showId,
     season_number: seasonNumber,
     episode_number: episodeNumber,
     // air_date: airDate,
     // vote_count: voteCount,
-    created_at: createdAt,
     updated_at: updatedAt,
     original_language: originalLanguage,
     translated_language: translatedLanguage,
@@ -75,13 +72,10 @@ function ScriptRow({
     profile: { email, username },
   },
 }) {
-  console.log("showId :>> ", showId);
   const navigate = useNavigate();
   const { user: currentUser } = useUser();
   const { confirm, isPending } = useConfirm();
   const { deleteScript, isDeleting } = useDeleteScript();
-
-  const { dispatch } = useQuery();
 
   const canConfirm = currentUser?.isMaster || currentUser?.isManager;
   const canDeleteUpdate =

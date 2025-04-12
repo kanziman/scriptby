@@ -13,9 +13,22 @@ import Tag from "../../ui/Tag";
 import { useUser } from "../authentication/useUser";
 import { useDeletePost } from "./useDeletePost";
 
+const RowGrid = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+const StyledLink = styled(Link)`
+  &:visited {
+    color: var(--color-grey-400);
+  }
+  color: var(--color-grey-600);
+`;
+
 const Img = styled.img`
   display: block;
-  width: 5.2rem;
+  max-width: 5.2rem;
   aspect-ratio: 4/3;
   object-fit: cover;
   object-position: center;
@@ -30,7 +43,7 @@ const Img = styled.img`
     overflow: hidden;
   }
   @media (max-width: 34em) {
-    width: 50%;
+    max-width: 4rem;
   }
 `;
 
@@ -65,16 +78,6 @@ const Title = styled.h2`
   }
 `;
 
-const RowGrid = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-`;
-const StyledLink = styled(Link)`
-  &:visited {
-    color: var(--color-grey-400);
-  }
-  color: var(--color-grey-600);
-`;
 function PostRowNotice({ data }) {
   const navigate = useNavigate();
   const {

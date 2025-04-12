@@ -1,4 +1,5 @@
 import { FaExpand } from "react-icons/fa";
+import { HiMinus, HiPlus } from "react-icons/hi2";
 import {
   PiSquareSplitHorizontalFill,
   PiSquareSplitHorizontalLight,
@@ -26,10 +27,18 @@ const StyledScreenMenu = styled.ul`
   div {
     display: flex;
   }
-  @media (max-width: 34em) {
+  @media (max-width: 50em) {
+    gap: 0.2rem;
     & svg {
-      width: 1.8rem;
-      height: 1.8rem;
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  }
+  @media (max-width: 34em) {
+    gap: 0;
+    & svg {
+      width: 1.2rem;
+      height: 1.2rem;
     }
   }
 `;
@@ -40,6 +49,8 @@ function ScreenMenu({
   onExpand,
   onHide,
   hideTranslation,
+  onBigger,
+  onSmaller,
 }) {
   const intl = useIntl();
   const options = [
@@ -89,6 +100,16 @@ function ScreenMenu({
       </StyledScreenMenu>
       {/* SPLIT HIDE EXPAND  */}
       <StyledScreenMenu type="end">
+        <li>
+          <ButtonIcon onClick={onBigger}>
+            <HiPlus />
+          </ButtonIcon>
+        </li>
+        <li>
+          <ButtonIcon onClick={onSmaller}>
+            <HiMinus />
+          </ButtonIcon>
+        </li>
         <li onClick={onToggle}>
           <ButtonIcon>
             {isToggled ? (

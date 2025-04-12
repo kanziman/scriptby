@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const SideNavigationButton = styled.button`
   position: fixed;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%);
   background-color: var(--color-grey-50);
   color: var(--color-grey-700);

@@ -22,7 +22,7 @@ function PostTable({ isToggled }) {
   }
   return (
     <Menus>
-      <Table columns={"1fr 3rem"} minWidth={"300"}>
+      <Table columns={"1fr 2.4rem"} minWidth={"300"}>
         {/* <Table.Header>
           <div></div>
           <div></div>

@@ -1,4 +1,5 @@
 import Empty from "../../ui/Empty";
+import ScrollToContainerTop from "../../ui/ScrollToContainerTop";
 import Table from "../../ui/Table";
 
 import { useIntl } from "react-intl";
@@ -8,7 +9,7 @@ import ScreenPagenation from "./ScreenPagenation";
 import ScreenRow from "./ScreenRow";
 import { useScriptOne } from "./useScriptOne";
 
-function ScreenTable({ isToggled, children, hideTranslation }) {
+function ScreenTable({ isToggled, children, hideTranslation, textScale }) {
   const { scriptId } = useParams();
   const { script, count, subData, isPending } = useScriptOne({
     scriptId,
@@ -36,6 +37,7 @@ function ScreenTable({ isToggled, children, hideTranslation }) {
               subData={subData}
               isToggled={isToggled}
               hideTranslation={hideTranslation}
+              fontSize={textScale}
             />
           )}
         />
@@ -44,6 +46,7 @@ function ScreenTable({ isToggled, children, hideTranslation }) {
           <ScreenPagenation count={count} isToggled={isToggled} />
         </Table.Footer>
       </Table>
+      <ScrollToContainerTop />
     </>
   );
 }

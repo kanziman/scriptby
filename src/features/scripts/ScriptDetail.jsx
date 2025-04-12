@@ -7,6 +7,7 @@ import ConfirmDelete from "../../ui/ConfirmDelete";
 import Empty from "../../ui/Empty";
 import Modal from "../../ui/Modal";
 import {
+  Delimiter,
   EpisodeInfo,
   EpisodeLabel,
   EpisodeName,
@@ -38,7 +39,7 @@ const AuthorContainer = styled.div`
 
 // Author info styled component
 const AuthorInfoWrapper = styled.div`
-  padding: 1rem 1.4rem;
+  padding: 0.2rem;
   border-radius: 0.8rem;
   display: flex;
   flex-direction: column;
@@ -48,7 +49,7 @@ const AuthorInfoWrapper = styled.div`
 const AuthorName = styled.div`
   font-weight: 600;
   font-size: 1.4rem;
-  color: #333;
+  color: var(--color-grey-700);
   margin-bottom: 0.2rem;
 
   @media (max-width: 34em) {
@@ -58,7 +59,7 @@ const AuthorName = styled.div`
 
 const AuthorDate = styled.div`
   font-size: 1.2rem;
-  color: #666;
+  color: var(--color-grey-500);
   @media (max-width: 34em) {
     font-size: 1rem;
   }
@@ -66,7 +67,7 @@ const AuthorDate = styled.div`
 const ByPrefix = styled.span`
   font-weight: 400;
   font-style: italic;
-  color: #666;
+  color: var(--color-grey-500);
   margin-right: 0.2rem;
 `;
 
@@ -113,7 +114,7 @@ function ScriptDetail() {
               <ShowTitle>{show?.originalName}</ShowTitle>
               <EpisodeInfo>
                 <EpisodeLabel>Season {seasonNumber}</EpisodeLabel>
-                {" | "}
+                <Delimiter>{" | "}</Delimiter>
                 <EpisodeLabel>Episode {episodeNumber}</EpisodeLabel>
               </EpisodeInfo>
               <EpisodeName>{shortName(episodeName)}</EpisodeName>

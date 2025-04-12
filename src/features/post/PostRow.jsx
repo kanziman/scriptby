@@ -13,9 +13,20 @@ import { POST_CATEGORY_OPTIONS, statusToTagName } from "../../utils/constants";
 import { useUser } from "../authentication/useUser";
 import { useDeletePost } from "./useDeletePost";
 
+const RowGrid = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+const StyledLink = styled(Link)`
+  &:visited {
+    color: var(--color-grey-400); /* 방문 후 색상 */
+  }
+  color: var(--color-grey-600);
+`;
 const Img = styled.img`
   display: block;
-  width: 5.2rem;
+  max-width: 5.2rem;
   aspect-ratio: 4/3;
   object-fit: cover;
   object-position: center;
@@ -30,9 +41,8 @@ const Img = styled.img`
     overflow: hidden;
   }
   @media (max-width: 34em) {
-    width: 50%;
+    max-width: 4rem;
   }
-  /* transform: scale(1.5) translateX(-7px); */
 `;
 
 const Stacked = styled.div`
@@ -45,11 +55,12 @@ const Stacked = styled.div`
     }
   }
 `;
-const StyledLink = styled(Link)`
-  &:visited {
-    color: var(--color-grey-400); /* 방문 후 색상 */
+const Title = styled.div`
+  font-size: 1.6rem;
+  font-weight: 600;
+  @media (max-width: 34em) {
+    font-size: 1.2rem;
   }
-  color: var(--color-grey-600);
 `;
 const Sided = styled.div`
   display: flex;
@@ -60,17 +71,6 @@ const Sided = styled.div`
       font-size: 0.8rem;
     }
   }
-`;
-const Title = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  @media (max-width: 34em) {
-    font-size: 1.2rem;
-  }
-`;
-const RowGrid = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
 `;
 
 function PostRow({ data }) {
