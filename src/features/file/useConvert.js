@@ -17,13 +17,11 @@ function fallbackWordSplit(dialogue, maxLen) {
   return lines;
 }
 
-// 새 splitLongDialogue 함수: 문장 경계를 우선으로 분리
+// 문장 경계를 우선으로 대사를 나누되, 없으면 fallback 사용
 function splitLongDialogue(dialogue, maxLen) {
   if (dialogue.length <= maxLen) return [dialogue];
-  // 문장 경계로 분리 (마침표, 느낌표, 물음표 뒤에 공백 포함)
   let sentences = dialogue.match(/[^.!?]+[.!?]+[\s]*/g);
   if (!sentences) {
-    // 문장 경계를 찾지 못하면 fallback 사용
     return fallbackWordSplit(dialogue, maxLen);
   }
   let parts = [];
@@ -35,7 +33,6 @@ function splitLongDialogue(dialogue, maxLen) {
       if (currentPart.trim().length > 0) {
         parts.push(currentPart.trim());
       }
-      // 만약 현재 문장이 maxLen보다 크면 단어 단위로 분리
       if (sentence.trim().length > maxLen) {
         const fallbackParts = fallbackWordSplit(sentence.trim(), maxLen);
         parts.push(...fallbackParts);
@@ -51,11 +48,42 @@ function splitLongDialogue(dialogue, maxLen) {
   return parts;
 }
 
+// 따옴표(" 또는 ') 또는 "..., and" 같은 구분자 기준 분리 (우선적으로 인용부 외부에서 분리)
+function splitOutsideQuotes(dialogue, maxLen) {
+  if (dialogue.length <= maxLen) return [dialogue];
+  let lastValidSplit = -1;
+  let insideQuote = false;
+  // maxLen 내에서 앞에서부터 순회하며, 인용부 외부에서 적절한 분리 위치(예: ", and " 또는 문장부호)를 찾는다.
+  for (let i = 0; i < maxLen; i++) {
+    const char = dialogue[i];
+    if (char === "'" || char === '"') {
+      insideQuote = !insideQuote;
+    }
+    // 인용부 외부에서 분리 가능한 위치 업데이트:
+    // 예: ", and " 또는 문장부호(. ! ?)
+    if (!insideQuote) {
+      if (dialogue.slice(i, i + 5) === ", and") {
+        lastValidSplit = i + 5;
+      }
+      if (!insideQuote && (char === "." || char === "!" || char === "?")) {
+        lastValidSplit = i + 1;
+      }
+    }
+  }
+  // 만약 적절한 분리 위치를 찾았다면 해당 위치에서 분할
+  if (lastValidSplit > 0) {
+    const part1 = dialogue.slice(0, lastValidSplit).trim();
+    const part2 = dialogue.slice(lastValidSplit).trim();
+    return [part1, part2];
+  }
+  return null;
+}
+
 export const useConvert = () => {
   const [rightText, setRightText] = useState("");
 
   const doConvert = (leftText) => {
-    const maxLength = 200; // 대사가 이 길이를 초과하면 분리 (필요에 따라 조정)
+    const maxLength = 200; // 이 길이를 초과하면 대사를 분리합니다.
     const script = leftText;
     const lines = script.split(/\r?\n/);
 
@@ -66,14 +94,48 @@ export const useConvert = () => {
     // 진행 중인 대화 블록을 결과에 저장하는 헬퍼 함수
     const pushDialogue = () => {
       if (currentSpeaker && currentLine) {
-        const cleanedLine = currentLine.replace(/\([^)]*\)/g, "").trim();
+        // 괄호 안 내용을 제거하며, 양쪽 공백은 단일 공백으로 치환
+        const cleanedLine = currentLine.replace(/\s*\([^)]*\)\s*/g, " ").trim();
         if (cleanedLine.length > maxLength) {
-          // 문장 경계에서 분리 (필요시 fallbackWordSplit 사용)
-          const parts = splitLongDialogue(cleanedLine, maxLength);
-          // 각 분할된 파트마다 "Speaker:"를 붙여서 저장
-          parts.forEach((part) => {
-            result.push(`${currentSpeaker}: ${part}`);
-          });
+          // 우선, 인용부 외부에서 자연스럽게 분리하는 규칙 시도
+          let partsBySplit = splitOutsideQuotes(cleanedLine, maxLength);
+          if (
+            partsBySplit &&
+            partsBySplit.length > 1 &&
+            partsBySplit.every((p) => p.length <= maxLength)
+          ) {
+            partsBySplit.forEach((part) => {
+              result.push(`${currentSpeaker}: ${part}`);
+            });
+          } else {
+            // 다음으로, ", and " 기준 분리 시도
+            let partsByCommaAnd = splitByCommaAnd(cleanedLine, maxLength);
+            if (
+              partsByCommaAnd.length > 1 &&
+              partsByCommaAnd.every((p) => p.length <= maxLength)
+            ) {
+              partsByCommaAnd.forEach((part) => {
+                result.push(`${currentSpeaker}: ${part}`);
+              });
+            } else {
+              // 그 외에는 따옴표("...") 기준 분리 시도
+              let partsByQuotes = splitByQuotes(cleanedLine, maxLength);
+              if (
+                partsByQuotes.length > 1 &&
+                partsByQuotes.every((p) => p.length <= maxLength)
+              ) {
+                partsByQuotes.forEach((part) => {
+                  result.push(`${currentSpeaker}: ${part}`);
+                });
+              } else {
+                // 마지막으로 문장/단어 기준 분리
+                const parts = splitLongDialogue(cleanedLine, maxLength);
+                parts.forEach((part) => {
+                  result.push(`${currentSpeaker}: ${part}`);
+                });
+              }
+            }
+          }
         } else {
           result.push(`${currentSpeaker}: ${cleanedLine}`);
         }
@@ -82,14 +144,53 @@ export const useConvert = () => {
       currentLine = "";
     };
 
+    // 기존 splitByQuotes: "..." 기준 분리 (이전 로직 유지)
+    function splitByQuotes(dialogue, maxLen) {
+      let parts = [];
+      let remaining = dialogue;
+      const ellipsis = "...";
+      while (remaining.length > maxLen) {
+        const sub = remaining.slice(0, maxLen);
+        const lastEllipsis = sub.lastIndexOf(ellipsis);
+        if (lastEllipsis > -1) {
+          let part = remaining.slice(0, lastEllipsis + ellipsis.length);
+          parts.push(part.trim());
+          remaining = remaining.slice(lastEllipsis + ellipsis.length).trim();
+        } else {
+          break;
+        }
+      }
+      if (remaining.length > 0) parts.push(remaining.trim());
+      return parts;
+    }
+
+    // 기존 splitByCommaAnd: ", and " 기준 분리 함수
+    function splitByCommaAnd(dialogue, maxLen) {
+      let parts = [];
+      let remaining = dialogue;
+      const separator = ", and ";
+      while (remaining.length > maxLen) {
+        const sub = remaining.slice(0, maxLen);
+        const lastSep = sub.lastIndexOf(separator);
+        if (lastSep > -1) {
+          let part = remaining.slice(0, lastSep + separator.length);
+          parts.push(part.trim());
+          remaining = remaining.slice(lastSep + separator.length).trim();
+        } else {
+          break;
+        }
+      }
+      if (remaining.length > 0) parts.push(remaining.trim());
+      return parts;
+    }
+
     lines.forEach((line) => {
       line = line.trim();
-      if (!line) return; // 빈 줄은 무시
+      if (!line) {
+        pushDialogue();
+        return;
+      }
 
-      // 무시할 항목 조건:
-      // 대괄호나 소괄호로 시작, Credits, Break, Scene, End 관련 문구,
-      // 숫자만 있는 줄, written/transcribed/adjustments? by 관련 문구,
-      // with help from: 로 시작하는 경우
       if (
         line.startsWith("[") ||
         line.startsWith("(") ||
@@ -98,27 +199,36 @@ export const useConvert = () => {
         /(written|transcribed|adjustments?)\s+by/i.test(line) ||
         /^with help from:/i.test(line)
       ) {
-        // 진행 중인 대화 블록이 있다면 먼저 저장
         pushDialogue();
         return;
       }
 
-      // "Speaker: 대사" 형식인지 확인
-      const match = line.match(/^([A-Za-z .&']+):\s*(.*)/);
+      // 화자 인식 (영어, 한글, 일본어 등 포함)
+      const match = line.match(/^([\p{L} ,.&']+):\s*(.*)/u);
       if (match) {
-        // 새 대화 블록 시작 전에 기존 블록을 저장
-        pushDialogue();
-        currentSpeaker = match[1].trim();
-        currentLine = match[2].trim();
+        const newSpeaker = match[1].trim();
+        const newText = match[2].trim();
+        if (currentSpeaker && currentSpeaker === newSpeaker) {
+          // 만약 새 대사의 첫 글자가 소문자면 이어진 대사로 처리
+          if (newText && newText[0] === newText[0].toLowerCase()) {
+            currentLine += " " + newText;
+          } else {
+            pushDialogue();
+            currentSpeaker = newSpeaker;
+            currentLine = newText;
+          }
+        } else {
+          pushDialogue();
+          currentSpeaker = newSpeaker;
+          currentLine = newText;
+        }
       } else {
-        // 진행 중인 대화 블록이 있다면 이어서 추가
         if (currentSpeaker) {
           currentLine += " " + line;
         }
       }
     });
 
-    // 마지막 대화 블록 처리
     pushDialogue();
 
     setRightText(result.join("\n"));
