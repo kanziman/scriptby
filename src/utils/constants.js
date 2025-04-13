@@ -7,6 +7,9 @@ export const DEFAULT_IMAGE =
 export const NO_IMAGE = { MdOutlineImageNotSupported };
 export const TMDB_KEY = "6f52a18ef9e4a14fe66d34b01664b30a";
 
+export const SAMPLE_URL =
+  "https://ssjkqrernrlhvyhqpzvp.supabase.co/storage/v1/object/public/images//friends-01-001.xlsx";
+
 export const TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search";
 export const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 export const TMDB_TREND_URL = "https://api.themoviedb.org/3/trending";

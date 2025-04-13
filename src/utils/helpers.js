@@ -8,6 +8,7 @@ import {
 import { franc } from "franc";
 import langs from "langs";
 import { languages } from "../data/IOS-639-1";
+import { SAMPLE_URL } from "./constants";
 
 // We want to make this function work for both Date objects and strings (which come from Supabase)
 export const subtractDates = (dateStr1, dateStr2) =>
@@ -102,6 +103,39 @@ export const sliceDataLeftRight = (data) => {
 
 //   return dividedData;
 // };
+
+export function downloadSample() {
+  // fetch를 사용하여 blob으로 가져오기
+  fetch(SAMPLE_URL)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      // Blob URL 생성
+      const blobUrl = URL.createObjectURL(blob);
+
+      // 다운로드 링크 생성
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "friends-01-001.xlsx";
+
+      // 클릭 이벤트 발생 및 정리
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Blob URL 해제
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 100);
+    })
+    .catch((error) => {
+      console.error("다운로드 중 오류가 발생했습니다:", error);
+    });
+}
 
 export function extractFirstImage(content) {
   const regex = /<img[^>]+src="([^">]+)"/g;

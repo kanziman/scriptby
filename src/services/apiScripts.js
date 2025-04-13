@@ -264,29 +264,20 @@ export async function confirmScript(id, obj) {
 }
 
 export async function deleteScript(id) {
-  const { data, error } = await supabase.from("scripts").delete().eq("id", id);
+  const { data, error, count } = await supabase
+    .from("scripts")
+    .delete({ count: "exact" }) // count 옵션 추가
+    .eq("id", id);
 
   if (error) {
     console.error(error);
     throw new Error("scripts could not be deleted");
   }
 
-  return data;
-}
-
-// We expect a newCabin object that looks like {setting: newValue}
-export async function updateScript(newCabin) {
-  const { data, error } = await supabase
-    .from("scripts")
-    .update(newCabin)
-    // There is only ONE row of cabins, and it has the ID=1, and so this is the updated one
-    .eq("id", 1)
-    .single();
-
-  if (error) {
-    console.error(error);
-    throw new Error("scripts could not be updated");
+  if (count === 0) {
+    throw new Error("No script was deleted. You might not have permission.");
   }
+
   return data;
 }
 

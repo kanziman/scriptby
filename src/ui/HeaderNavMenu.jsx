@@ -57,6 +57,7 @@ const StyledNavLink = styled(NavLink)`
 
 function HeaderNavMenu() {
   const { user } = useUser();
+  console.log("user :>> ", user);
   return (
     <StyledHeaderPageMenu>
       <li>
@@ -101,7 +102,7 @@ function HeaderNavMenu() {
           </StyledNavLink>
         </li>
       )}
-      {user?.isMaster && (
+      {(user?.isMaster || user?.isTutor) && (
         <li>
           <StyledNavLink to="/convert">
             <span>

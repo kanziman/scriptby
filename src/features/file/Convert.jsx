@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import * as XLSX from "xlsx";
 import Button from "../../ui/Button";
+import { downloadSample } from "../../utils/helpers";
 import { useConvert } from "./useConvert";
 
 // styled-components를 이용한 스타일 정의
@@ -85,6 +86,9 @@ function Convert() {
         />
       </TextareaContainer>
       <ButtonContainer>
+        <Button variation="tertiary" onClick={downloadSample}>
+          Sample
+        </Button>
         <Button variation="inactive" onClick={handleReset}>
           Reset
         </Button>

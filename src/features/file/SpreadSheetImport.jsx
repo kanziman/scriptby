@@ -4,6 +4,7 @@ import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import Button from "../../ui/Button";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Spinner from "../../ui/Spinner";
+import { downloadSample } from "../../utils/helpers";
 import { fields } from "./fields";
 import { translations } from "./translation";
 
@@ -13,41 +14,7 @@ export default function SpreadSheetImport({
   fileName,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  function downloadSample() {
-    const sampleUrl =
-      "https://ssjkqrernrlhvyhqpzvp.supabase.co/storage/v1/object/public/images//friends-01-001.xlsx";
 
-    // fetch를 사용하여 blob으로 가져오기
-    fetch(sampleUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.blob();
-      })
-      .then((blob) => {
-        // Blob URL 생성
-        const blobUrl = URL.createObjectURL(blob);
-
-        // 다운로드 링크 생성
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = "friends-01-001.xlsx";
-
-        // 클릭 이벤트 발생 및 정리
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        // Blob URL 해제
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-        }, 100);
-      })
-      .catch((error) => {
-        console.error("다운로드 중 오류가 발생했습니다:", error);
-      });
-  }
   return (
     <>
       <>

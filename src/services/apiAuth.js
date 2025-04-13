@@ -61,6 +61,8 @@ export async function getCurrentProfile() {
   data.isManager = data.role === "manager";
   data.isUser = data.role === "user";
 
+  data.isTutor = data?.play === "tutor";
+
   if (error) throw new Error(error.message);
   return data;
 }

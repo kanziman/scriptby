@@ -3,8 +3,8 @@ import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 
 import { useIntl } from "react-intl";
+import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
-import ScreenPagenation from "../scripts/ScreenPagenation";
 import PostRow from "./PostRow";
 import PostRowNotice from "./PostRowNotice";
 import { usePosts } from "./usePosts";
@@ -47,7 +47,7 @@ function PostTable({ isToggled }) {
         )}
 
         <Table.Footer>
-          <ScreenPagenation count={count} isToggled={isToggled} />
+          <Pagination count={count} isToggled={isToggled} />
         </Table.Footer>
       </Table>
     </Menus>

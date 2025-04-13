@@ -134,6 +134,8 @@ function App() {
                         path="scripts/:action/:scriptId"
                         element={<AddScriptPage />}
                       />
+                      <Route path="convert" element={<ConvertPage />} />
+
                       {/* <Route
                       path="scripts/:action/:scriptId"
                       element={<AddScriptPage />}
@@ -144,7 +146,6 @@ function App() {
                       element={<ProtectedRoute requiredRole={["master"]} />}
                     >
                       <Route path="users" element={<Users />} />
-                      <Route path="convert" element={<ConvertPage />} />
                     </Route>
 
                     <Route element={<ProtectedRoute />}>
