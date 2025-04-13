@@ -34,6 +34,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { theme } from "./styles/theme";
 import AppLayout from "./ui/AppLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import { recordVisit } from "./utils/visit";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -63,6 +64,16 @@ function App() {
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10); // "2025-04-13"
+    const visited = localStorage.getItem("visitedDate");
+
+    if (visited !== today) {
+      recordVisit();
+      localStorage.setItem("visitedDate", today);
     }
   }, []);
 

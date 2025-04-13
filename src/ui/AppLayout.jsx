@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { HiX } from "react-icons/hi";
 import { Outlet, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSidebar } from "../context/SidebarContext";
+import VisitCounter from "../features/dashboard/VisitCounter";
 import Header from "./Header";
 import MainFooter from "./Layout/MainFooter";
 import Sidebar from "./Sidebar";
@@ -66,10 +66,10 @@ const SidebarModal = styled.div`
   height: 100%;
   box-shadow: 2px 0 5px var(--backdrop-100);
   overflow-y: auto;
-  @media (max-width: 80rem) {
+  @media (max-width: 50em) {
     width: 70%;
   }
-  @media (max-width: 34rem) {
+  @media (max-width: 34em) {
     width: 100%;
   }
 `;
@@ -99,6 +99,7 @@ function AppLayout() {
           <Outlet />
         </Container>
       </Main>
+      <VisitCounter />
 
       <MainFooter />
 
