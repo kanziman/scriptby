@@ -41,8 +41,8 @@
 
   "pagination.previous": "이전",
   "pagination.next": "다음",
-  "sortOptions.created.desc": "최신순 ⬇️",
-  "sortOptions.created.asc": "오래된순 ⬇️",
+  "sortOptions.created.desc": "오래된순 ⬇️",
+  "sortOptions.created.asc": "최신순 ⬇️",
   "sortOptions.title.desc": "제목 (Z-A)",
   "sortOptions.title.asc": "제목 (A-Z)",
   "search.placeHolder": "🔎 영화 또는 TV 검색...",

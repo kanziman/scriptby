@@ -45,8 +45,8 @@
   "pagination.previous": "previous",
   "pagination.next": "next",
 
-  "sortOptions.created.desc": "latest ⬇️",
-  "sortOptions.created.asc": "oldest ⬇️",
+  "sortOptions.created.desc": "oldest ⬇️",
+  "sortOptions.created.asc": "latest ⬇️",
   "sortOptions.title.desc": "title (Z-A)",
   "sortOptions.title.asc": "title (A-Z)",
 

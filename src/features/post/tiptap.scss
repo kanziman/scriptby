@@ -14,6 +14,8 @@
 
   p {
     margin: 0.5rem 0;
+    display: block;
+    // display: inline;
   }
   h1 {
     font-size: 3rem;
@@ -349,6 +351,18 @@
 .tiptap pre,
 .tiptap ul {
   margin: 1rem 0;
+}
+.tiptap ul {
+  margin: 1rem 2rem;
+  list-style-type: disc;
+}
+.tiptap ol {
+  margin: 1rem 2rem;
+  list-style-type: decimal;
+}
+.tiptap ul {
+  margin: 1rem 2rem;
+  list-style-type: disc;
 }
 .tiptap blockquote:first-child,
 .tiptap h1:first-child,

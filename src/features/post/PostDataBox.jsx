@@ -52,7 +52,7 @@ function PostDataBox() {
           <PostData post={post} />
           <ContentContainer>
             <div
-              className="ql-editor"
+              className="tiptap"
               dangerouslySetInnerHTML={{ __html: updatedContent }}
             />
           </ContentContainer>
