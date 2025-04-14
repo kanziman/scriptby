@@ -15,9 +15,7 @@ function ScriptTable() {
   const isAdminPage = location.pathname.includes("users") ? true : false;
   const { scripts, isLoading, count } = useScript();
 
-  // const adminColumns = "0.6fr 1fr 1fr 0.4fr 0.4fr 0.4fr 0.8fr 1fr 2rem";
-  // const userColumns = "repeat(auto-fit, minmax(50px, 1fr))";
-  const userColumns = `9rem 14rem  repeat(auto-fit, minmax(50px, 1fr))`;
+  const userColumns = `minmax(4rem, 1fr) minmax(8rem, 2fr)  repeat(auto-fit, minmax(5rem, 1fr))`;
 
   if (isLoading) return <Spinner />;
   if (!scripts?.length) {
@@ -27,7 +25,7 @@ function ScriptTable() {
   return (
     <>
       <Menus>
-        <Table columns={userColumns}>
+        <Table columns={userColumns} minWidth={"800px"}>
           <Table.Header>
             <div>
               <FormattedMessage id="table.header.status" />
