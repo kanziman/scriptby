@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true, // 기존 JS 파일 허용
+    "jsx": "react-jsx", // React 17+ JSX 변환
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "strict": true, // 나중에 false로 시작해서 점진적으로 true로 바꿔도 됨
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

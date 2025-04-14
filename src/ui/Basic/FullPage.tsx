@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import styled from "styled-components";
 
 const StyledFullPage = styled.div`
@@ -8,8 +9,12 @@ const StyledFullPage = styled.div`
   justify-content: center;
 `;
 
-function FullPage() {
-  return <StyledFullPage></StyledFullPage>;
+type FullPageProps = {
+  children: ReactNode,
+};
+
+function FullPage({ children }: FullPageProps) {
+  return <StyledFullPage>{children}</StyledFullPage>;
 }
 
 export default FullPage;

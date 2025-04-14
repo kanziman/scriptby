@@ -1,14 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-
-import { useEffect } from "react";
 import { ThemeProvider } from "styled-components";
+
 import { QueryProvider } from "./context/QueryContext";
 import { SettingsProvider } from "./context/SettingsContext";
 import { SidebarProvider } from "./context/SidebarContext";
 import LocationLogger from "./features/logger/LocationLogger";
+
 import Account from "./pages/Account";
 import AddPostPage from "./pages/AddPostPage";
 import AddScriptPage from "./pages/AddScriptPage";
@@ -29,6 +30,7 @@ import ScriptsAllPage from "./pages/ScriptsAllPage";
 import SignUp from "./pages/SignUp";
 import TrendDetailPage from "./pages/TrendDetailPage";
 import Users from "./pages/Users";
+
 import supabase from "./services/supabase";
 import GlobalStyles from "./styles/GlobalStyles";
 import { theme } from "./styles/theme";
@@ -39,15 +41,13 @@ import { recordVisit } from "./utils/visit";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // staleTime: 60 * 1000,
       staleTime: 10,
     },
   },
 });
 
-function App() {
+function App(): JSX.Element {
   useEffect(() => {
-    // 페이지 로드 시 세션 체크
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -68,7 +68,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const today = new Date().toISOString().slice(0, 10); // "2025-04-13"
+    const today = new Date().toISOString().slice(0, 10);
     const visited = localStorage.getItem("visitedDate");
 
     if (visited !== today) {
@@ -84,7 +84,6 @@ function App() {
           <QueryProvider>
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools initialIsOpen={false} />
-
               <GlobalStyles />
               <LocationLogger />
               <ThemeProvider theme={theme}>
@@ -99,33 +98,24 @@ function App() {
                     <Route path="bookings/:bookingId" element={<Booking />} />
                     <Route path="checkin/:bookingId" element={<Checkin />} />
                     <Route path="cabins" element={<Cabins />} />
-                    {/* <Route path="scripts" element={<Scripts />} /> */}
 
-                    {/* <Route
-                    path="scripts/shows/:showId"
-                    element={<ScriptsPage />}
-                  /> */}
-
-                    {/* ALL */}
                     <Route path="find" element={<FindPage />} />
                     <Route path="posts" element={<PostsPage />} />
                     <Route path="posts/:postId" element={<PostPage />} />
                     <Route path="scripts" element={<ScriptsAllPage />} />
                     <Route path="scripts/:scriptId" element={<ScriptPage />} />
-                    {/* <Route path="settings" element={<Settings />} /> */}
                     <Route
-                      path="/trend/movie/:trendId"
+                      path="trend/movie/:trendId"
                       element={<TrendDetailPage />}
                     />
                     <Route
-                      path="/trend/tv/:trendId"
+                      path="trend/tv/:trendId"
                       element={<TrendDetailPage />}
                     />
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
                     <Route path="loading" element={<LoadingPage />} />
 
-                    {/*  PROTECTED */}
                     <Route
                       element={<ProtectedRoute requiredPlay={["tutor"]} />}
                     >
@@ -135,11 +125,6 @@ function App() {
                         element={<AddScriptPage />}
                       />
                       <Route path="convert" element={<ConvertPage />} />
-
-                      {/* <Route
-                      path="scripts/:action/:scriptId"
-                      element={<AddScriptPage />}
-                    /> */}
                     </Route>
 
                     <Route
@@ -167,12 +152,8 @@ function App() {
                 gutter={12}
                 containerStyle={{ margin: "8px" }}
                 toastOptions={{
-                  success: {
-                    duration: 3000,
-                  },
-                  error: {
-                    duration: 5000,
-                  },
+                  success: { duration: 3000 },
+                  error: { duration: 5000 },
                   style: {
                     fontSize: "16px",
                     maxWidth: "500px",
