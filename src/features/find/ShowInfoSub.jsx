@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
-import TextExpander from "../../ui/Basic/TextExpander";
+import TextExpander from "../../ui/TextExpander";
 
 const DescriptionSection = styled.section`
   padding: 2rem;

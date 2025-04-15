@@ -22,7 +22,7 @@ const PostSection = styled.div`
   margin: 0 auto;
   padding: 4rem;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     padding: 2rem;
   }
 `;
@@ -32,7 +32,7 @@ const ContentContainer = styled.div`
   }
   margin-bottom: 3rem;
   min-height: 32rem;
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.4rem;
   }
 `;

@@ -12,7 +12,7 @@ const StyledUserAvatar = styled.div`
   color: var(--color-grey-600);
   margin-right: 1.4rem;
   cursor: pointer;
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     margin-right: 0;
     & img {
       width: 2.4rem;

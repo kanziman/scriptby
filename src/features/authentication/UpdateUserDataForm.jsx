@@ -5,7 +5,7 @@ import { FormattedMessage } from "react-intl";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRowV1";
+import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import { useUpdateUser } from "./useUpdateUser";
 import { useUser } from "./useUser";
@@ -48,6 +48,7 @@ function UpdateUserDataForm() {
   return (
     <Form onSubmit={handleSubmit}>
       <FormRow
+        orientation="vertical"
         label={
           <FormattedMessage
             id="form.emailAddress"
@@ -59,6 +60,7 @@ function UpdateUserDataForm() {
       </FormRow>
 
       <FormRow
+        orientation="vertical"
         label={
           <FormattedMessage id="form.fullName" defaultMessage="Full name" />
         }
@@ -73,13 +75,13 @@ function UpdateUserDataForm() {
       </FormRow>
 
       <FormRow
+        orientation="vertical"
         label={
           <FormattedMessage
             id="form.avatarImage"
             defaultMessage="Avatar image"
           />
         }
-        noFlex
       >
         <FileInput
           id="avatar"

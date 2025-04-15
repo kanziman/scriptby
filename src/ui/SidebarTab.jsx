@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import TabButton from "./Basic/TabButton";
+import TabButton from "./TabButton";
 
 const StyledFilter = styled.div`
   /* border: 1px solid var(--color-grey-100); */

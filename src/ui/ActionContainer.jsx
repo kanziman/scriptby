@@ -1,4 +1,3 @@
-import React from "react";
 import { CiCircleInfo } from "react-icons/ci";
 import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";

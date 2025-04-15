@@ -29,10 +29,10 @@ const StyledHeader = styled.header`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     padding: 0.8rem 2.4rem;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     padding: 1rem 1rem;
     font-weight: 500;
     font-size: 1.8rem;

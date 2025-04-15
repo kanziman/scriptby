@@ -71,7 +71,7 @@ const Badge = styled.div`
 const Star = styled.span`
   color: ${(props) => (props.filled ? "#FFD700" : "#E0E0E0")};
   font-size: 1.2rem;
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1cqmax;
   }
 `;

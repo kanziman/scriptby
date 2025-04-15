@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
@@ -22,7 +22,7 @@ const P = styled.p`
     font-weight: 600;
   }
   color: var(--color-grey-500);
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
     gap: 0.4rem;
   }
@@ -77,7 +77,7 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
   }
 `;

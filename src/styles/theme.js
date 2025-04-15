@@ -1,17 +1,10 @@
-// theme.js
 export const theme = {
-  breakpoints: {
-    desktop: "120rem",
-    /* 84em BELOW 1344px (Smaller desktops) */
-    smallDesktop: "90rem",
-    /* 75em BELOW 1200px (Landscape Tablets) */
-    landScapeTablet: "80rem",
-    /* 59em BELOW 960px (Tablets) */
-    tablet: "75rem", // 태블릿 기준
-    /* 50em BELOW 800px (Smaller tablets) */
-    smallTablet: "55rem", // 모바일 기준
-    /* 34em BELOW 544px (Phones) */
-    mobile: "37.5rem", // 모바일 기준
+  media: {
+    desktop: "max-width: 120em", // 1920px
+    landScapeTablet: "max-width: 84em", // 1344px
+    bigTablet: "max-width: 75em", // 1200px
+    tablet: "max-width: 55em", // 880px
+    mobile: "max-width: 37.5em", // 600px
   },
   colors: {
     primary: "#3498db",

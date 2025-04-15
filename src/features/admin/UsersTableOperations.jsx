@@ -1,4 +1,4 @@
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import SortBy from "../../ui/SortBy";
 import TableOperations from "../../ui/TableOperations";
 

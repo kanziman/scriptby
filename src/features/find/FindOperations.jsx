@@ -1,5 +1,5 @@
 import { useIntl } from "react-intl";
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import TableOperations from "../../ui/TableOperations";
 
 function FindOperations({ onChange, value }) {

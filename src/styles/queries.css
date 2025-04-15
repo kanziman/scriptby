@@ -226,7 +226,7 @@
 /* BELOW 544px (Phones) */
 /**************************/
 
-@media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
   .grid {
     row-gap: 4.8rem;
   }

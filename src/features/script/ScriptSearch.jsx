@@ -13,7 +13,7 @@ const SearchContainer = styled.div`
   gap: 1rem;
   flex-wrap: wrap;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     flex-direction: column;
     gap: 1rem;
   }
@@ -25,7 +25,7 @@ const InputWrapper = styled.div`
   min-width: 28rem;
   height: 4rem; /* 고정된 높이 설정 */
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     width: 100%;
     min-width: 100%;
   }
@@ -56,7 +56,7 @@ const StyledSearch = styled.input`
     color: transparent;
   }
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.6rem;
   }
 `;
@@ -96,7 +96,7 @@ const OperationsWrapper = styled.div`
   align-items: center;
   justify-content: end;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     width: 100%;
   }
 `;

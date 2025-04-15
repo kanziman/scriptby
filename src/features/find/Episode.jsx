@@ -67,7 +67,7 @@ const EpisodeTitle = styled.h3`
   font-size: 1.4rem;
   margin: 0;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1rem;
   }
 `;
@@ -83,7 +83,7 @@ const EpisodeInfo = styled.div`
     display: flex;
     align-items: center;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     p {
       font-size: 1rem;
     }
@@ -104,7 +104,7 @@ const ScriptInfo = styled.div`
   align-items: center;
   gap: 0.6rem;
   width: 100%;
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     & > span {
       font-size: 0.8rem;
     }

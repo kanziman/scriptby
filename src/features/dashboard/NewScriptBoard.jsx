@@ -3,7 +3,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ButtonText from "../../ui/ButtonText";
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import Heading from "../../ui/Heading";
 import HeadingGroup from "../../ui/HeadingGroup";
 import Spinner from "../../ui/Spinner";
@@ -19,7 +19,7 @@ const StyledTrendBoard = styled.div`
   gap: 2.4rem;
   padding: 2.4rem 3.2rem 1.6rem;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     padding: 1.2rem 0 1.6rem;
     gap: 1.2rem;
   }
@@ -27,7 +27,7 @@ const StyledTrendBoard = styled.div`
 
 const RightAlignedButtonText = styled(ButtonText)`
   margin-left: auto;
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1rem;
   }
 `;

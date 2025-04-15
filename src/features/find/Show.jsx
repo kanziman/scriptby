@@ -61,7 +61,7 @@ const ShowName = styled.h3`
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
   }
 `;
@@ -82,11 +82,11 @@ const InfoItems = styled.div`
   font-size: 1.1rem;
   flex-wrap: wrap;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
     gap: 0.4rem;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     gap: 0.2rem;
     font-size: 0.8rem;
   }
@@ -112,10 +112,10 @@ const Rating = styled.div`
     font-size: 1rem;
   }
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1rem;
   }
 `;

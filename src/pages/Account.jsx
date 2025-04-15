@@ -16,7 +16,7 @@ const RowGrid = styled.div`
   & > div {
     min-width: 35rem;
   }
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-template-columns: 1fr;
     & > :nth-child(1) {
       grid-row: 2 / span 1; /* Update user data를 두 번째 행으로 */

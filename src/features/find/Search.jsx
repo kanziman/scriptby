@@ -38,7 +38,7 @@ const StyledSearch = styled.input`
     color: transparent;
   }
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.6rem;
   }
 `;

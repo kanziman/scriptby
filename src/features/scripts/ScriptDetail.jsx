@@ -52,7 +52,7 @@ const AuthorName = styled.div`
   color: var(--color-grey-700);
   margin-bottom: 0.2rem;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.2rem;
   }
 `;
@@ -60,7 +60,7 @@ const AuthorName = styled.div`
 const AuthorDate = styled.div`
   font-size: 1.2rem;
   color: var(--color-grey-500);
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1rem;
   }
 `;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { useSearchParams } from "react-router-dom";
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import SortBy from "../../ui/SortBy";
 import TableOperations from "../../ui/TableOperations";
 import ScriptCheckBox from "./ScriptCheckBox";

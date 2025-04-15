@@ -17,11 +17,11 @@ const RowGrid = styled.div`
   min-height: 30vh;
   padding: 0 1rem;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     padding: 0;
     gap: 1rem;
   }

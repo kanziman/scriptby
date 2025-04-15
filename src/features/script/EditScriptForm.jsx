@@ -12,6 +12,15 @@ import DataItem from "../../ui/DataItem";
 import FlagSelect from "../../ui/FlagSelect";
 import Input from "../../ui/Input";
 import {
+  Backdrop,
+  ContentWrapper,
+  Footer,
+  Header,
+  OverView,
+  Section,
+  StyledScriptAddForm,
+} from "../../ui/ScriptFormGroup";
+import {
   EpisodeInfo,
   EpisodeLabel,
   EpisodeName,
@@ -28,85 +37,6 @@ import { useUser } from "../authentication/useUser";
 import SpreadSheetImport from "../file/SpreadSheetImport";
 import { useUpdateScript } from "../file/useUpdateScript";
 
-// Styled Components
-const StyledScriptAddForm = styled.section`
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-100);
-  border-radius: var(--border-radius-md);
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  position: relative;
-  transition: transform 0.3s, box-shadow 0.3s;
-`;
-const Backdrop = styled.div`
-  background-image: url(${(props) => props.image});
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.5);
-  height: 30vh;
-  width: 100%;
-`;
-const ContentWrapper = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 90%;
-  flex-wrap: nowrap;
-  @media (max-width: 34em) {
-    gap: 1rem;
-  }
-`;
-const Header = styled.header`
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--color-brand-500);
-  @media (max-width: 34em) {
-    h1 {
-      gap: 0;
-      margin: 0;
-      flex-direction: row;
-    }
-  }
-`;
-const Section = styled.section`
-  padding: 3.2rem 4rem 2.4rem;
-  gap: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
-  background-color: var(--color-grey-50);
-`;
-const Footer = styled.footer`
-  padding: 1.8rem 4rem;
-  font-size: 1.2rem;
-  color: var(--color-grey-600);
-  text-align: right;
-  border-top: 1px solid var(--color-grey-200);
-  background-color: var(--color-grey-50);
-  position: relative;
-  p {
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-  @media (max-width: 34em) {
-    font-size: 0.8rem;
-  }
-`;
-const OverView = styled.div`
-  color: #d1d5db;
-  font-style: italic;
-  font-size: 1.2rem;
-  padding: 1rem;
-  @media (max-width: 34em) {
-    font-size: 1rem;
-  }
-`;
 const StyledFlagGroup = styled.div`
   display: flex;
   gap: 1.5rem;
@@ -127,7 +57,7 @@ const DataItemContainer = styled.div`
   &:hover {
     transform: translateX(5px);
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.2rem;
     & select,
     button,
@@ -137,13 +67,6 @@ const DataItemContainer = styled.div`
     }
   }
 `;
-
-// helper: prepare show data by removing id and setting show_id and category
-function prepareShowData(selectedShow, category) {
-  if (!selectedShow) return null;
-  const { id, ...rest } = selectedShow;
-  return { ...rest, show_id: id, category };
-}
 
 /**
  * EditScriptForm (편집 전용)

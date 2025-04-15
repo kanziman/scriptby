@@ -17,7 +17,7 @@ const Stacked = styled.div`
     font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
     font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
   }
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     & span:first-child {
       font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
     }

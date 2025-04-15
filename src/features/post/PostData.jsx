@@ -14,7 +14,7 @@ const Title = styled.h1`
   font-size: 3rem;
   margin-bottom: 2.4rem;
   color: var(--color-grey-600);
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 2rem;
   }
 `;
@@ -25,7 +25,7 @@ const MetaInfo = styled.div`
   margin-bottom: 1.4rem;
   padding-bottom: 1.4rem;
   border-bottom: 1px solid var(--color-grey-200);
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
   }
 `;

@@ -21,7 +21,7 @@ const GridFooter = styled.div`
   column-gap: 2rem;
   /* row-gap: 3.6rem; */
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     row-gap: 3.6rem;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto;
@@ -73,7 +73,7 @@ const FooterHeading = styled.h2`
 
 // Contact us 컬럼을 위한 styled component
 const ContactCol = styled.div`
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-area: contact;
   }
 `;
@@ -90,19 +90,19 @@ const Address = styled.p`
 
 // Account, Company, Resources용 nav styled component들
 const NavAccount = styled.nav`
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-area: account;
   }
 `;
 
 const NavCompany = styled.nav`
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-area: company;
   }
 `;
 
 const NavResources = styled.nav`
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-area: resources;
   }
 `;

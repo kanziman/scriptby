@@ -10,7 +10,7 @@ import { useIntl } from "react-intl";
 import styled from "styled-components";
 import { useSidebar } from "../../context/SidebarContext";
 import ButtonIcon from "../../ui/ButtonIcon";
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import SidebarToggleButton from "../../ui/SidebarToggleButton";
 import TableOperations from "../../ui/TableOperations";
 
@@ -27,14 +27,14 @@ const StyledScreenMenu = styled.ul`
   div {
     display: flex;
   }
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     gap: 0.2rem;
     & svg {
       width: 1.4rem;
       height: 1.4rem;
     }
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     gap: 0;
     & svg {
       width: 1.2rem;

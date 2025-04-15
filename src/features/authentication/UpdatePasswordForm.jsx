@@ -4,7 +4,7 @@ import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 
 import { FormattedMessage } from "react-intl";
-import FormRow from "../../ui/FormRowV1";
+import FormRow from "../../ui/FormRow";
 import { useUpdateUser } from "./useUpdateUser";
 
 function UpdatePasswordForm() {
@@ -20,6 +20,7 @@ function UpdatePasswordForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
+        orientation="vertical"
         label={
           <FormattedMessage
             id="form.password"
@@ -44,6 +45,7 @@ function UpdatePasswordForm() {
       </FormRow>
 
       <FormRow
+        orientation="vertical"
         label={
           <FormattedMessage
             id="form.passwordConfirm"

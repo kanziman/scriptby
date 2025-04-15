@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useUser } from "../features/authentication/useUser";
-import FullPage from "./Basic/FullPage";
+import FullPage from "./FullPage";
 import Spinner from "./Spinner";
 
 type ProtectedRouteProps = {

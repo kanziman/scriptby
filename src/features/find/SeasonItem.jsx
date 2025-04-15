@@ -24,7 +24,7 @@ const StyledSeasonItem = styled.li`
     background-color: var(--color-grey-200);
   }
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     flex-direction: column;
     padding: 1rem;
   }
@@ -43,7 +43,7 @@ const PosterContainer = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     width: 100%;
     margin-right: 0;
     margin-bottom: 1rem;
@@ -70,7 +70,7 @@ const SeasonName = styled.h3`
   color: var(--color-grey-800);
   /* align-self: center; */
   /* margin: 1rem auto; */
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.6rem;
   }
 `;
@@ -81,13 +81,13 @@ const DetailedItem = styled.section`
   font-size: 1.4rem;
   color: var(--color-grey-600);
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-template-columns: 1fr;
     gap: 0rem;
     font-size: 1.2rem;
   }
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1rem;
   }
 `;

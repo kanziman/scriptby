@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { useIntl } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import FlagTextVertical from "../../ui/FlagTextVertical";
+import FlagTextSlide from "../../ui/FlagTextSlide";
 import { MetaContainer, MetaSubGroup } from "../../ui/MetaSubGroup";
 import Row from "../../ui/Row";
 import { IMG_PATH } from "../../utils/constants";
@@ -115,18 +115,18 @@ function ScriptSliderItem({ item: script }) {
 
         <FlagWrapper>
           <Row type="horizontal" gap="1rem" style={{ color: "white" }}>
-            <FlagTextVertical code={originalLanguage} flagOnly />
+            <FlagTextSlide code={originalLanguage} flagOnly />
             <span style={{ fontSize: "1.2rem" }}>&rarr;</span>
-            <FlagTextVertical code={translatedLanguage} flagOnly />
+            <FlagTextSlide code={translatedLanguage} flagOnly />
           </Row>
         </FlagWrapper>
       </ImageWrapper>
 
       <FlagTextWrapper>
         <Row type="horizontal" gap="0.4rem" style={{ color: "white" }}>
-          <FlagTextVertical code={originalLanguage} textOnly />
+          <FlagTextSlide code={originalLanguage} textOnly />
           <span style={{ fontSize: "1.2rem" }}>&rarr;</span>
-          <FlagTextVertical code={translatedLanguage} textOnly />
+          <FlagTextSlide code={translatedLanguage} textOnly />
         </Row>
       </FlagTextWrapper>
 

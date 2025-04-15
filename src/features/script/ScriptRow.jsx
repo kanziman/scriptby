@@ -25,14 +25,14 @@ const Stacked = styled.div`
   & span:first-child {
     font-weight: 500;
     font-size: 1.2rem;
-    @media (max-width: 50em) {
+    @media (${(props) => props.theme.media.tablet}) {
       font-size: 1rem;
     }
   }
   & span:not(:first-child) {
     color: var(--color-grey-500);
     font-size: 1rem;
-    @media (max-width: 50em) {
+    @media (${(props) => props.theme.media.tablet}) {
       font-size: 0.8rem;
     }
   }

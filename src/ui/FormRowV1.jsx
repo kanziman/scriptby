@@ -33,7 +33,7 @@ const StyledFormRow = styled.div`
       gap: 1.2rem;
     `}
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.2rem;
   }
 `;

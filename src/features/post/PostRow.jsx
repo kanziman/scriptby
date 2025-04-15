@@ -40,7 +40,7 @@ const Img = styled.img`
     transform: scale(1.5);
     overflow: hidden;
   }
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     max-width: 4rem;
   }
 `;
@@ -49,7 +49,7 @@ const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     & span {
       font-size: 1rem;
     }
@@ -58,7 +58,7 @@ const Stacked = styled.div`
 const Title = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 1.2rem;
   }
 `;
@@ -66,7 +66,7 @@ const Sided = styled.div`
   display: flex;
   gap: 0.8rem;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     & span {
       font-size: 0.8rem;
     }

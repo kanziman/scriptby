@@ -10,7 +10,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "strict": true, // 나중에 false로 시작해서 점진적으로 true로 바꿔도 됨
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "include": ["src"]
 }

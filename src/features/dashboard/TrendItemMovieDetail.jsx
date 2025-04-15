@@ -38,7 +38,7 @@ const ContentWrapper = styled.div`
   /* z-index: 1; */
   margin: 0 auto;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
@@ -64,7 +64,7 @@ const Poster = styled.img`
   aspect-ratio: 2/3;
   object-fit: cover;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     max-width: 250px;
   }
 `;
@@ -75,7 +75,7 @@ const Details = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     gap: 0.4rem;
     width: 100%;
   }
@@ -101,7 +101,7 @@ const Info = styled.p`
   margin: 0.2rem 0;
   font-size: 1.2rem;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
   }
 `;
@@ -111,7 +111,7 @@ const Overview = styled.p`
   font-size: 1.2rem;
   line-height: 1.5;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
   }
 `;

@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import ActionContainer from "../../ui/ActionContainer";
 import Spinner from "../../ui/Spinner";
-import SpinnerMini from "../../ui/SpinnerMini";
 import { TMDB_BASE_URL, TMDB_KEY } from "../../utils/constants";
 
 // 전체 페이지를 감싸는 래퍼 (배경 이미지를 위한 relative container)
@@ -39,7 +38,7 @@ const ContentWrapper = styled.div`
   /* z-index: 1; */
   margin: 0 auto;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
@@ -65,7 +64,7 @@ const Poster = styled.img`
   aspect-ratio: 2/3;
   object-fit: cover;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     max-width: 250px;
   }
 `;
@@ -76,7 +75,7 @@ const Details = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     gap: 0.4rem;
     width: 100%;
   }
@@ -102,7 +101,7 @@ const Info = styled.p`
   margin: 0.2rem 0;
   font-size: 1.2rem;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
   }
 `;
@@ -112,7 +111,7 @@ const Overview = styled.p`
   font-size: 1.2rem;
   line-height: 1.5;
 
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1rem;
   }
 `;

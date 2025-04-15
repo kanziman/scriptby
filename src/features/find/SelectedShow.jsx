@@ -13,7 +13,7 @@ const StyledSeasonsHead = styled.h2`
   width: fit-content;
   gap: 1rem;
   border-bottom: 1px solid var(--color-grey-300);
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     font-size: 2rem;
   }
 `;

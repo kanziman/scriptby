@@ -30,7 +30,7 @@ const StyledHeader = styled(CommonRow)`
   min-width: ${(props) => props.minWidth || "700px"};
   word-break: keep-all;
   /* text-align: center; */
-  @media (max-width: 50em) {
+  @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
     padding: 1.2rem;
   }
@@ -54,7 +54,8 @@ const StyledRow = styled(CommonRow)`
         background-color: var(--color-grey-200);
       }
     `}
-  @media (max-width: 50em) {
+
+  @media (${(props) => props.theme.media.tablet}) {
     padding: 1.2rem;
   }
 `;

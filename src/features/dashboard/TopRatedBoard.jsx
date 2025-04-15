@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import styled from "styled-components";
-import FilterGroup from "../../ui/FilterGroup";
+import FilterGroup from "../../ui/FilterGroup.tsx";
 import Heading from "../../ui/Heading";
 import HeadingGroup from "../../ui/HeadingGroup";
 import Row from "../../ui/Row";
@@ -19,7 +19,7 @@ const StyledTrendBoard = styled.div`
   grid-column: 1 / span 2;
   padding: 2.4rem 3.2rem 1.6rem;
 
-  @media (max-width: 34em) {
+  @media (${(props) => props.theme.media.mobile}) {
     padding: 1.2rem 0 1.6rem;
     gap: 1.2rem;
   }
