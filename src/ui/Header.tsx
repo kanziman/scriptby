@@ -6,6 +6,7 @@ import HeaderNavMenu from "./HeaderNavMenu";
 import { useEffect, useRef, useState } from "react";
 import { useBrowser } from "../hooks/useBrowser";
 
+// Styled header
 const StyledHeader = styled.header`
   position: relative;
   background-color: var(--color-grey-0);
@@ -16,8 +17,6 @@ const StyledHeader = styled.header`
   align-items: center;
   padding: 0.8rem 4.8rem;
   max-width: 100%;
-  /* margin: 0 auto; */
-  /* justify-content: space-between; */
   transition: all 0.3s ease-in-out;
 
   &.sticky {
@@ -32,6 +31,7 @@ const StyledHeader = styled.header`
   @media (${(props) => props.theme.media.tablet}) {
     padding: 0.8rem 2.4rem;
   }
+
   @media (${(props) => props.theme.media.mobile}) {
     padding: 1rem 1rem;
     font-weight: 500;
@@ -41,18 +41,14 @@ const StyledHeader = styled.header`
 
 function Header() {
   const isBrowserSmall = useBrowser();
-  const headerRef = useRef(null);
+  const headerRef = useRef<HTMLElement>(null);
   const [isSticky, setIsSticky] = useState(false);
   const headerHeight = "8rem";
 
+  // 스크롤 감지
   useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-
     const handleScroll = () => {
-      // 스크롤 위치가 특정 값(예: 100px)을 넘어가면 sticky 적용
-      const scrollY = window.scrollY;
-      setIsSticky(scrollY > 100);
+      setIsSticky(window.scrollY > 100);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -61,22 +57,15 @@ function Header() {
     };
   }, []);
 
+  // sticky 상태일 때 main에 margin 적용
   useEffect(() => {
-    // sticky 상태가 변경될 때 main 엘리먼트에 margin-top 추가
-    const mainElement = document.querySelector("main");
+    const mainElement = document.querySelector("main") as HTMLElement | null;
     if (!mainElement) return;
 
-    if (isSticky) {
-      mainElement.style.marginTop = headerHeight;
-    } else {
-      mainElement.style.marginTop = "0";
-    }
+    mainElement.style.marginTop = isSticky ? headerHeight : "0";
 
-    // 상태 변경 시 margin 제거를 보장하기 위한 클리어 함수
     return () => {
-      if (mainElement) {
-        mainElement.style.marginTop = "0";
-      }
+      mainElement.style.marginTop = "0";
     };
   }, [isSticky, headerHeight]);
 

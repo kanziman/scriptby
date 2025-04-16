@@ -1,12 +1,18 @@
 import styled from "styled-components";
 import { languages } from "../data/IOS-639-1";
 
+// -------- 타입 정의 --------
+interface FlagTextSlideProps {
+  code: string;
+  textOnly?: boolean;
+  flagOnly?: boolean;
+}
+
+// -------- styled components --------
 const StyledFlagText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* gap: 0.8rem; */
-  /* margin-bottom: 0.4rem; */
 `;
 
 const FlagWrapper = styled.span`
@@ -22,15 +28,21 @@ const FlagName = styled.span`
   }
 `;
 
-function FlagTextSlide({ code, textOnly = false, flagOnly = false }) {
+// -------- main component --------
+function FlagTextSlide({
+  code,
+  textOnly = false,
+  flagOnly = false,
+}: FlagTextSlideProps): JSX.Element | null {
   if (!code) {
     console.error("No lang code");
-    return;
+    return null;
   }
-  // code가 전달되지 않았거나 일치하는 언어가 없으면 null 반환
+
   const language = languages.find(
     (lang) => lang.Code.toLowerCase() === code.toLowerCase()
   );
+
   if (!language) return null;
 
   return (

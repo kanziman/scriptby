@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-// ✅ Backdrop 컴포넌트의 props 타입 지정
 interface BackdropProps {
   image: string;
 }
@@ -15,10 +14,7 @@ const StyledScriptAddForm = styled.section`
   transition: transform 0.3s, box-shadow 0.3s;
 `;
 
-const Backdrop =
-  styled.div <
-  BackdropProps >
-  `
+const Backdrop = styled.div<BackdropProps>`
   position: absolute;
   top: 0;
   left: 0;

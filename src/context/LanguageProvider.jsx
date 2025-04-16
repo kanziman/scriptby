@@ -4,11 +4,13 @@ import { IntlProvider } from "react-intl";
 // 메시지 가져오기
 import enMessages from "../locales/en.json";
 import koMessages from "../locales/ko.json";
+import jaMessages from "../locales/ja.json";
 
 // 메시지 매핑
 export const messages = {
   ko: koMessages,
   en: enMessages,
+  ja: jaMessages,
 };
 
 const LanguageContext = createContext({

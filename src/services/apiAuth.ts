@@ -1,7 +1,14 @@
+import { applyFilter } from "./applyFilter";
 import supabase, { supabaseUrl } from "./supabase";
+import { ExtendedProfile, Filter, Profile, SortBy } from "./types";
 
-export async function signup({ username, email, password }) {
-  console.log(username, email, password);
+interface SignupCredentials {
+  username: string;
+  email: string;
+  password: string;
+}
+
+export async function signup({ username, email, password }: SignupCredentials) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -18,19 +25,39 @@ export async function signup({ username, email, password }) {
   return data;
 }
 
-export async function login({ email, password }) {
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export async function login({ email, password }: LoginCredentials) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) throw new Error(error.message);
-  const profile = getCurrentProfile();
+  const profile = await getCurrentProfile();
   return profile;
 }
 
+interface UserMetadata {
+  role: "master" | "manager" | "user";
+}
+
+interface SupabaseUserWithRoles
+  extends Omit<
+    Awaited<ReturnType<typeof supabase.auth.getUser>>["data"]["user"],
+    "user_metadata"
+  > {
+  user_metadata: UserMetadata;
+  isMaster: boolean;
+  isManager: boolean;
+  isUser: boolean;
+}
+
 /// USING AUTH
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<SupabaseUserWithRoles | null> {
   console.log("getCurrentUser!");
   const { data: session } = await supabase.auth.getSession();
   console.log("session!", session);
@@ -39,60 +66,103 @@ export async function getCurrentUser() {
 
   const { data, error } = await supabase.auth.getUser();
 
-  data.user.isMaster = data.user.user_metadata.role === "master";
-  data.user.isManager = data.user.user_metadata.role === "manager";
-  data.user.isUser = data.user.user_metadata.role === "user";
+  if (!data.user) return null;
+
+  const role = (data.user.user_metadata as UserMetadata)?.role;
+
+  const extendedUser: SupabaseUserWithRoles = {
+    ...data.user,
+    isMaster: role === "master",
+    isManager: role === "manager",
+    isUser: role === "user",
+    user_metadata: {
+      role,
+    },
+  };
 
   if (error) throw new Error(error.message);
-  return data.user;
+  return extendedUser;
 }
 
 /// USING PROFILE
-export async function getCurrentProfile() {
+export async function getCurrentProfile(): Promise<ExtendedProfile | null> {
   const { data: session } = await supabase.auth.getSession();
-
   if (!session.session) return null;
+
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", session.session?.user.id)
-    .single();
-  data.isMaster = data.role === "master";
-  data.isManager = data.role === "manager";
-  data.isUser = data.role === "user";
-
-  data.isTutor = data?.play === "tutor";
+    .eq("id", session.session.user.id)
+    .single<Profile>();
 
   if (error) throw new Error(error.message);
-  return data;
+  if (!data) return null;
+
+  const extendedProfile: ExtendedProfile = {
+    ...data,
+    isMaster: data.role === "master",
+    isManager: data.role === "manager",
+    isUser: data.role === "user",
+    isTutor: data.play === "tutor",
+    isStudent: data.play === "student",
+  };
+
+  return extendedProfile;
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(): Promise<{
+  data: Profile[];
+  count: number | null;
+}> {
   const { data, count, error } = await supabase
     .from("profiles")
     .select("*", { count: "exact" })
     .order("created_at");
+
   if (error) throw new Error(error.message);
-  return { data, count };
+
+  return {
+    data: data as Profile[],
+    count,
+  };
 }
 
-export async function getUsersWithPage({ filter, sortBy, page, size }) {
+// 🔹 페이지 요청 파라미터
+interface GetUsersWithPageParams {
+  filter?: Filter;
+  sortBy?: SortBy;
+  page: number;
+  size: number;
+}
+
+// 🔹 반환 타입
+interface GetUsersWithPageResponse {
+  data: Profile[];
+  count: number;
+}
+
+export async function getUsersWithPage({
+  filter,
+  sortBy,
+  page,
+  size,
+}: GetUsersWithPageParams): Promise<GetUsersWithPageResponse> {
   // 1. 전체 행수(count)를 조회하기 위한 베이스 쿼리 생성
   let baseQuery = supabase.from("profiles").select("*", { count: "exact" });
 
   if (filter) {
-    baseQuery = baseQuery[filter.method || "eq"](filter.field, filter.value);
+    baseQuery = applyFilter(baseQuery, filter);
   }
 
   if (sortBy) {
-    baseQuery = baseQuery.order(sortBy.field, {
+    baseQuery = baseQuery.order(sortBy.field as string, {
       ascending: sortBy.direction === "asc",
     });
   }
 
   // 2. count만 먼저 가져옴
   const { count, error: countError } = await baseQuery;
-  if (countError) {
+  if (countError || count === null) {
     console.error(countError);
     throw new Error("Users could not be loaded (count error)");
   }
@@ -109,11 +179,12 @@ export async function getUsersWithPage({ filter, sortBy, page, size }) {
   let query = supabase.from("profiles").select("*", { count: "exact" });
 
   if (filter) {
-    query = query[filter.method || "eq"](filter.field, filter.value);
+    query = applyFilter(baseQuery, filter);
+    filter.field, filter.value;
   }
 
   if (sortBy) {
-    query = query.order(sortBy.field, {
+    query = query.order(sortBy.field as string, {
       ascending: sortBy.direction === "asc",
     });
   }
@@ -134,14 +205,25 @@ export async function logout() {
   if (error) throw new Error(error.message);
 }
 
-export async function updateCurrentProfile({
-  password,
-  username,
-  avatar,
-  role,
-  play,
-}) {
-  // 현재 사용자 정보 가져오기
+// TYPE
+export interface UserUpdateInput {
+  userId?: string;
+  password?: string;
+  username?: string;
+  avatar?: File;
+  role?: string;
+  play?: string;
+}
+interface ProfileData {
+  username?: string;
+  role?: string;
+  play?: string;
+  password?: string;
+}
+// UPDATE USER
+export async function updateCurrentProfile(input: UserUpdateInput) {
+  const { password, username, avatar, role, play } = input;
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -157,7 +239,7 @@ export async function updateCurrentProfile({
   }
 
   // 프로필 업데이트 데이터 준비
-  let profileData = {};
+  let profileData: ProfileData = {};
   if (username) profileData.username = username;
   if (role) profileData.role = role;
   if (play) profileData.play = play;
@@ -175,7 +257,6 @@ export async function updateCurrentProfile({
   // 2. 아바타 이미지 업로드
   if (avatar) {
     const fileName = `${user.id}/${Math.random()}`;
-    console.log("fileName :>> ", fileName);
     const { error: storageError } = await supabase.storage
       .from("avatars")
       .upload(fileName, avatar);
@@ -206,35 +287,30 @@ export async function updateCurrentProfile({
 }
 
 /// UPDATE USERS BY ADMIN(MANAGER,MASTER)
-export async function updateUserByAdmin({
-  userId,
-  password,
-  username,
-  avatar,
-  role,
-  play,
-}) {
+
+export async function updateUserByAdmin(input: UserUpdateInput) {
+  const { userId, password, username, role, avatar, play } = input;
   if (!userId) {
     console.error("userId is required to update another user.");
     return;
   }
 
   // 업데이트할 데이터 구성
-  const updateData = {};
-  if (password) updateData.password = password;
-  if (username) updateData.username = username;
-  if (avatar) updateData.avatar_url = avatar;
-  if (role) updateData.role = role;
-  if (play) updateData.play = play;
+  let profileData: ProfileData = {};
 
-  console.log("Updating user by admin:", userId, "with data:", updateData);
+  if (password) profileData.password = password;
+  if (username) profileData.username = username;
+  if (role) profileData.role = role;
+  if (play) profileData.play = play;
+
+  // console.log("Updating user by admin:", userId, "with data:", profileData);
 
   // Supabase DB 업데이트 (마스터 계정은 Service Role 사용)
   const { data, error } = await supabase
     .from("profiles")
-    .update(updateData)
+    .update(profileData)
     .eq("id", userId);
-  console.log("data :>> ", data);
+  // console.log("data :>> ", data);
   if (error) {
     console.error("Error updating user:", error);
   } else if (!data) {
@@ -243,6 +319,26 @@ export async function updateUserByAdmin({
     );
   } else {
     console.log("User updated successfully:", data);
+  }
+
+  // 2. 아바타 이미지 업로드
+  if (avatar) {
+    const fileName = `${userId}/${Math.random()}`;
+    const { error: storageError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, avatar);
+
+    if (storageError) throw new Error(storageError.message);
+
+    // 3. 아바타 URL을 profiles 테이블에 업데이트
+    const avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
+
+    const { error: avatarError } = await supabase
+      .from("profiles")
+      .update({ avatar_url: avatarUrl })
+      .eq("id", userId);
+
+    if (avatarError) throw new Error(avatarError.message);
   }
 
   return { data, error };

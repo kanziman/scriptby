@@ -87,7 +87,7 @@ function UsersTableRow({ user }) {
   function handleTutorRequest() {
     if (!user) return;
 
-    updateUser({ id, play: play === "requested" ? "tutor" : "" });
+    updateUser({ userId: id, play: play === "requested" ? "tutor" : "" });
   }
   return (
     <Table.Row>

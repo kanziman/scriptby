@@ -1,6 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { FormattedMessage } from "react-intl";
 import styled, { css } from "styled-components";
+
+// -------- Styled Components --------
+interface CommonRowProps {
+  columns?: string;
+  minWidth?: string;
+  type?: string;
+}
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-secondary-50);
@@ -11,7 +25,7 @@ const StyledTable = styled.div`
   width: 100%;
 `;
 
-const CommonRow = styled.div`
+const CommonRow = styled.div<CommonRowProps>`
   display: grid;
   grid-template-columns: ${(props) => props.columns};
   column-gap: 1.2rem;
@@ -29,7 +43,7 @@ const StyledHeader = styled(CommonRow)`
   color: var(--color-grey-600);
   min-width: ${(props) => props.minWidth || "700px"};
   word-break: keep-all;
-  /* text-align: center; */
+
   @media (${(props) => props.theme.media.tablet}) {
     font-size: 1.2rem;
     padding: 1.2rem;
@@ -43,9 +57,11 @@ const StyledRow = styled(CommonRow)`
   &:hover {
     background-color: var(--color-grey-50);
   }
+
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-50);
   }
+
   ${(props) =>
     props.type === "posts" &&
     css`
@@ -80,54 +96,85 @@ const Empty = styled.p`
   margin: 2.4rem;
 `;
 
-const TableContext = createContext();
+// -------- Context --------
+interface TableContextType {
+  columns: string;
+  windowWidth: number;
+  minWidth?: string;
+}
 
-function Table({ columns, children, minWidth }) {
+const TableContext = createContext<TableContextType | null>(null);
+
+// -------- Table --------
+interface TableProps {
+  children: ReactNode;
+  columns: string;
+  minWidth?: string;
+}
+
+function Table({ columns, children, minWidth }: TableProps): JSX.Element {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 브라우저 너비에 따라 동적으로 컬럼 조정
   const dynamicColumns =
     windowWidth <= 800 ? "repeat(auto-fit, minmax(50px, 1fr))" : columns;
 
   return (
     <TableContext.Provider
-      value={{
-        columns: columns ? columns : dynamicColumns,
-        windowWidth,
-        minWidth, // minWidth를 context에 전달
-      }}
+      value={{ columns: columns ?? dynamicColumns, windowWidth, minWidth }}
     >
       <StyledTable role="table">{children}</StyledTable>
     </TableContext.Provider>
   );
 }
 
-function Header({ fixedColumns, color, children }) {
-  const { columns, minWidth } = useContext(TableContext);
+// -------- Header --------
+interface HeaderProps {
+  children: ReactNode;
+  fixedColumns?: string;
+  color?: string;
+}
+
+function Header({
+  fixedColumns,
+  color,
+  children,
+}: HeaderProps): JSX.Element | null {
+  const context = useContext(TableContext);
+  if (!context) return null;
+
+  const { columns, minWidth } = context;
+
   return (
     <StyledHeader
       role="row"
       columns={fixedColumns || columns}
       as="header"
       color={color}
-      minWidth={minWidth} // 여기서 minWidth 사용
+      minWidth={minWidth}
     >
       {children}
     </StyledHeader>
   );
 }
 
-function Row({ children, ...props }) {
-  const { columns, minWidth } = useContext(TableContext);
+// -------- Row --------
+interface RowProps {
+  children: ReactNode;
+  type?: string;
+}
+
+function Row({ children, ...props }: RowProps): JSX.Element | null {
+  const context = useContext(TableContext);
+  if (!context) return null;
+
+  const { columns, minWidth } = context;
+
   return (
     <StyledRow role="row" columns={columns} minWidth={minWidth} {...props}>
       {children}
@@ -135,18 +182,28 @@ function Row({ children, ...props }) {
   );
 }
 
-function Body({ data, render }) {
-  if (!data?.length) return;
-  <Empty>
-    <FormattedMessage
-      id="empty.noData"
-      defaultMessage="No data to show at the moment"
-    />
-  </Empty>;
+// -------- Body --------
+interface BodyProps<T> {
+  data: T[];
+  render: (item: T) => ReactElement;
+}
+
+function Body<T>({ data, render }: BodyProps<T>): JSX.Element {
+  if (!data || data.length === 0) {
+    return (
+      <Empty>
+        <FormattedMessage
+          id="empty.noData"
+          defaultMessage="No data to show at the moment"
+        />
+      </Empty>
+    );
+  }
 
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
 
+// -------- Export 구성 --------
 Table.Header = Header;
 Table.Row = Row;
 Table.Body = Body;

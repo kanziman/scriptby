@@ -129,9 +129,7 @@ function PostRow({ data }) {
                 <Menus.List id={postId}>
                   <Modal.Open opens="edit">
                     <Menus.Button
-                      onFuncFromOutside={() =>
-                        navigate(`/posts/edit/${postId}`)
-                      }
+                      onClick={() => navigate(`/posts/edit/${postId}`)}
                       icon={<HiPencil />}
                     >
                       <FormattedMessage id="modal.menu.edit" />

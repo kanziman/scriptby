@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useSidebar } from "../context/SidebarContext";
 import VisitCounter from "../features/dashboard/VisitCounter";
 import Header from "./Header";
-import MainFooter from "./Layout/MainFooter";
+import MainFooter from "./MainFooter";
 import Sidebar from "./Sidebar";
 
 interface OverlayProps {

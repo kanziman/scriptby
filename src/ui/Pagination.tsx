@@ -4,23 +4,25 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { PAGE_SIZE } from "../utils/constants";
 
+interface PaginationProps {
+  count: number;
+  size?: number;
+}
+
+interface PaginationButtonProps {
+  active?: boolean;
+}
+
 const StyledPagination = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  @media (${(props) => props.theme.media.mobile}) {
-    & p {
-      /* font-size: 1.2rem; */
-    }
-  }
 `;
 
 const P = styled.p`
   font-size: 1.4rem;
   margin-left: 0.8rem;
-
   color: var(--color-grey-500);
 `;
 
@@ -29,10 +31,10 @@ const Buttons = styled.div`
   gap: 0.6rem;
 `;
 
-const PaginationButton = styled.button`
+const PaginationButton = styled.button<PaginationButtonProps>`
   background-color: ${(props) =>
-    props.active ? " var(--color-brand-600)" : "var(--color-grey-50)"};
-  color: ${(props) => (props.active ? " var(--color-brand-50)" : "inherit")};
+    props.active ? "var(--color-brand-600)" : "var(--color-grey-50)"};
+  color: ${(props) => (props.active ? "var(--color-brand-50)" : "inherit")};
   border: none;
   border-radius: var(--border-radius-sm);
   font-weight: 500;
@@ -64,27 +66,22 @@ const PaginationButton = styled.button`
   }
 `;
 
-function Pagination({ count, size }) {
+function Pagination({ count, size }: PaginationProps): JSX.Element | null {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = !searchParams.get("page")
-    ? 1
-    : Number(searchParams.get("page"));
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? Number(pageParam) : 1;
 
   const pageCount = Math.ceil(count / (size || PAGE_SIZE));
-  // console.log("count size:", count, size);
-  // console.log("total pageCount:", pageCount);
 
   function nextPage() {
     const next = currentPage === pageCount ? currentPage : currentPage + 1;
-
-    searchParams.set("page", next);
+    searchParams.set("page", String(next));
     setSearchParams(searchParams);
   }
 
   function prevPage() {
     const prev = currentPage === 1 ? currentPage : currentPage - 1;
-
-    searchParams.set("page", prev);
+    searchParams.set("page", String(prev));
     setSearchParams(searchParams);
   }
 
@@ -116,7 +113,7 @@ function Pagination({ count, size }) {
 
       <Buttons>
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
-          <HiChevronLeft />{" "}
+          <HiChevronLeft />
           <span>
             <FormattedMessage
               id="pagination.previous"

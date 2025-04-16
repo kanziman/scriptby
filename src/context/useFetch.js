@@ -25,12 +25,12 @@ export function useFetch(state, dispatch) {
       state.status.includes("seasons/") || // 시즌 관련 상태
       state.status.includes("episodes/") // 에피소드 관련 상태
     ) {
-      console.log("Skipping query update due to special state:", state.status);
+      // console.log("Skipping query update due to special state:", state.status);
       prevValues.current = { query, filter, status: state.status };
       return;
     }
 
-    console.log("Checking for query/filter changes in regular flow");
+    // console.log("Checking for query/filter changes in regular flow");
 
     // location.search에 "from"이 포함되면 업데이트를 막음
     if (location.search.includes("from")) return;
@@ -48,7 +48,7 @@ export function useFetch(state, dispatch) {
     if (queryChanged || filterChanged) {
       // 쿼리가 비어있거나 2글자 이상일 때만 업데이트
       if (query?.trim() === "" || query?.trim().length >= 2) {
-        console.log("Dispatching query/update with:", { query, filter });
+        // console.log("Dispatching query/update with:", { query, filter });
         dispatch({
           type: "query/update",
           payload: { query, filter },
@@ -62,20 +62,18 @@ export function useFetch(state, dispatch) {
   const fetchUrl = useMemo(() => {
     const langCode = getLangCode(query || "");
 
-    console.log("Building URL for status:", state.status);
+    // console.log("Building URL for status:", state.status);
 
     // 트렌드 쇼의 상세 정보 URL (우선 순위 높게)
     if (state.status === "trend/selected" && state.showId) {
       const currentFilter = state.filter || filter;
       const currentLang = state.lang || langCode;
 
-      console.log("state.lang :>> ", state.lang);
-
-      console.log("Building trend URL with:", {
-        showId: state.showId,
-        filter: currentFilter,
-        lang: currentLang,
-      });
+      // console.log("Building trend URL with:", {
+      //   showId: state.showId,
+      //   filter: currentFilter,
+      //   lang: currentLang,
+      // });
 
       return `${TMDB_BASE_URL}/${currentFilter}/${state.showId}?api_key=${TMDB_KEY}&language=${currentLang}&append_to_response=seasons`;
     }
@@ -116,8 +114,8 @@ export function useFetch(state, dispatch) {
   useEffect(() => {
     if (!fetchUrl) return;
 
-    console.log("fetchUrl changed:", fetchUrl);
-    console.log("State status:", state.status);
+    // console.log("fetchUrl changed:", fetchUrl);
+    // console.log("State status:", state.status);
 
     const controller = new AbortController();
 
@@ -141,7 +139,7 @@ export function useFetch(state, dispatch) {
         }
 
         // 데이터 가져오기
-        console.log("Fetching from:", fetchUrl);
+        // console.log("Fetching from:", fetchUrl);
         const res = await fetch(fetchUrl, { signal: controller.signal });
 
         if (!res.ok) {
@@ -155,7 +153,7 @@ export function useFetch(state, dispatch) {
         }
 
         const data = await res.json();
-        console.log("Fetched data:", data);
+        // console.log("Fetched data:", data);
 
         // 검색 결과가 없는 경우 처리
         if (
@@ -168,7 +166,7 @@ export function useFetch(state, dispatch) {
 
         // 트렌드 상태에서 데이터를 가져온 경우, "trend/selected" 대신 "shows/fetched"로 바로 전달
         if (state.status === "trend/selected") {
-          console.log("Dispatching trend data directly to shows/fetched");
+          // console.log("Dispatching trend data directly to shows/fetched");
           dispatch({
             type: "shows/selected", // trend/selected 대신 shows/selected 액션 타입 사용
             payload: data,

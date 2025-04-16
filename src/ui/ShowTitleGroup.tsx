@@ -1,27 +1,47 @@
 import styled from "styled-components";
 
-// 메타 정보를 감싸는 컨테이너
+// 🔹 색상 매핑 객체
+const textColors = {
+  text: {
+    title: "var(--color-grey-800)",
+    localized: "var(--color-grey-600)",
+    year: "var(--color-grey-700)",
+    episodeInfo: "var(--color-grey-600)",
+    episodeName: "var(--color-grey-500)",
+  },
+  backdrop: {
+    title: "#ddd",
+    localized: "#aaa",
+    year: "#bbb",
+    episodeInfo: "#ddd",
+    episodeName: "#ddd",
+  },
+};
+
+// 🔹 헬퍼 함수
+const getTextColor = (
+  key: keyof (typeof textColors)["text"],
+  backdrop?: boolean
+) => (backdrop ? textColors.backdrop[key] : textColors.text[key]);
+
 const ShowInfoWrapper = styled.div`
   display: flex;
   font-family: "Sono", sans-serif;
   flex-direction: column;
-  /* align-items: center; */
 `;
 
-// 메인 타이틀 스타일
-const ShowTitle = styled.h1`
+const ShowTitle = styled.h1<{ backdropColor?: boolean }>`
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   font-weight: bold;
   margin-bottom: 1.5rem;
-  color: ${(props) => (props.backdropColor ? `#ddd` : "var(--color-grey-800)")};
+  color: ${({ backdropColor }) => getTextColor("title", backdropColor)};
 
   @media (${(props) => props.theme.media.mobile}) {
     flex-direction: column;
     font-size: 1.8rem;
     margin-bottom: 0.4rem;
-    /* align-items: flex-start; */
   }
 `;
 
@@ -35,9 +55,9 @@ const OriginalTitle = styled.span`
   }
 `;
 
-const LocalizedTitle = styled.span`
+const LocalizedTitle = styled.span<{ backdropColor?: boolean }>`
   font-size: 1.8rem;
-  color: ${(props) => (props.backdropColor ? `#aaa` : "var(--color-grey-600)")};
+  color: ${({ backdropColor }) => getTextColor("localized", backdropColor)};
   font-weight: 500;
   font-style: italic;
 
@@ -47,9 +67,9 @@ const LocalizedTitle = styled.span`
   }
 `;
 
-const YearLabel = styled.span`
+const YearLabel = styled.span<{ backdropColor?: boolean }>`
   font-size: 2rem;
-  color: ${(props) => (props.backdropColor ? `#bbb` : "var(--color-grey-700)")};
+  color: ${({ backdropColor }) => getTextColor("year", backdropColor)};
   margin-left: 0.6rem;
   font-weight: normal;
 
@@ -60,16 +80,13 @@ const YearLabel = styled.span`
   }
 `;
 
-// 에피소드 정보를 담는 행
-const EpisodeInfo = styled.div`
+const EpisodeInfo = styled.div<{ backdropColor?: boolean }>`
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: var(--color-grey-600);
-  color: ${(props) => props.backdropColor && `#ddd`};
+  color: ${({ backdropColor }) => getTextColor("episodeInfo", backdropColor)};
 `;
 
-// 시즌과 에피소드 번호에 적용할 스타일
 const EpisodeLabel = styled.span`
   font-weight: 500;
   font-size: 1.4rem;
@@ -80,12 +97,11 @@ const EpisodeLabel = styled.span`
   }
 `;
 
-// 에피소드 제목 스타일 (짧게 줄인 제목)
-const EpisodeName = styled.div`
+const EpisodeName = styled.div<{ backdropColor?: boolean }>`
   font-size: 1.2rem;
   font-style: italic;
-  color: var(--color-grey-500);
-  color: ${(props) => props.backdropColor && `#ddd`};
+  color: ${({ backdropColor }) => getTextColor("episodeName", backdropColor)};
+
   @media (${(props) => props.theme.media.mobile}) {
     font-size: 0.8rem;
   }
@@ -93,6 +109,7 @@ const EpisodeName = styled.div`
 
 const Delimiter = styled.span`
   color: var(--color-grey-400);
+
   @media (${(props) => props.theme.media.mobile}) {
     font-size: 0.8rem;
   }

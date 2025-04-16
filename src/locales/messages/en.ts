@@ -1,4 +1,4 @@
-{
+const en = {
   "menu.home": "Home",
   "menu.find": "Find",
   "menu.show": "Show",
@@ -24,7 +24,7 @@
 
   "badge.hot": "HOT",
   "badge.new": "NEW",
-  "loadMore": "More",
+  loadMore: "More",
   "showInfo.firstAired": "First Aired:",
   "showInfo.runTime": "Run time:",
   "showInfo.min": "min",
@@ -127,14 +127,16 @@
   "tutor.list.create": "Create and share your own script",
   "tutor.list.help": "Help other students with your contents(later)",
   "tutor.list.earn": "Earn recognition for your expertise",
-  "tutor.list.notice": "It may take up to one day for approval after uploading your script",
+  "tutor.list.notice":
+    "It may take up to one day for approval after uploading your script",
   "tutor.sendApplication": "Send tutor application",
   "tutor.sendApplicationRequested": "Requested",
   "tutor.sendApplicationConfirmed": "Confirmed",
   "tutor.uploadScriptMessage": "Now go upload your own script ->",
 
   "toast.incorrectCredentials": "Provided email or password are incorrect",
-  "toast.scriptUploaded": "Script successfully uploaded.\n(After confirmation, everyone can see)",
+  "toast.scriptUploaded":
+    "Script successfully uploaded.\n(After confirmation, everyone can see)",
   "toast.success.deleted": "Successfully deleted.",
   "toast.success.updated": "Successfully updated.",
   "toast.success.created": "Successfully created.",
@@ -177,7 +179,7 @@
   "post.type.error": "error",
   "post.type.request": "request",
 
-  "emptyMessage": "No {resource} to show at the moment",
+  emptyMessage: "No {resource} to show at the moment",
 
   "filter.lines": "LINES",
   "filter.words": "WORDS",
@@ -190,7 +192,8 @@
   "modal.menu.update": "Update",
 
   "modal.delete.title": "Delete {resource}",
-  "modal.delete.description": "Are you sure you want to delete this {resource} permanently? This action cannot be undone.",
+  "modal.delete.description":
+    "Are you sure you want to delete this {resource} permanently? This action cannot be undone.",
   "modal.delete.cancel": "Cancel",
   "modal.delete.delete": "Delete",
 
@@ -205,7 +208,8 @@
   "results.summary.pagination": "{start} ~ {end} of {count} results",
 
   "footer.contactUs": "Contact us",
-  "footer.address": "135, Misagangbyeonhangang-ro, Hanam-si, {br}Gyeonggi-do, Republic of Korea",
+  "footer.address":
+    "135, Misagangbyeonhangang-ro, Hanam-si, {br}Gyeonggi-do, Republic of Korea",
   "footer.account": "Account",
   "footer.createAccount": "Create account",
   "footer.signIn": "Sign in",
@@ -214,5 +218,7 @@
   "footer.forBusiness": "For Business",
   "footer.resources": "Resources",
   "footer.helpCenter": "Help center",
-  "footer.privacyTerms": "Privacy & terms"
-}
+  "footer.privacyTerms": "Privacy & terms",
+};
+
+export default en;

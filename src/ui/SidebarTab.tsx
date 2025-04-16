@@ -1,21 +1,31 @@
 import styled from "styled-components";
 import TabButton from "./TabButton";
 
+// 🔹 Styled component
 const StyledFilter = styled.div`
-  /* border: 1px solid var(--color-grey-100); */
-  background-color: var(--color-grey-0);
-  /* box-shadow: var(--shadow-sm); */
+  background-color: inherit;
   border-radius: var(--border-radius-sm);
   padding: 0.4rem;
   display: flex;
   gap: 0.8rem;
   margin-bottom: 0.8rem;
-
-  background-color: inherit;
 `;
 
-function SidebarTab({ activeTab, onTab, options }) {
-  const currentFilter = options.at(activeTab).value;
+// 🔹 탭 옵션 타입
+interface TabOption {
+  value: string;
+  label: string;
+}
+
+// 🔹 SidebarTab Props 타입
+interface SidebarTabProps {
+  activeTab: number;
+  onTab: (index: number) => void;
+  options: TabOption[];
+}
+
+function SidebarTab({ activeTab, onTab, options }: SidebarTabProps) {
+  const currentFilter = options.at(activeTab)?.value;
 
   return (
     <StyledFilter>

@@ -70,16 +70,17 @@ const ExtraMessage = styled.p`
   font-weight: 500;
 `;
 
+type UserPlayType = "student" | "tutor" | "requested" | "" | undefined;
+
 function Tutor() {
   const { formatMessage } = useIntl();
   const { updateUser, isUpdating } = useUpdateUser();
   const { user } = useUser();
   const nav = useNavigate();
-  const id = user?.id;
-  const currentPlay = user?.play;
+  const currentPlay = user?.play as UserPlayType;
 
   // 초기 상태를 "student"로 설정
-  const [play, setPlay] = useState();
+  const [play, setPlay] = useState<UserPlayType>(undefined);
 
   useEffect(() => {
     if (currentPlay) {
@@ -87,12 +88,16 @@ function Tutor() {
     }
   }, [currentPlay]);
 
+  const isStudent = play === "student";
+  const isTutor = play === "tutor";
+  const isRequested = play === "requested";
+
   // tutor 요청 처리: student -> tutor 전환 (추후 확장 가능)
   function handleTutorRequest() {
-    if (!user) return;
+    if (!user || !user.id) return;
 
     updateUser(
-      { userId: id, play: play === "student" ? "tutor" : "" },
+      { userId: user.id, play: play === "student" ? "tutor" : "" },
       {
         onSuccess: () => {
           setPlay(play);
@@ -104,9 +109,6 @@ function Tutor() {
     nav("/find");
   }
 
-  const isStudent = play === "student";
-  const isTutor = play === "tutor";
-  const isRequested = play === "requested";
   const sendApplication = formatMessage({
     id: "tutor.sendApplication",
     defaultMessage: "Send tutor application",

@@ -1,4 +1,4 @@
-{
+const ko = {
   "menu.home": "홈",
   "menu.find": "검색",
   "menu.show": "Show",
@@ -22,7 +22,7 @@
   "flag.scriptTitle": "{language} 스크립트",
   "badge.hot": "인기",
   "badge.new": "신규",
-  "loadMore": "더보기",
+  loadMore: "더보기",
   "showInfo.firstAired": "최초 방송:",
   "showInfo.runTime": "상영 시간:",
   "showInfo.min": "분",
@@ -111,7 +111,8 @@
   "tutor.list.create": "자신만의 스크립트를 만들고 공유하기",
   "tutor.list.help": "다른 학생들을 도와주기(예정)",
   "tutor.list.earn": "전문성 인정받기",
-  "tutor.list.notice": "스크립트 업로드 후 최대 1일 승인시간이 걸릴 수 있습니다.",
+  "tutor.list.notice":
+    "스크립트 업로드 후 최대 1일 승인시간이 걸릴 수 있습니다.",
   "tutor.sendApplication": "튜터 신청하기",
   "tutor.sendApplicationRequested": "신청완료",
   "tutor.sendApplicationConfirmed": "승인완료",
@@ -152,10 +153,11 @@
   "empty.noScript": "스크립트가 없습니다.",
   "empty.noData": "데이터가 없습니다.",
 
-  "emptyMessage": "현재 데이터가 없습니다.",
+  emptyMessage: "현재 데이터가 없습니다.",
 
   "toast.incorrectCredentials": "이메일 혹은 비밀번호가 일치하지 않습니다.",
-  "toast.scriptUploaded": "스크립트가 성공적으로 등록되었습니다.\n(승인 후 모두 열람 가능합니다)",
+  "toast.scriptUploaded":
+    "스크립트가 성공적으로 등록되었습니다.\n(승인 후 모두 열람 가능합니다)",
   "toast.success.deleted": "성공적으로 삭제되었습니다.",
   "toast.success.updated": "성공적으로 수정되었습니다.",
   "toast.success.created": "성공적으로 생성되었습니다.",
@@ -190,5 +192,6 @@
   "footer.forBusiness": "비즈니스",
   "footer.resources": "리소스",
   "footer.helpCenter": "고객센터",
-  "footer.privacyTerms": "개인정보 및 약관"
-}
+  "footer.privacyTerms": "개인정보 및 약관",
+};
+export default ko;

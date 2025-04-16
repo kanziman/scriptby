@@ -31,6 +31,7 @@ import SignUp from "./pages/SignUp";
 import TrendDetailPage from "./pages/TrendDetailPage";
 import Users from "./pages/Users";
 
+import I18nProvider from "./locales";
 import supabase from "./services/supabase";
 import GlobalStyles from "./styles/GlobalStyles";
 import { theme } from "./styles/theme";
@@ -80,92 +81,97 @@ function App(): JSX.Element {
   return (
     <BrowserRouter>
       <SettingsProvider>
-        <SidebarProvider>
-          <QueryProvider>
-            <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtools initialIsOpen={false} />
-              <GlobalStyles />
-              <LocationLogger />
-              <ThemeProvider theme={theme}>
-                <Routes>
-                  <Route element={<AppLayout />}>
-                    <Route
-                      index
-                      element={<Navigate replace to="dashboard" />}
-                    />
-                    <Route path="dashboard" element={<DashboardPage />} />
-                    <Route path="bookings" element={<Bookings />} />
-                    <Route path="bookings/:bookingId" element={<Booking />} />
-                    <Route path="checkin/:bookingId" element={<Checkin />} />
-                    <Route path="cabins" element={<Cabins />} />
-
-                    <Route path="find" element={<FindPage />} />
-                    <Route path="posts" element={<PostsPage />} />
-                    <Route path="posts/:postId" element={<PostPage />} />
-                    <Route path="scripts" element={<ScriptsAllPage />} />
-                    <Route path="scripts/:scriptId" element={<ScriptPage />} />
-                    <Route
-                      path="trend/movie/:trendId"
-                      element={<TrendDetailPage />}
-                    />
-                    <Route
-                      path="trend/tv/:trendId"
-                      element={<TrendDetailPage />}
-                    />
-                    <Route path="login" element={<Login />} />
-                    <Route path="signup" element={<SignUp />} />
-                    <Route path="loading" element={<LoadingPage />} />
-
-                    <Route
-                      element={<ProtectedRoute requiredPlay={["tutor"]} />}
-                    >
-                      <Route path="script/add" element={<AddScriptPage />} />
+        <I18nProvider>
+          <SidebarProvider>
+            <QueryProvider>
+              <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} />
+                <GlobalStyles />
+                <LocationLogger />
+                <ThemeProvider theme={theme}>
+                  <Routes>
+                    <Route element={<AppLayout />}>
                       <Route
-                        path="scripts/:action/:scriptId"
-                        element={<AddScriptPage />}
+                        index
+                        element={<Navigate replace to="dashboard" />}
                       />
-                      <Route path="convert" element={<ConvertPage />} />
-                    </Route>
+                      <Route path="dashboard" element={<DashboardPage />} />
+                      <Route path="bookings" element={<Bookings />} />
+                      <Route path="bookings/:bookingId" element={<Booking />} />
+                      <Route path="checkin/:bookingId" element={<Checkin />} />
+                      <Route path="cabins" element={<Cabins />} />
 
-                    <Route
-                      element={<ProtectedRoute requiredRole={["master"]} />}
-                    >
-                      <Route path="users" element={<Users />} />
-                    </Route>
-
-                    <Route element={<ProtectedRoute />}>
-                      <Route path="post/add" element={<AddPostPage />} />
-                      <Route path="account" element={<Account />} />
+                      <Route path="find" element={<FindPage />} />
+                      <Route path="posts" element={<PostsPage />} />
+                      <Route path="posts/:postId" element={<PostPage />} />
+                      <Route path="scripts" element={<ScriptsAllPage />} />
                       <Route
-                        path="posts/:action/:postId"
-                        element={<PostPage />}
+                        path="scripts/:scriptId"
+                        element={<ScriptPage />}
                       />
+                      <Route
+                        path="trend/movie/:trendId"
+                        element={<TrendDetailPage />}
+                      />
+                      <Route
+                        path="trend/tv/:trendId"
+                        element={<TrendDetailPage />}
+                      />
+                      <Route path="login" element={<Login />} />
+                      <Route path="signup" element={<SignUp />} />
+                      <Route path="loading" element={<LoadingPage />} />
+
+                      <Route
+                        element={<ProtectedRoute requiredPlay={["tutor"]} />}
+                      >
+                        <Route path="script/add" element={<AddScriptPage />} />
+                        <Route
+                          path="scripts/:action/:scriptId"
+                          element={<AddScriptPage />}
+                        />
+                        <Route path="convert" element={<ConvertPage />} />
+                      </Route>
+
+                      <Route
+                        element={<ProtectedRoute requiredRole={["master"]} />}
+                      >
+                        <Route path="users" element={<Users />} />
+                      </Route>
+
+                      <Route element={<ProtectedRoute />}>
+                        <Route path="post/add" element={<AddPostPage />} />
+                        <Route path="account" element={<Account />} />
+                        <Route
+                          path="posts/:action/:postId"
+                          element={<PostPage />}
+                        />
+                      </Route>
                     </Route>
-                  </Route>
 
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-              </ThemeProvider>
+                    <Route path="*" element={<PageNotFound />} />
+                  </Routes>
+                </ThemeProvider>
 
-              <Toaster
-                position="top-center"
-                gutter={12}
-                containerStyle={{ margin: "8px" }}
-                toastOptions={{
-                  success: { duration: 3000 },
-                  error: { duration: 5000 },
-                  style: {
-                    fontSize: "16px",
-                    maxWidth: "500px",
-                    padding: "16px 24px",
-                    backgroundColor: "var(--color-grey-0)",
-                    color: "var(--color-grey-700)",
-                  },
-                }}
-              />
-            </QueryClientProvider>
-          </QueryProvider>
-        </SidebarProvider>
+                <Toaster
+                  position="top-center"
+                  gutter={12}
+                  containerStyle={{ margin: "8px" }}
+                  toastOptions={{
+                    success: { duration: 3000 },
+                    error: { duration: 5000 },
+                    style: {
+                      fontSize: "16px",
+                      maxWidth: "500px",
+                      padding: "16px 24px",
+                      backgroundColor: "var(--color-grey-0)",
+                      color: "var(--color-grey-700)",
+                    },
+                  }}
+                />
+              </QueryClientProvider>
+            </QueryProvider>
+          </SidebarProvider>
+        </I18nProvider>
       </SettingsProvider>
     </BrowserRouter>
   );

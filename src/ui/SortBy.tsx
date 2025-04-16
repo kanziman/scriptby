@@ -1,7 +1,9 @@
+import { ChangeEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Select from "./Select";
 
+// 🔹 스타일 컴포넌트
 const StyledSort = styled.div`
   select {
     font-size: 1.4rem;
@@ -12,11 +14,22 @@ const StyledSort = styled.div`
   }
 `;
 
-function SortBy({ options }) {
+// 🔹 옵션 타입 정의
+interface Option {
+  value: string;
+  label: string;
+}
+
+// 🔹 컴포넌트 Props 타입
+interface SortByProps {
+  options: Option[];
+}
+
+function SortBy({ options }: SortByProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const sortBy = searchParams.get("sortBy") || "";
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
     searchParams.set("sortBy", e.target.value);
     setSearchParams(searchParams);
   }

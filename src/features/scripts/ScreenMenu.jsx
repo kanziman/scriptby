@@ -37,8 +37,8 @@ const StyledScreenMenu = styled.ul`
   @media (${(props) => props.theme.media.mobile}) {
     gap: 0;
     & svg {
-      width: 1.2rem;
-      height: 1.2rem;
+      /* width: 1.2rem;
+      height: 1.2rem; */
     }
   }
 `;
@@ -87,13 +87,13 @@ function ScreenMenu({
 
   return (
     <>
+      <SidebarToggleButton
+        sidebarToggled={sidebarToggled}
+        onToggle={toggleSidebar}
+      />
+
       {/* LINE WORDS PHRASE IDIOMS */}
       <StyledScreenMenu type="start">
-        <SidebarToggleButton
-          sidebarToggled={sidebarToggled}
-          onToggle={toggleSidebar}
-        />
-
         <TableOperations>
           <FilterGroup size="small" filterField="dataType" options={options} />
         </TableOperations>

@@ -1,9 +1,18 @@
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  MouseEvent,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
+// ---------- Styled Components ----------
 const StyledModal = styled.div`
   position: fixed;
   top: 50%;
@@ -46,20 +55,29 @@ const Button = styled.button`
   & svg {
     width: 2.4rem;
     height: 2.4rem;
-    /* Sometimes we need both */
-    /* fill: var(--color-grey-500);
-    stroke: var(--color-grey-500); */
     color: var(--color-grey-500);
   }
 `;
 
-const ModalContext = createContext();
+// ---------- Modal Context ----------
+interface ModalContextType {
+  openName: string;
+  open: (name: string) => void;
+  close: () => void;
+}
 
-function Modal({ children }) {
-  const [openName, setOpenName] = useState("");
+const ModalContext = createContext<ModalContextType | null>(null);
+
+// ---------- Modal Container ----------
+interface ModalProps {
+  children: ReactNode;
+}
+
+function Modal({ children }: ModalProps) {
+  const [openName, setOpenName] = useState<string>("");
 
   const close = () => setOpenName("");
-  const open = setOpenName;
+  const open = (name: string) => setOpenName(name);
 
   return (
     <ModalContext.Provider value={{ openName, close, open }}>
@@ -68,27 +86,45 @@ function Modal({ children }) {
   );
 }
 
-function Open({ children, opens: opensWindowName }) {
-  const { open } = useContext(ModalContext);
+// ---------- Modal.Open ----------
+interface OpenProps {
+  children: ReactElement;
+  opens: string;
+}
 
-  const handleClick = (e) => {
+function Open({ children, opens }: OpenProps) {
+  const context = useContext(ModalContext);
+  if (!context) return null;
+
+  const { open } = context;
+
+  const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
-    open(opensWindowName);
+    open(opens);
   };
 
   return cloneElement(children, { onClick: handleClick });
 }
 
-function Window({ children, name }) {
-  const { openName, close } = useContext(ModalContext);
-  const ref = useOutsideClick(close);
+// ---------- Modal.Window ----------
+interface WindowProps {
+  children: ReactElement;
+  name: string;
+}
 
+function Window({ children, name }: WindowProps) {
+  const context = useContext(ModalContext);
+  if (!context) return null;
+
+  const { openName, close } = context;
+  const ref = useOutsideClick(close) as React.RefObject<HTMLDivElement>;
   if (name !== openName) return null;
 
-  const handleClose = (e) => {
+  const handleClose = (e: MouseEvent) => {
     e.stopPropagation();
     close();
   };
+
   return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
@@ -103,6 +139,7 @@ function Window({ children, name }) {
   );
 }
 
+// ---------- Attach subcomponents ----------
 Modal.Open = Open;
 Modal.Window = Window;
 

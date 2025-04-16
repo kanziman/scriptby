@@ -1,7 +1,7 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
-import { useSettings } from "../../context/SettingsContext";
+import { useSettings } from "../context/SettingsContext";
 
 const Footer = styled.footer`
   padding: 2.8rem 0;

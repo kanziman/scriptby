@@ -1,5 +1,3 @@
-import { FaLanguage } from "react-icons/fa";
-import { FaLanguage as FaLang2 } from "react-icons/fa6";
 import { HiOutlineMenu } from "react-icons/hi";
 import {
   HiArrowRightOnRectangle,
@@ -10,87 +8,104 @@ import {
 import { FormattedMessage } from "react-intl";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { messages } from "../context/LanguageProvider";
 import { useSettings } from "../context/SettingsContext";
 import Logout from "../features/authentication/Logout";
 import { useLogout } from "../features/authentication/useLogout";
 import { useUser } from "../features/authentication/useUser";
 import { useBrowser } from "../hooks/useBrowser";
+import { Locale, supportedLocales } from "../locales/supportedLocales";
 import ButtonIcon from "../ui/ButtonIcon";
 import DarkModeToggle from "../ui/DarkModeToggle";
 import Menus from "./Menus";
 import SpinnerMini from "./SpinnerMini";
 
-const StyledHeaderMenu = styled.ul`
+// 🔹 Styled component props
+interface ResponsiveProps {
+  isBrowserSmall: boolean;
+}
+
+const StyledHeaderMenu = styled.ul<ResponsiveProps>`
   display: ${({ isBrowserSmall }) => (!isBrowserSmall ? "flex" : "none")};
   gap: 0.4rem;
 `;
 
-const StyledMenus = styled.div`
+const StyledMenus = styled.div<ResponsiveProps>`
   display: ${({ isBrowserSmall }) => (isBrowserSmall ? "flex" : "none")};
 `;
 
 function HeaderMenu() {
   const isBrowserSmall = useBrowser();
-  // const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { darkMode, toggleDarkMode, locale, changeLanguage } = useSettings();
   const { logout, isPending } = useLogout();
   const navigate = useNavigate();
   const { user: currentUser } = useUser();
-  // const { locale, changeLanguage } = useLanguage();
-  const handleClick = () => {
-    if (currentUser) {
-      navigate("/account");
-      return;
-    }
-    navigate("/login");
+
+  const languageSequence: Locale[] = Object.keys(supportedLocales) as Locale[];
+
+  const currentIndex = languageSequence.indexOf(locale);
+  const nextLocale =
+    languageSequence[(currentIndex + 1) % languageSequence.length];
+  const currentLocale =
+    languageSequence[currentIndex % languageSequence.length];
+
+  const currentFlag = supportedLocales[currentLocale].flag;
+
+  const handleLanguageToggle = () => {
+    changeLanguage(nextLocale);
   };
 
-  const languageSequence = ["ko", "en", "ja"];
-  const currentIndex = languageSequence.indexOf(locale);
-  const LanguageIcon = currentIndex % 2 === 0 ? FaLanguage : FaLang2;
-  const nextIndex = messages[languageSequence[currentIndex + 1]]
-    ? (currentIndex + 1) % languageSequence.length
-    : (currentIndex + 2) % languageSequence.length;
-  const nextLanguage = languageSequence[nextIndex];
-
-  const handleToggle = () => {
-    changeLanguage(nextLanguage);
+  const handleAccountClick = () => {
+    navigate(currentUser ? "/account" : "/login");
   };
 
   return (
     <>
       <StyledHeaderMenu isBrowserSmall={isBrowserSmall}>
-        <li>
-          <ButtonIcon onClick={handleClick}>
+        <li key="account">
+          <ButtonIcon onClick={handleAccountClick}>
             <HiOutlineUser />
           </ButtonIcon>
         </li>
-        <li>
+        <li key="darkmode">
           <DarkModeToggle />
         </li>
-        <li>
-          <ButtonIcon onClick={handleToggle}>
-            <LanguageIcon />
+        <li key="language">
+          <ButtonIcon onClick={handleLanguageToggle}>
+            <span role="img" aria-label={supportedLocales[nextLocale].label}>
+              {currentFlag}
+            </span>
           </ButtonIcon>
         </li>
-        <li>{currentUser && <Logout />}</li>
+        <li key="logout">{currentUser && <Logout />}</li>
       </StyledHeaderMenu>
 
       <StyledMenus isBrowserSmall={isBrowserSmall}>
         <Menus>
           <Menus.Menu>
-            <Menus.Toggle id={2} icon={<HiOutlineMenu />} />
-            <Menus.List id={2}>
-              <Menus.Button onClick={handleClick} icon={<HiOutlineUser />}>
+            <Menus.Toggle id={"header-menu"} icon={<HiOutlineMenu />} />
+            <Menus.List id={"header-menu"}>
+              <Menus.Button
+                onClick={handleAccountClick}
+                icon={<HiOutlineUser />}
+              >
                 <FormattedMessage id="menu.account" />
               </Menus.Button>
-              <Menus.Button onClick={handleToggle} icon={<LanguageIcon />}>
+              <Menus.Button
+                onClick={handleLanguageToggle}
+                icon={
+                  <span
+                    role="img"
+                    aria-label={supportedLocales[nextLocale].label}
+                  >
+                    {currentFlag}
+                  </span>
+                }
+              >
                 <FormattedMessage id="menu.language" />
               </Menus.Button>
               <Menus.Button
-                icon={darkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
                 onClick={toggleDarkMode}
+                icon={darkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
               >
                 <FormattedMessage id="menu.darkMode" />
               </Menus.Button>
@@ -100,7 +115,7 @@ function HeaderMenu() {
                   icon={
                     !isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />
                   }
-                  onClick={logout}
+                  onClick={() => logout()}
                 >
                   <FormattedMessage id="menu.logout" />
                 </Menus.Button>
@@ -109,7 +124,7 @@ function HeaderMenu() {
                   icon={
                     !isPending ? <HiArrowRightOnRectangle /> : <SpinnerMini />
                   }
-                  onClick={handleClick}
+                  onClick={handleAccountClick}
                 >
                   <FormattedMessage id="menu.login" />
                 </Menus.Button>

@@ -30,7 +30,7 @@ function UpdateUserDataForm() {
     e.preventDefault();
     if (!username) return;
     updateUser(
-      { id, username, avatar },
+      { userId: id, username, avatar },
       {
         onSuccess: () => {
           setAvatar(null);

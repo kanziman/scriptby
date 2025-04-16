@@ -1,5 +1,7 @@
 import {
   createContext,
+  MouseEvent,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -10,6 +12,7 @@ import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
+// ------ Styled Components ------
 const Menu = styled.div`
   display: flex;
   align-items: center;
@@ -35,7 +38,7 @@ const StyledToggle = styled.button`
   }
 `;
 
-const StyledList = styled.ul`
+const StyledList = styled.ul<{ position: { x: number; y: number } | null }>`
   position: fixed;
   z-index: 9999;
 
@@ -44,8 +47,12 @@ const StyledList = styled.ul`
   border-radius: var(--border-radius-md);
   color: var(--color-grey-500);
 
-  right: ${(props) => props.position.x}px;
-  top: ${(props) => props.position.y}px;
+  ${({ position }) =>
+    position &&
+    `
+    right: ${position.x}px;
+    top: ${position.y}px;
+  `}
 `;
 
 const StyledButton = styled.button`
@@ -73,14 +80,48 @@ const StyledButton = styled.button`
   }
 `;
 
-const MenusContext = createContext();
+// ------ Types ------
+interface MenusContextType {
+  openId: string;
+  position: { x: number; y: number } | null;
+  open: (id: string) => void;
+  close: () => void;
+  setPosition: (pos: { x: number; y: number }) => void;
+}
 
-function Menus({ children }) {
+interface ToggleProps {
+  id: string;
+  icon?: ReactNode;
+}
+
+interface ListProps {
+  id: string;
+  children: ReactNode;
+}
+
+interface ButtonProps {
+  children: ReactNode;
+  icon?: ReactNode;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onFuncFromOutside?: (e: MouseEvent<HTMLButtonElement>) => void;
+}
+
+interface MenusProps {
+  children: ReactNode;
+}
+
+// ------ Context ------
+const MenusContext = createContext<MenusContextType | null>(null);
+
+function Menus({ children }: MenusProps) {
   const [openId, setOpenId] = useState("");
-  const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(
+    null
+  );
   const [lastScrollPosition, setLastScrollPosition] = useState(0);
   const close = () => setOpenId("");
   const open = setOpenId;
+
   useEffect(() => {
     if (openId !== "") {
       setLastScrollPosition(window.scrollY);
@@ -90,20 +131,11 @@ function Menus({ children }) {
         const scrollDifference = Math.abs(
           currentScrollPosition - lastScrollPosition
         );
-
-        const SCROLL_THRESHOLD = 20;
-        if (scrollDifference > SCROLL_THRESHOLD) {
-          close();
-        }
+        if (scrollDifference > 20) close();
       };
 
-      // 스크롤 이벤트 리스너 등록
       window.addEventListener("scroll", handleScroll, true);
-
-      // 컴포넌트 언마운트 또는 openId가 변경될 때 이벤트 리스너 제거
-      return () => {
-        window.removeEventListener("scroll", handleScroll, true);
-      };
+      return () => window.removeEventListener("scroll", handleScroll, true);
     }
   }, [openId, lastScrollPosition]);
 
@@ -116,32 +148,47 @@ function Menus({ children }) {
   );
 }
 
-function Toggle({ id, icon }) {
-  const { openId, close, open, setPosition } = useContext(MenusContext);
+function Toggle({ id, icon }: ToggleProps) {
+  const context = useContext(MenusContext);
+  if (!context) return null;
 
-  function handleClick(e) {
+  const { openId, open, close, setPosition } = context;
+
+  const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
-    const rect = e.target.closest("button").getBoundingClientRect();
+    const rect = (e.target as HTMLElement)
+      .closest("button")
+      ?.getBoundingClientRect();
+    if (!rect) return;
+
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
     });
 
     openId === "" || openId !== id ? open(id) : close();
-  }
+  };
 
   return (
     <StyledToggle onClick={handleClick}>
-      {icon ? icon : <HiEllipsisVertical />}
+      {icon || <HiEllipsisVertical />}
     </StyledToggle>
   );
 }
 
-function List({ id, children }) {
-  const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close, false);
+function List({ id, children }: ListProps) {
+  const context = useContext(MenusContext);
+  if (!context) return null;
 
-  if (openId !== id) return null;
+  const { openId, position, close } = context;
+  const ref = useOutsideClick(
+    close,
+    false
+  ) as React.RefObject<HTMLUListElement>;
+
+  // const ref = useOutsideClick(close, false);
+
+  if (openId !== id || !position) return null;
 
   return createPortal(
     <StyledList position={position} ref={ref}>
@@ -151,16 +198,19 @@ function List({ id, children }) {
   );
 }
 
-function Button({ children, icon, onClick, onFuncFromOutside }) {
-  const { close } = useContext(MenusContext);
-  // console.log("onClick :>> ", onClick);
+function Button({ children, icon, onClick, onFuncFromOutside }: ButtonProps) {
+  const context = useContext(MenusContext);
+  if (!context) return null;
+
+  const { close } = context;
+
   const handleClick = useCallback(
-    (e) => {
+    (e: MouseEvent<HTMLButtonElement>) => {
       onFuncFromOutside?.(e);
       onClick?.(e);
       close();
     },
-    [onFuncFromOutside, onClick, close]
+    [onClick, onFuncFromOutside, close]
   );
 
   return (
@@ -173,6 +223,7 @@ function Button({ children, icon, onClick, onFuncFromOutside }) {
   );
 }
 
+// Attach subcomponents
 Menus.Menu = Menu;
 Menus.Toggle = Toggle;
 Menus.List = List;
