@@ -11,8 +11,8 @@ const StyledMetaContainer = styled.div`
   font-size: 0.9rem;
   background-color: var(--color-grey-100);
 
-  @media (${(props) => props.theme.media.tablet}) {
-    padding: 0.8rem 1rem;
+  @media (${(props) => props.theme.media.bigTablet}) {
+    padding: 0.8rem;
   }
 `;
 
@@ -50,20 +50,21 @@ const StyledGroupTitle = styled.h2`
   font-weight: 800;
   margin-bottom: 1rem;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 4.8rem;
 
+  @media (${(props) => props.theme.media.landScapeTablet}) {
+    font-size: 1.2rem;
+    -webkit-line-clamp: 2;
+  }
   @media (${(props) => props.theme.media.tablet}) {
-    font-size: 1.4rem;
-    min-height: 4.4rem;
+    font-size: 1.2rem;
   }
 
   @media (${(props) => props.theme.media.mobile}) {
-    font-size: 1.2rem;
-    min-height: 3.6rem;
+    font-size: 1rem;
   }
 `;
 
