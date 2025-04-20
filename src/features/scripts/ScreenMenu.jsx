@@ -6,6 +6,7 @@ import {
   PiTranslate,
   PiTranslateFill,
 } from "react-icons/pi";
+import { TbAlphabetLatin } from "react-icons/tb";
 import { useIntl } from "react-intl";
 import styled from "styled-components";
 import { useSidebar } from "../../context/SidebarContext";
@@ -37,8 +38,8 @@ const StyledScreenMenu = styled.ul`
   @media (${(props) => props.theme.media.mobile}) {
     gap: 0;
     & svg {
-      /* width: 1.2rem;
-      height: 1.2rem; */
+      width: 1.2rem;
+      height: 1.2rem;
     }
   }
 `;
@@ -51,6 +52,7 @@ function ScreenMenu({
   hideTranslation,
   onBigger,
   onSmaller,
+  onRomanToggle,
 }) {
   const intl = useIntl();
   const options = [
@@ -98,6 +100,7 @@ function ScreenMenu({
           <FilterGroup size="small" filterField="dataType" options={options} />
         </TableOperations>
       </StyledScreenMenu>
+
       {/* SPLIT HIDE EXPAND  */}
       <StyledScreenMenu type="end">
         <li>
@@ -117,6 +120,11 @@ function ScreenMenu({
             ) : (
               <PiSquareSplitHorizontalLight />
             )}
+          </ButtonIcon>
+        </li>
+        <li>
+          <ButtonIcon onClick={onRomanToggle}>
+            <TbAlphabetLatin />
           </ButtonIcon>
         </li>
         <li>

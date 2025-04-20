@@ -1,6 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
+import { useBrowser } from "../../hooks/useBrowser";
 import { useMore } from "../../hooks/useMore";
 import Box from "../../ui/Box";
 import LoadMoreButton from "../../ui/LoadMoreButton";
@@ -24,7 +25,9 @@ const StyledSeasonList = styled.ul`
 
 export default function SelectedShow() {
   const { selectedShow, dispatch, state } = useQuery();
-  const { visibleCount, handleLoadMore } = useMore(6, 6);
+  const isSmall = useBrowser();
+  const count = isSmall ? 6 : 8;
+  const { visibleCount, handleLoadMore } = useMore(count, count);
   const seasons = selectedShow?.seasons;
   const seasonsCount = seasons?.length;
 

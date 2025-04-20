@@ -138,7 +138,9 @@ function AddScriptForm() {
   function handleOnSubmit(uploadData, fName) {
     setFileName(fName);
     const baseScript = buildBaseScript(fName);
-    setNewScript({ ...baseScript, ...transform(uploadData) });
+    const updatedScript = { ...baseScript, ...transform(uploadData) };
+    setNewScript(updatedScript);
+    console.log("Submitted newScript:", updatedScript);
   }
 
   function handleOnChange(e) {

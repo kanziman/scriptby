@@ -17,6 +17,7 @@ const StyledScreenContainer = styled.div`
 
 function Screen() {
   const [isToggled, setIsToggled] = useState(true);
+  const [isRomanToggled, setIsRomanToggled] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hideTranslation, setHideTranslation] = useState(false);
   const [textScale, setTextScale] = useState(1.0);
@@ -28,12 +29,15 @@ function Screen() {
   const handleBigger = () => setTextScale((prev) => prev + 0.1);
   const handleSmaller = () => setTextScale((prev) => Math.max(0.5, prev - 0.1));
 
+  const handleRomanToggle = () => setIsRomanToggled((prev) => !prev);
+
   return (
     <StyledScreenContainer isExpanded={isExpanded}>
       <ScreenTable
         isToggled={isToggled}
         hideTranslation={hideTranslation}
         textScale={textScale}
+        isRomanToggled={isRomanToggled}
       >
         <ScreenMenu
           isToggled={isToggled}
@@ -44,6 +48,8 @@ function Screen() {
           hideTranslation={hideTranslation}
           onBigger={handleBigger}
           onSmaller={handleSmaller}
+          isRomanToggled={isRomanToggled}
+          onRomanToggle={handleRomanToggle}
         />
       </ScreenTable>
 

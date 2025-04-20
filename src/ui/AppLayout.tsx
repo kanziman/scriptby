@@ -63,7 +63,7 @@ const Overlay = styled.div<OverlayProps>`
 `;
 
 const SidebarModal = styled.div`
-  background: white;
+  background-color: var(--color-grey-50);
   width: 50%;
   height: 100%;
   box-shadow: 2px 0 5px var(--backdrop-100);

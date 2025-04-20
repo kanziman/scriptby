@@ -51,14 +51,33 @@ export const getFlag = (code) => {
 export const extractField = (data, field) =>
   data.map((item) => item[field]).filter(Boolean);
 
-export const transformSection = (items, originalKey, translatedKey) => {
+export const transformSection = (
+  items,
+  originalKey,
+  translatedKey,
+  optionalKey
+) => {
   return items
-    .filter((item) => item[originalKey] && item[translatedKey])
-    .map((item, index) => ({
-      index,
-      original: item[originalKey],
-      translated: item[translatedKey],
-    }));
+    .filter(
+      (item) =>
+        item[originalKey] && (translatedKey ? item[translatedKey] : true)
+    )
+    .map((item, index) => {
+      const result = {
+        index,
+        original: item[originalKey],
+      };
+
+      if (translatedKey && item[translatedKey]) {
+        result.translated = item[translatedKey];
+      }
+
+      if (optionalKey && item[optionalKey]) {
+        result.roman = item[optionalKey];
+      }
+
+      return result;
+    });
 };
 
 export const escapeRegExp = (string) => {
@@ -247,7 +266,7 @@ export function maskEmail(email) {
 
 export function transform(uploadData) {
   return {
-    lines: transformSection(uploadData, "original", "translated"),
+    lines: transformSection(uploadData, "original", "translated", "roman"),
     words: transformSection(uploadData, "original_words", "translated_words"),
     phrases: transformSection(
       uploadData,

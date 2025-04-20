@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import * as XLSX from "xlsx";
 import Button from "../../ui/Button";
@@ -19,6 +19,7 @@ const TextareaContainer = styled.div`
   width: 100%;
   max-width: 800px;
   margin-bottom: 20px;
+  color: black;
 `;
 
 const StyledTextarea = styled.textarea`

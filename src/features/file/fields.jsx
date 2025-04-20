@@ -41,12 +41,22 @@ export const fields = [
     ],
   },
   {
+    label: "Roman",
+    key: "roman",
+    fieldType: {
+      type: "input",
+    },
+    alternateMatches: ["ROMAN", "romanized", "romanization", "roman-text"],
+    validations: [], // 필수 아님
+  },
+  {
     label: "Original Words",
     key: "original_words",
     fieldType: {
       type: "input",
     },
     alternateMatches: ["ORIGINAL_WORDS", "originalWords", "original-words"],
+    validations: [], // 필수 아님
   },
   {
     label: "Translated Words",
@@ -59,6 +69,7 @@ export const fields = [
       "translatedWords",
       "translated-words",
     ],
+    validations: [], // 필수 아님
   },
   {
     label: "Original Phrases",
@@ -72,6 +83,7 @@ export const fields = [
       "original-phrases",
       "Original_Phrases",
     ],
+    validations: [], // 필수 아님
   },
   {
     label: "Translated Phrases",
@@ -85,6 +97,7 @@ export const fields = [
       "translated-phrases",
       "Translated_Phrases",
     ],
+    validations: [], // 필수 아님
   },
   {
     label: "Original Idioms",
@@ -93,6 +106,7 @@ export const fields = [
       type: "input",
     },
     alternateMatches: ["ORIGINAL_IDIOMS", "originalIdioms", "original-idioms"],
+    validations: [], // 필수 아님
   },
   {
     label: "Translated Idioms",
@@ -105,5 +119,6 @@ export const fields = [
       "translatedIdioms",
       "translated-idioms",
     ],
+    validations: [], // 필수 아님
   },
 ];

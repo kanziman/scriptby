@@ -9,7 +9,13 @@ import ScreenPagenation from "./ScreenPagenation";
 import ScreenRow from "./ScreenRow";
 import { useScriptOne } from "./useScriptOne";
 
-function ScreenTable({ isToggled, children, hideTranslation, textScale }) {
+function ScreenTable({
+  isToggled,
+  children,
+  hideTranslation,
+  textScale,
+  isRomanToggled,
+}) {
   const { scriptId } = useParams();
   const { script, count, subData, isPending } = useScriptOne({
     scriptId,
@@ -38,6 +44,7 @@ function ScreenTable({ isToggled, children, hideTranslation, textScale }) {
               isToggled={isToggled}
               hideTranslation={hideTranslation}
               fontSize={textScale}
+              isRomanToggled={isRomanToggled}
             />
           )}
         />

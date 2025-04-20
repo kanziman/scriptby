@@ -6,24 +6,37 @@ const Stacked = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  & span:first-child {
+
+  & .roman {
+    color: var(--color-grey-400);
+    font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
+    font-style: italic;
+  }
+
+  & .original {
     font-weight: 500;
-    /* 글자 크기가 textScale에 따라 변경됨 (기본 1.2rem의 배율 적용) */
     font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
   }
-  & span:last-child {
+
+  & .translated {
     color: var(--color-grey-500);
-    /* 기본 1rem 기준 */
     font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
     font-family: "Noto Sans KR", "Noto Sans JP", sans-serif;
   }
+
   @media (${(props) => props.theme.media.tablet}) {
-    & span:first-child {
-      font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
-    }
-    & span:last-child {
+    & .roman {
       font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
     }
+
+    & .original {
+      font-size: ${(props) => `calc(1.2rem * ${props.fontSize})`};
+    }
+
+    & .translated {
+      font-size: ${(props) => `calc(1.0rem * ${props.fontSize})`};
+    }
+
     gap: 0.1rem;
   }
 `;
@@ -53,17 +66,30 @@ function TextContent({
   hideTranslation,
   subData,
   fontSize,
+  roman,
 }) {
   return (
     <Stacked fontSize={fontSize}>
-      <span>{renderColoredText(original, subData)}</span>
-      <span>{!hideTranslation && renderColoredText(translated, subData)}</span>
+      {roman && <span className="roman">{roman}</span>}
+      <span className="original">{renderColoredText(original, subData)}</span>
+      <span className="translated">
+        {!hideTranslation && renderColoredText(translated, subData)}
+      </span>
     </Stacked>
   );
 }
 
-function ScreenRow({ data, isToggled, hideTranslation, subData, fontSize }) {
-  const { original, translated, left, right } = data;
+function ScreenRow({
+  data,
+  isToggled,
+  hideTranslation,
+  subData,
+  fontSize,
+  isRomanToggled,
+}) {
+  const { original, translated, left, right, roman } = data;
+
+  const romanProp = isRomanToggled ? roman : undefined;
 
   if (!isToggled) {
     return (
@@ -71,6 +97,7 @@ function ScreenRow({ data, isToggled, hideTranslation, subData, fontSize }) {
         <TextContent
           original={original}
           translated={translated}
+          roman={romanProp}
           hideTranslation={hideTranslation}
           subData={subData}
           fontSize={fontSize}
@@ -84,6 +111,7 @@ function ScreenRow({ data, isToggled, hideTranslation, subData, fontSize }) {
       <TextContent
         original={left?.original}
         translated={left?.translated}
+        roman={isRomanToggled ? left?.roman : undefined}
         hideTranslation={hideTranslation}
         subData={subData}
         fontSize={fontSize}
@@ -91,6 +119,7 @@ function ScreenRow({ data, isToggled, hideTranslation, subData, fontSize }) {
       <TextContent
         original={right?.original}
         translated={right?.translated}
+        roman={isRomanToggled ? right?.roman : undefined}
         hideTranslation={hideTranslation}
         subData={subData}
         fontSize={fontSize}

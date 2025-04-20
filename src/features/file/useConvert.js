@@ -1,51 +1,62 @@
 import { useState } from "react";
-
-// fallback: 단어 단위 분리 (문장 경계가 없을 때 사용)
-function fallbackWordSplit(dialogue, maxLen) {
-  const words = dialogue.split(" ");
-  let lines = [];
-  let currentLine = "";
-  words.forEach((word) => {
-    if ((currentLine + word).length > maxLen) {
-      lines.push(currentLine.trim());
-      currentLine = word + " ";
-    } else {
-      currentLine += word + " ";
+// <p> 안의 텍스트만 재귀적으로 추출
+function extractText(node) {
+  let txt = "";
+  node.childNodes.forEach((child) => {
+    if (child.nodeType === Node.TEXT_NODE) {
+      txt += child.nodeValue;
+    } else if (
+      child.nodeType === Node.ELEMENT_NODE &&
+      child.localName.toLowerCase() === "br"
+    ) {
+      txt += " ";
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      txt += extractText(child);
     }
   });
-  if (currentLine.trim()) lines.push(currentLine.trim());
-  return lines;
+  return txt;
 }
 
-// 문장 경계를 우선으로 대사를 나누되, 문장 경계가 없으면 fallback 사용
-function splitLongDialogue(dialogue, maxLen) {
-  if (dialogue.length <= maxLen) return [dialogue];
-  let sentences = dialogue.match(/[^.!?]+[.!?]+[\s]*/g);
-  if (!sentences) {
-    return fallbackWordSplit(dialogue, maxLen);
+// 틱(t) 값을 초 단위로 바꾸는 함수
+function formatTime(ticks, tickRate = 10000000) {
+  const sec = Math.floor(ticks / tickRate);
+  if (sec >= 60) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}m${s}s`;
   }
-  let parts = [];
-  let currentPart = "";
-  for (const sentence of sentences) {
-    if ((currentPart + sentence).length <= maxLen) {
-      currentPart += sentence;
-    } else {
-      if (currentPart.trim().length > 0) {
-        parts.push(currentPart.trim());
-      }
-      if (sentence.trim().length > maxLen) {
-        const fallbackParts = fallbackWordSplit(sentence.trim(), maxLen);
-        parts.push(...fallbackParts);
-        currentPart = "";
-      } else {
-        currentPart = sentence;
-      }
-    }
-  }
-  if (currentPart.trim().length > 0) {
-    parts.push(currentPart.trim());
-  }
-  return parts;
+  return `${sec}s`;
+}
+
+// XML 전용 변환 함수 (중복 제거 포함)
+function doConvertXml(xmlText) {
+  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+  const ps = Array.from(doc.getElementsByTagName("p"));
+
+  let lastText = null;
+  const lines = [];
+
+  ps.forEach((p) => {
+    // 1) 시간 코드
+    const begin = p.getAttribute("begin") || "";
+    const ticks = parseInt(begin.replace(/t$/, ""), 10) || 0;
+    const ts = formatTime(ticks);
+
+    // 2) 자막 텍스트
+    const text = extractText(p).trim();
+
+    // 3) 넷플릭스 시리즈만 예외 제거
+    if (text === "넷플릭스 시리즈") return;
+
+    // 4) 바로 전 텍스트와 같으면 스킵
+    if (text === lastText) return;
+
+    // 5) 결과에 추가
+    lines.push(`${ts}: ${text}`);
+    lastText = text;
+  });
+
+  return lines.join("\n");
 }
 
 // 따옴표(" 또는 ') 또는 "..., and" 같은 구분자 기준 분리 (인용부 외부에서 분리)
@@ -118,70 +129,45 @@ function splitByQuotes(dialogue, maxLen) {
 export const useConvert = () => {
   const [rightText, setRightText] = useState("");
 
-  const doConvert = (leftText) => {
-    const maxLength = 200; // 이 길이를 초과하면 대사를 분리합니다.
-    const script = leftText;
-    const lines = script.split(/\r?\n/);
-
+  // 기존 speech 전용 변환 로직을 별도 함수로 분리
+  const doConvertSpeech = (leftText) => {
+    const maxLength = 200;
+    const lines = leftText.split(/\r?\n/);
     let result = [];
     let currentSpeaker = null;
     let currentLine = "";
 
-    // 진행 중인 대화 블록을 결과에 저장하는 헬퍼 함수
     const pushDialogue = () => {
-      if (currentSpeaker && currentLine) {
-        // 괄호 안의 내용을 제거하고, 주변 불필요한 공백은 단일 공백으로 치환
-        const cleanedLine = currentLine.replace(/\s*\([^)]*\)\s*/g, " ").trim();
-        // 길이가 초과하는 경우에만 분리 후보들을 시도합니다.
-        if (cleanedLine.length > maxLength) {
-          // 우선, 인용부 외부에서 자연스럽게 분리하는 규칙 시도
-          let partsCandidate = splitOutsideQuotes(cleanedLine, maxLength);
-          if (
-            partsCandidate &&
-            partsCandidate.length > 1 &&
-            partsCandidate.every((p) => p.length <= maxLength)
-          ) {
-            partsCandidate.forEach((part) => {
-              result.push(`${currentSpeaker}: ${part}`);
-            });
-          } else {
-            // 다음으로, ", and " 기준 분리 시도
-            partsCandidate = splitByCommaAnd(cleanedLine, maxLength);
-            if (
-              partsCandidate &&
-              partsCandidate.length > 1 &&
-              partsCandidate.every((p) => p.length <= maxLength)
-            ) {
-              partsCandidate.forEach((part) => {
-                result.push(`${currentSpeaker}: ${part}`);
-              });
-            } else {
-              // 다음, 따옴표("...") 기준 분리 시도
-              partsCandidate = splitByQuotes(cleanedLine, maxLength);
-              if (
-                partsCandidate &&
-                partsCandidate.length > 1 &&
-                partsCandidate.every((p) => p.length <= maxLength)
-              ) {
-                partsCandidate.forEach((part) => {
-                  result.push(`${currentSpeaker}: ${part}`);
-                });
-              } else {
-                // 만약 자연스러운 분리 후보를 찾지 못하면, 원본 전체를 하나의 대화로 남깁니다.
-                result.push(`${currentSpeaker}: ${cleanedLine}`);
-              }
-            }
-          }
+      if (!currentSpeaker || !currentLine) {
+        currentSpeaker = null;
+        currentLine = "";
+        return;
+      }
+      const cleaned = currentLine.replace(/\s*\([^)]*\)\s*/g, " ").trim();
+      if (cleaned.length > maxLength) {
+        // splitOutsideQuotes → splitByCommaAnd → splitByQuotes 순으로 시도
+        let parts =
+          splitOutsideQuotes(cleaned, maxLength) ||
+          (splitByCommaAnd(cleaned, maxLength).length > 1
+            ? splitByCommaAnd(cleaned, maxLength)
+            : null) ||
+          (splitByQuotes(cleaned, maxLength).length > 1
+            ? splitByQuotes(cleaned, maxLength)
+            : null);
+        if (parts && parts.every((p) => p.length <= maxLength)) {
+          parts.forEach((p) => result.push(`${currentSpeaker}: ${p}`));
         } else {
-          result.push(`${currentSpeaker}: ${cleanedLine}`);
+          result.push(`${currentSpeaker}: ${cleaned}`);
         }
+      } else {
+        result.push(`${currentSpeaker}: ${cleaned}`);
       }
       currentSpeaker = null;
       currentLine = "";
     };
 
-    lines.forEach((line) => {
-      line = line.trim();
+    lines.forEach((ln) => {
+      const line = ln.trim();
       if (!line) {
         pushDialogue();
         return;
@@ -197,34 +183,43 @@ export const useConvert = () => {
         pushDialogue();
         return;
       }
-      // 화자 인식 (영어, 한글, 일본어 등 포함 - Unicode 프로퍼티 사용)
+
       const match = line.match(/^([\p{L} ,.&']+):\s*(.*)/u);
       if (match) {
-        const newSpeaker = match[1].trim();
-        const newText = match[2].trim();
-        if (currentSpeaker && currentSpeaker === newSpeaker) {
-          if (newText && newText[0] === newText[0].toLowerCase()) {
-            currentLine += " " + newText;
+        const [_, speaker, text] = match;
+        if (currentSpeaker === speaker) {
+          // 같은 화자 연속: 소문자 시작이면 이어쓰기
+          if (text[0] === text[0].toLowerCase()) {
+            currentLine += " " + text;
           } else {
             pushDialogue();
-            currentSpeaker = newSpeaker;
-            currentLine = newText;
+            currentSpeaker = speaker;
+            currentLine = text;
           }
         } else {
           pushDialogue();
-          currentSpeaker = newSpeaker;
-          currentLine = newText;
+          currentSpeaker = speaker;
+          currentLine = text;
         }
-      } else {
-        if (currentSpeaker) {
-          currentLine += " " + line;
-        }
+      } else if (currentSpeaker) {
+        currentLine += " " + line;
       }
     });
 
     pushDialogue();
-    setRightText(result.join("\n"));
-    console.log("✅ 대사 정제 완료!");
+    return result.join("\n");
+  };
+
+  // doConvert: XML이면 doConvertXml, 아니면 speech 전용 로직
+  const doConvert = (leftText) => {
+    const trimmed = leftText.trim();
+    if (trimmed.startsWith("<")) {
+      // XML 텍스트라고 판단하면
+      setRightText(doConvertXml(leftText));
+    } else {
+      // 일반 대사 스크립트
+      setRightText(doConvertSpeech(leftText));
+    }
   };
 
   return { rightText, doConvert, setRightText };
