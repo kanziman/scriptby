@@ -36,7 +36,7 @@ const en = {
   "meta.season": "season",
   "meta.episode": "episode",
   "meta.released": "released",
-  "meta.createdBy": "created by",
+  "meta.createdBy": "creator",
 
   "status.confirmed": "Confirmed",
   "status.pending": "Pending",

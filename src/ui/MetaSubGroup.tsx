@@ -11,7 +11,7 @@ const StyledMetaContainer = styled.div`
   font-size: 0.9rem;
   background-color: var(--color-grey-100);
 
-  @media (${(props) => props.theme.media.bigTablet}) {
+  @media (${(props) => props.theme.media.landScapeTablet}) {
     padding: 0.8rem;
   }
 `;
