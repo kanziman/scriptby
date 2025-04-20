@@ -36,11 +36,7 @@ const StyledMetaSubGroup = styled.div`
   font-size: 1rem;
   color: var(--color-grey-500);
 
-  @media (${(props) => props.theme.media.tablet}) {
-    font-size: 0.9rem;
-  }
-
-  @media (${(props) => props.theme.media.mobile}) {
+  @media (${(props) => props.theme.media.bigTablet}) {
     font-size: 0.8rem;
   }
 `;
