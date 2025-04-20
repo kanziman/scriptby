@@ -1,6 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useQuery } from "../../context/QueryContext";
+import { useBrowser } from "../../hooks/useBrowser";
 import { useMore } from "../../hooks/useMore";
 import Box from "../../ui/Box";
 import ErrorMessage from "../../ui/ErrorMessage";
@@ -23,7 +24,9 @@ const StyledEpisodes = styled.ul`
 
 export default function Episodes() {
   const { episodes, selectedShow } = useQuery();
-  const { visibleCount, handleLoadMore } = useMore(6, 6);
+  const isSmall = useBrowser();
+  const count = isSmall ? 6 : 8;
+  const { visibleCount, handleLoadMore } = useMore(count, count);
 
   const { isPending, error } = useEpisode(selectedShow?.id);
 

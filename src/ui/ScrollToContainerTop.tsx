@@ -11,12 +11,18 @@ interface ScrollByOffsetProps {
 }
 
 function ScrollByOffset({
-  offset = { top: -200, behavior: "smooth" },
-}: ScrollByOffsetProps) {
+  offset = { percent: 0.1, behavior: "smooth" },
+}: {
+  offset?: { percent?: number; behavior?: ScrollBehavior };
+}) {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollBy(offset);
+    const targetY = window.innerHeight * (offset.percent ?? 0.1);
+    window.scrollTo({
+      top: targetY,
+      behavior: offset.behavior ?? "smooth",
+    });
   }, [location]);
 
   return null;
