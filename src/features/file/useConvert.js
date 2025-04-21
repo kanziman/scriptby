@@ -59,34 +59,44 @@ function doConvertXml(xmlText) {
   return lines.join("\n");
 }
 
-// 따옴표(" 또는 ') 또는 "..., and" 같은 구분자 기준 분리 (인용부 외부에서 분리)
-function splitOutsideQuotes(dialogue, maxLen) {
-  if (dialogue.length <= maxLen) return [dialogue];
-  let lastValidSplit = -1;
-  let insideQuote = false;
-  for (let i = 0; i < maxLen; i++) {
-    const char = dialogue[i];
-    if (char === "'" || char === '"') {
-      insideQuote = !insideQuote;
-    }
-    if (!insideQuote) {
-      if (dialogue.slice(i, i + 5) === ", and") {
-        lastValidSplit = i + 5;
-      }
-      if (char === "." || char === "!" || char === "?") {
-        lastValidSplit = i + 1;
-      }
+function splitOutsideQuotes(text, maxLength = 200) {
+  let parts = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char === '"' || char === "'") inQuotes = !inQuotes;
+
+    current += char;
+
+    if (!inQuotes && /[.!?]/.test(char) && current.length >= maxLength) {
+      parts.push(current.trim());
+      current = "";
     }
   }
-  if (lastValidSplit > 0) {
-    const part1 = dialogue.slice(0, lastValidSplit).trim();
-    const part2 = dialogue.slice(lastValidSplit).trim();
-    return [part1, part2];
-  }
-  return null;
+
+  if (current.trim()) parts.push(current.trim());
+  return parts.length > 1 ? parts : null;
 }
 
-// ", and " 기준 분리 함수
+function splitBySentences(text, maxLength = 200) {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  let result = [];
+  let buffer = "";
+
+  for (let sentence of sentences) {
+    if ((buffer + sentence).length > maxLength) {
+      if (buffer) result.push(buffer.trim());
+      buffer = sentence;
+    } else {
+      buffer += sentence;
+    }
+  }
+  if (buffer) result.push(buffer.trim());
+  return result;
+}
+
 function splitByCommaAnd(dialogue, maxLen) {
   let parts = [];
   let remaining = dialogue;
@@ -106,7 +116,6 @@ function splitByCommaAnd(dialogue, maxLen) {
   return parts;
 }
 
-// 기존 splitByQuotes: "..." 기준 분리 함수
 function splitByQuotes(dialogue, maxLen) {
   let parts = [];
   let remaining = dialogue;
@@ -129,8 +138,7 @@ function splitByQuotes(dialogue, maxLen) {
 export const useConvert = () => {
   const [rightText, setRightText] = useState("");
 
-  // 기존 speech 전용 변환 로직을 별도 함수로 분리
-  const doConvertSpeech = (leftText) => {
+  const doConvertSpeech = (leftText, { allowSplit = false } = {}) => {
     const maxLength = 200;
     const lines = leftText.split(/\r?\n/);
     let result = [];
@@ -143,9 +151,19 @@ export const useConvert = () => {
         currentLine = "";
         return;
       }
-      const cleaned = currentLine.replace(/\s*\([^)]*\)\s*/g, " ").trim();
-      if (cleaned.length > maxLength) {
-        // splitOutsideQuotes → splitByCommaAnd → splitByQuotes 순으로 시도
+
+      const cleaned = currentLine
+        .replace(/\s*[([][^\])]*[\])]\s*/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!cleaned) {
+        currentSpeaker = null;
+        currentLine = "";
+        return;
+      }
+
+      if (allowSplit && cleaned.length > maxLength) {
         let parts =
           splitOutsideQuotes(cleaned, maxLength) ||
           (splitByCommaAnd(cleaned, maxLength).length > 1
@@ -153,7 +171,9 @@ export const useConvert = () => {
             : null) ||
           (splitByQuotes(cleaned, maxLength).length > 1
             ? splitByQuotes(cleaned, maxLength)
-            : null);
+            : null) ||
+          splitBySentences(cleaned, maxLength);
+
         if (parts && parts.every((p) => p.length <= maxLength)) {
           parts.forEach((p) => result.push(`${currentSpeaker}: ${p}`));
         } else {
@@ -162,6 +182,7 @@ export const useConvert = () => {
       } else {
         result.push(`${currentSpeaker}: ${cleaned}`);
       }
+
       currentSpeaker = null;
       currentLine = "";
     };
@@ -172,13 +193,15 @@ export const useConvert = () => {
         pushDialogue();
         return;
       }
+
       if (
         line.startsWith("[") ||
         line.startsWith("(") ||
         /Credits|Break|Scene|^End$/i.test(line) ||
         /^[-\s]*\d+\s*[-\s]*$/.test(line) ||
         /(teleplay|story|written|transcribed|adjustments?)\s+by/i.test(line) ||
-        /^with help from:/i.test(line)
+        /^with help from:/i.test(line) ||
+        line.startsWith("Location notes:")
       ) {
         pushDialogue();
         return;
@@ -188,7 +211,6 @@ export const useConvert = () => {
       if (match) {
         const [_, speaker, text] = match;
         if (currentSpeaker === speaker) {
-          // 같은 화자 연속: 소문자 시작이면 이어쓰기
           if (text[0] === text[0].toLowerCase()) {
             currentLine += " " + text;
           } else {
@@ -210,14 +232,11 @@ export const useConvert = () => {
     return result.join("\n");
   };
 
-  // doConvert: XML이면 doConvertXml, 아니면 speech 전용 로직
   const doConvert = (leftText) => {
     const trimmed = leftText.trim();
     if (trimmed.startsWith("<")) {
-      // XML 텍스트라고 판단하면
       setRightText(doConvertXml(leftText));
     } else {
-      // 일반 대사 스크립트
       setRightText(doConvertSpeech(leftText));
     }
   };
