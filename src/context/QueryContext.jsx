@@ -19,7 +19,7 @@ const initState = {
 };
 
 function reducer(state, action) {
-  console.log("reducer:", { currentState: state, action });
+  // console.log("reducer:", { currentState: state, action });
 
   switch (action.type) {
     // settings의 locale과 동기화하기 위한 액션
@@ -157,7 +157,7 @@ function QueryProvider({ children }) {
 
   // 상태 변경 시 localStorage에 저장
   useEffect(() => {
-    console.log("State updated:", state);
+    // console.log("State updated:", state);
     localStorage.setItem("queryState", JSON.stringify(state));
   }, [state]);
 
