@@ -178,6 +178,7 @@ const en = {
   "post.type.q&a": "q&a",
   "post.type.error": "error",
   "post.type.request": "request",
+  "empty.noData": "No data found",
 
   emptyMessage: "No {resource} to show at the moment",
 

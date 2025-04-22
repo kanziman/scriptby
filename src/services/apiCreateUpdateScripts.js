@@ -43,7 +43,7 @@ export async function createShowAndScript({ newScript, show }) {
 
 /// UPDATE SCRIPT
 export async function updateShowAndScript({ newScript }) {
-  console.log("update updatedScript:", newScript);
+  // console.log("update updatedScript:", newScript);
 
   try {
     const scriptData = {
@@ -62,7 +62,7 @@ export async function updateShowAndScript({ newScript }) {
       console.error("Script update error:", scriptError);
       throw new Error("Script could not be updated");
     }
-    console.log("UPDATE FINISH scriptData:>> ", scriptData);
+    // console.log("UPDATE FINISH scriptData:>> ", scriptData);
 
     return { updatedScript: updatedScriptData };
   } catch (error) {

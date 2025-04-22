@@ -72,33 +72,19 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
     dataToRender = isToggled ? sliceDataLeftRight(slicedLines) : slicedLines;
     count = lines.length;
   } else {
-    // ★ 제거 후 원문 정리
+    // === 모든 필터 (words, phrases, idioms)에서 ★와 괄호 제거 ===
     const cleanSubData = (script[filter.value] || []).map((item) => ({
       ...item,
-      cleanedOriginal: item.original.replace("★", "").trim(),
+      cleanedOriginal: item.original
+        .replace(/（[^）]*）/g, "") // 일본어 괄호 제거
+        .replace(/\([^)]*\)/g, "") // 일반 괄호 제거
+        .replace("★", "")
+        .trim(),
     }));
 
-    // lines 중에서 cleanedOriginal이 포함된 것만 필터
-    const isPhrases = filter.value === "phrases";
+    // === 단순 includes로 매칭 ===
     const filteredLines = lines.filter((line) =>
-      cleanSubData.some((item) => {
-        if (!isPhrases) {
-          return cleanSubData.some((item) =>
-            line.original.includes(item.cleanedOriginal)
-          );
-        }
-
-        // ONLY PHRASES
-        const [verb, particle] = item.cleanedOriginal.split(" ");
-        if (!verb || !particle) return false;
-
-        const expr = new RegExp(
-          `\\b${verb}(ed|s|ing)?(\\s+\\w+)?\\s+${particle}\\b`,
-          "i"
-        );
-
-        return expr.test(line.original);
-      })
+      cleanSubData.some((item) => line.original.includes(item.cleanedOriginal))
     );
 
     const slicedFilteredLines = filteredLines.slice(start, start + pageSize);
@@ -109,7 +95,8 @@ export function useScriptOne({ scriptId, isToggled, activeTabValue } = {}) {
     count = filteredLines.length;
   }
 
-  const subData = filter.value === "lines" ? null : script[filter.value];
+  // const subData = filter.value === "lines" ? null : script[filter.value];
+  const subData = filter.value === "lines" ? [] : script[filter.value] || [];
   const tabData = script[activeTabValue];
 
   return {
