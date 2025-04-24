@@ -15,7 +15,7 @@ function ScriptTable() {
   const isAdminPage = location.pathname.includes("users") ? true : false;
   const { scripts, isLoading, count } = useScript();
 
-  const userColumns = `minmax(5rem, 1fr) minmax(8rem, 2fr)  repeat(auto-fit, minmax(5rem, 1fr))`;
+  const userColumns = `minmax(9rem, 1fr) minmax(8rem, 2fr)  repeat(auto-fit, minmax(5rem, 1fr))`;
 
   if (isLoading) return <Spinner />;
   if (!scripts?.length) {
