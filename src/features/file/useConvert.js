@@ -2,19 +2,28 @@ import { useState } from "react";
 // <p> 안의 텍스트만 재귀적으로 추출
 function extractText(node) {
   let txt = "";
+
   node.childNodes.forEach((child) => {
     if (child.nodeType === Node.TEXT_NODE) {
       txt += child.nodeValue;
-    } else if (
-      child.nodeType === Node.ELEMENT_NODE &&
-      child.localName.toLowerCase() === "br"
-    ) {
-      txt += " ";
     } else if (child.nodeType === Node.ELEMENT_NODE) {
-      txt += extractText(child);
+      if (child.localName.toLowerCase() === "br") {
+        txt += " "; // 공백으로 처리
+      } else if (
+        child.childNodes.length === 2 &&
+        child.childNodes[0].nodeType === Node.ELEMENT_NODE &&
+        child.childNodes[1].nodeType === Node.ELEMENT_NODE
+      ) {
+        const kanji = extractText(child.childNodes[0]).trim();
+        const reading = extractText(child.childNodes[1]).trim();
+        txt += `${kanji}(${reading})`;
+      } else {
+        txt += extractText(child);
+      }
     }
   });
-  return txt;
+
+  return txt.replace(/^\s*-\s*/, ""); // 앞의 - 제거
 }
 
 // 틱(t) 값을 초 단위로 바꾸는 함수
@@ -37,23 +46,30 @@ function doConvertXml(xmlText) {
   const lines = [];
 
   ps.forEach((p) => {
-    // 1) 시간 코드
     const begin = p.getAttribute("begin") || "";
     const ticks = parseInt(begin.replace(/t$/, ""), 10) || 0;
     const ts = formatTime(ticks);
 
-    // 2) 자막 텍스트
-    const text = extractText(p).trim();
+    const rawText = extractText(p).trim();
 
-    // 3) 넷플릭스 시리즈만 예외 제거
-    if (text === "넷플릭스 시리즈") return;
+    // 넷플릭스 시리즈 제거
+    if (rawText === "넷플릭스 시리즈") return;
 
-    // 4) 바로 전 텍스트와 같으면 스킵
-    if (text === lastText) return;
+    // 괄호만 있는 라인 제거
+    if (/^[（(][^）)]*[）)]$/.test(rawText)) return;
 
-    // 5) 결과에 추가
-    lines.push(`${ts}: ${text}`);
-    lastText = text;
+    if (rawText.startsWith("♪")) return;
+
+    // 1) 화자 괄호 → 콜론 형태로 변환
+    const text = rawText.replace(
+      /^（([^（）]+(?:\([^)]+\))?)）\s*/,
+      (_, speaker) => `${speaker}: `
+    );
+    // 2) 중복 제거
+    if (text !== lastText) {
+      lines.push(`${ts}: ${text}`);
+      lastText = text;
+    }
   });
 
   return lines.join("\n");

@@ -229,7 +229,8 @@ export async function getNewScriptsWithinAWeek({ filter }) {
       count: "exact",
     })
     .eq("status", "confirmed")
-    .gte("created_at", oneWeekAgo.toISOString());
+    .gte("created_at", oneWeekAgo.toISOString())
+    .order("created_at", { ascending: false });
 
   if (filter) {
     query = query[filter.method || "eq"](filter.field, filter.value);
