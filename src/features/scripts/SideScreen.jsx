@@ -13,6 +13,9 @@ import { useScriptOne } from "./useScriptOne";
 
 const StyledSideScreen = styled.aside`
   padding-top: 3rem;
+  & span {
+    font-size: 1.2rem;
+  }
 `;
 
 function SideScreen() {
