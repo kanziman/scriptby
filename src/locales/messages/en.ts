@@ -37,6 +37,7 @@ const en = {
   "meta.episode": "episode",
   "meta.released": "released",
   "meta.createdBy": "creator",
+  "meta.created": "created",
 
   "status.confirmed": "Confirmed",
   "status.pending": "Pending",

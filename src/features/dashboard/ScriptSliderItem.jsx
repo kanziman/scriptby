@@ -88,6 +88,7 @@ function ScriptSliderItem({ item: script }) {
     translated_language: translatedLanguage,
     show,
     profile,
+    created_at: createdAt,
   } = script;
 
   const { poster, date, isTv } = cleansingData(show);
@@ -160,6 +161,12 @@ function ScriptSliderItem({ item: script }) {
               id: "meta.createdBy",
             })}
             value={username}
+          />
+          <MetaSubGroup
+            label={intl.formatMessage({
+              id: "meta.created",
+            })}
+            value={format(new Date(createdAt), "yyyy.MM.dd")}
           />
         </MetaContainer>
       </Row>

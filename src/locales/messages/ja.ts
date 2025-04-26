@@ -31,9 +31,10 @@ const ja = {
   "showInfo.seasons": "シーズン：",
   "showInfo.episodes": "エピソード：",
   "meta.season": "シーズン",
-  "meta.episode": "エピソード",
+  "meta.episode": "エピ",
   "meta.released": "公開日",
-  "meta.createdBy": "制作：",
+  "meta.createdBy": "制作",
+  "meta.created": "作成日",
 
   "status.confirmed": "承認済み",
   "status.pending": "承認待ち",

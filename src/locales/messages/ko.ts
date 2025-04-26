@@ -32,8 +32,9 @@ const ko = {
   "showInfo.episodes": "에피소드:",
   "meta.season": "시즌",
   "meta.episode": "에피소드",
-  "meta.released": "개봉",
+  "meta.released": "개봉일",
   "meta.createdBy": "제작자",
+  "meta.created": "제작일",
 
   "status.confirmed": "승인",
   "status.pending": "승인중",
