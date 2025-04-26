@@ -69,6 +69,7 @@ const AbsoluteButton = styled(ButtonIcon)`
 function ShowInfoMain() {
   const { cleanedShow, dispatch } = useQuery();
   const {
+    id,
     name,
     poster,
     date,
@@ -92,6 +93,7 @@ function ShowInfoMain() {
       </ImageWrapper>
 
       <CustomSection
+        showId={id}
         name={name}
         originalLanguage={originalLanguage}
         date={date}

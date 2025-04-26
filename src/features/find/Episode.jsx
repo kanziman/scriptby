@@ -36,7 +36,7 @@ const StyledEpisode = styled.li`
     border-radius: 5px;
   }
 
-  @media (max-width: 50rem) {
+  @media (${(props) => props.theme.media.tablet}) {
     grid-template-columns: 1fr;
     gap: 0.8rem;
     padding: 0.8rem 1rem;

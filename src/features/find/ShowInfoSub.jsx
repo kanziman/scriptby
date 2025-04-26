@@ -50,6 +50,7 @@ function ShowInfoSub() {
           <TextExpander collapsedNumWords={20}>{overview}</TextExpander>
         </OverviewText>
       )}
+
       {isTv ? (
         <InfoWrapper>
           <p>

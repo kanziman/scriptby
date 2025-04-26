@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 type Size = "small" | "medium" | "large";
-type Variation =
+export type Variation =
   | "primary"
   | "secondary"
   | "danger"

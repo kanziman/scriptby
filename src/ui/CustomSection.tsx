@@ -2,6 +2,7 @@ import { HiLink } from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
+import ActionContainer from "./ActionContainer";
 import FlagText from "./FlagText";
 import Heading from "./Heading";
 
@@ -79,6 +80,7 @@ const SeasonCount = styled.p`
 `;
 
 interface CustomSectionProps {
+  showId: string;
   name: string;
   originalLanguage: string;
   date?: string;
@@ -89,6 +91,7 @@ interface CustomSectionProps {
 }
 
 function CustomSection({
+  showId,
   name,
   originalLanguage,
   date,
@@ -107,7 +110,6 @@ function CustomSection({
         <DetailItem>
           <FlagText code={originalLanguage} type="horizontal" gap="0.8rem" />
         </DetailItem>
-
         {date && (
           <DetailItem>
             <span>🗓</span>
@@ -152,7 +154,13 @@ function CustomSection({
           </SeasonCount>
         )}
 
-        {/* <ActionContainer play={play} isTv={isTv} /> */}
+        {/* REGISTER ACTION */}
+        <ActionContainer
+          play={play}
+          baseType="movie"
+          isTv={isTv}
+          showId={showId}
+        />
       </BottomContainer>
     </StyledSection>
   );

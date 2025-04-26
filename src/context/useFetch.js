@@ -62,8 +62,6 @@ export function useFetch(state, dispatch) {
   const fetchUrl = useMemo(() => {
     const langCode = getLangCode(query || "");
 
-    console.log("Building URL for status:", state.status, langCode, query);
-
     // 트렌드 쇼의 상세 정보 URL (우선 순위 높게)
     if (state.status === "trend/selected" && state.showId) {
       const currentFilter = state.filter || filter;

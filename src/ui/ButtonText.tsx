@@ -4,10 +4,7 @@ interface ButtonTextProps {
   active?: boolean;
 }
 
-const ButtonText =
-  styled.button <
-  ButtonTextProps >
-  `
+const ButtonText = styled.button<ButtonTextProps>`
   color: var(--color-grey-500);
   font-weight: 500;
   text-align: center;
