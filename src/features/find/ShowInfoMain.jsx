@@ -9,20 +9,7 @@ const StyledDetail = styled.header`
   display: flex;
   position: relative;
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 0.6rem;
-    line-height: 1.5;
-  }
-
-  img {
-    width: 55%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  @media (max-width: 50rem) {
+  @media (${(props) => props.theme.media.tablet}) {
     flex-direction: column;
     align-items: center;
 
@@ -30,12 +17,26 @@ const StyledDetail = styled.header`
       font-size: 1.6rem;
       gap: 1rem;
     }
-    p {
-      font-size: 1.2rem;
-    }
     & span {
       font-size: 1rem;
     }
+  }
+`;
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
   }
 `;
 
@@ -83,11 +84,12 @@ function ShowInfoMain() {
       <AbsoluteButton onClick={() => dispatch({ type: "shows/back" })}>
         <HiArrowLeft />
       </AbsoluteButton>
-
-      <img
-        src={poster ? `${IMG_PATH}${poster}` : DEFAULT_IMAGE}
-        alt={`${name} poster`}
-      />
+      <ImageWrapper>
+        <img
+          src={poster ? `${IMG_PATH}${poster}` : DEFAULT_IMAGE}
+          alt={`${name} poster`}
+        />
+      </ImageWrapper>
 
       <CustomSection
         name={name}

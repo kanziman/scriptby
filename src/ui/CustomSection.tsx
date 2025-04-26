@@ -102,7 +102,7 @@ function CustomSection({
 
   return (
     <StyledSection>
-      <Heading as="h1">{name}</Heading>
+      <Heading as="h2">{name}</Heading>
       <DetailsContainer>
         <DetailItem>
           <FlagText code={originalLanguage} type="horizontal" gap="0.8rem" />

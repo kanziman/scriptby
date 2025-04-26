@@ -242,7 +242,7 @@ export async function fetchWrapper(url, options = {}) {
 }
 
 export function getLangCode(query) {
-  const iso6393 = franc(query, { minLength: 20 });
+  const iso6393 = franc(query, { minLength: 2 });
   let languageCode = "en-US";
   if (iso6393 !== "und") {
     const langObj = langs.where("3", iso6393);

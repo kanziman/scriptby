@@ -23,7 +23,16 @@ function extractText(node) {
     }
   });
 
-  return txt.replace(/^\s*-\s*/, ""); // 앞의 - 제거
+  txt = txt.replace(/^\s*-\s*/, "");
+
+  // 전체 괄호 제거 후 텍스트가 남는지 확인
+  const cleaned = txt
+    .replace(/[（(][^）)]*[）)]/g, "") // 괄호 전체 제거
+    .replace(/\u3000/g, " ") // 전각 스페이스 → 일반 스페이스
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return cleaned ? txt : "";
 }
 
 // 틱(t) 값을 초 단위로 바꾸는 함수
@@ -52,23 +61,31 @@ function doConvertXml(xmlText) {
 
     const rawText = extractText(p).trim();
 
-    // 넷플릭스 시리즈 제거
+    if (!rawText) return;
     if (rawText === "넷플릭스 시리즈") return;
-
-    // 괄호만 있는 라인 제거
-    if (/^[（(][^）)]*[）)]$/.test(rawText)) return;
-
     if (rawText.startsWith("♪")) return;
+    if (rawText.startsWith("～♪")) return;
 
-    // 1) 화자 괄호 → 콜론 형태로 변환
-    const text = rawText.replace(
-      /^（([^（）]+(?:\([^)]+\))?)）\s*/,
-      (_, speaker) => `${speaker}: `
-    );
-    // 2) 중복 제거
-    if (text !== lastText) {
-      lines.push(`${ts}: ${text}`);
-      lastText = text;
+    // === 화자 + 대사 분리 ===
+    const match = rawText.match(/^（([^（）]+(?:\([^)]+\))?)）\s*(.*)/);
+    if (match) {
+      const speaker = match[1]; // 화자 이름 (漢字(ふりがな))
+      const content = match[2].trim(); // 대사 내용
+
+      if (!content) return; // 대사가 없으면 스킵!
+
+      const text = `${speaker}: ${content}`;
+
+      if (text !== lastText) {
+        lines.push(`${ts}: ${text}`);
+        lastText = text;
+      }
+    } else {
+      // 화자가 없는 경우 그냥 출력
+      if (rawText !== lastText) {
+        lines.push(`${ts}: ${rawText}`);
+        lastText = rawText;
+      }
     }
   });
 
