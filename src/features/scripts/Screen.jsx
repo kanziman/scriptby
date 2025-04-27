@@ -16,7 +16,7 @@ const StyledScreenContainer = styled.div`
 `;
 
 function Screen() {
-  const [isToggled, setIsToggled] = useState(true);
+  const [isToggled, setIsToggled] = useState(false);
   const [isRomanToggled, setIsRomanToggled] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hideTranslation, setHideTranslation] = useState(false);

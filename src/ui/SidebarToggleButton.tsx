@@ -16,10 +16,12 @@ const ExpandButton = styled.button`
   width: 4rem;
   height: 4rem;
   color: var(--color-tertiary-500);
+  opacity: 0.5;
 
   &:hover {
     width: 12rem;
     background-color: var(--color-tertiary-100);
+    opacity: 1;
     transition: all 0.3s;
   }
 

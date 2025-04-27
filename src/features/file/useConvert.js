@@ -1,152 +1,22 @@
 import { useState } from "react";
-// <p> 안의 텍스트만 재귀적으로 추출
-function extractText(node) {
-  let txt = "";
 
-  node.childNodes.forEach((child) => {
-    if (child.nodeType === Node.TEXT_NODE) {
-      txt += child.nodeValue;
-    } else if (child.nodeType === Node.ELEMENT_NODE) {
-      if (child.localName.toLowerCase() === "br") {
-        txt += " "; // 공백으로 처리
-      } else if (
-        child.childNodes.length === 2 &&
-        child.childNodes[0].nodeType === Node.ELEMENT_NODE &&
-        child.childNodes[1].nodeType === Node.ELEMENT_NODE
-      ) {
-        const kanji = extractText(child.childNodes[0]).trim();
-        const reading = extractText(child.childNodes[1]).trim();
-        txt += `${kanji}(${reading})`;
-      } else {
-        txt += extractText(child);
-      }
-    }
-  });
+function splitBySentences(text, maxLen) {
+  // non-greedy 매치 + 부호 + (공백 또는 문자열 끝)
+  const regex = /.*?[.!?]+(?:\s|$)/g;
+  const sentences = text.match(regex) || [text];
+  let result = [],
+    buffer = "";
 
-  txt = txt.replace(/^\s*-\s*/, "");
-
-  // 전체 괄호 제거 후 텍스트가 남는지 확인
-  const cleaned = txt
-    .replace(/[（(][^）)]*[）)]/g, "") // 괄호 전체 제거
-    .replace(/\u3000/g, " ") // 전각 스페이스 → 일반 스페이스
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return cleaned ? txt : "";
-}
-
-// 틱(t) 값을 초 단위로 바꾸는 함수
-function formatTime(ticks, tickRate = 10000000) {
-  const sec = Math.floor(ticks / tickRate);
-  if (sec >= 60) {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m}m${s}s`;
-  }
-  return `${sec}s`;
-}
-
-// XML 전용 변환 함수 (중복 제거 포함)
-function doConvertXml(xmlText) {
-  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
-  const ps = Array.from(doc.getElementsByTagName("p"));
-
-  let lastText = null;
-  const lines = [];
-
-  ps.forEach((p) => {
-    const begin = p.getAttribute("begin") || "";
-    const ticks = parseInt(begin.replace(/t$/, ""), 10) || 0;
-    const ts = formatTime(ticks);
-
-    const rawText = extractText(p).trim();
-
-    if (!rawText) return;
-    if (rawText === "넷플릭스 시리즈") return;
-    if (rawText.startsWith("♪")) return;
-    if (rawText.startsWith("～♪")) return;
-
-    // === 화자 + 대사 분리 ===
-    const match = rawText.match(/^（([^（）]+(?:\([^)]+\))?)）\s*(.*)/);
-    if (match) {
-      const speaker = match[1]; // 화자 이름 (漢字(ふりがな))
-      const content = match[2].trim(); // 대사 내용
-
-      if (!content) return; // 대사가 없으면 스킵!
-
-      const text = `${speaker}: ${content}`;
-
-      if (text !== lastText) {
-        lines.push(`${ts}: ${text}`);
-        lastText = text;
-      }
-    } else {
-      // 화자가 없는 경우 그냥 출력
-      if (rawText !== lastText) {
-        lines.push(`${ts}: ${rawText}`);
-        lastText = rawText;
-      }
-    }
-  });
-
-  return lines.join("\n");
-}
-
-function splitOutsideQuotes(text, maxLength = 200) {
-  let parts = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (char === '"' || char === "'") inQuotes = !inQuotes;
-
-    current += char;
-
-    if (!inQuotes && /[.!?]/.test(char) && current.length >= maxLength) {
-      parts.push(current.trim());
-      current = "";
-    }
-  }
-
-  if (current.trim()) parts.push(current.trim());
-  return parts.length > 1 ? parts : null;
-}
-
-function splitBySentences(text, maxLength = 200) {
-  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  let result = [];
-  let buffer = "";
-
-  for (let sentence of sentences) {
-    if ((buffer + sentence).length > maxLength) {
+  for (let s of sentences) {
+    if ((buffer + s).length > maxLen) {
       if (buffer) result.push(buffer.trim());
-      buffer = sentence;
+      buffer = s;
     } else {
-      buffer += sentence;
+      buffer += s;
     }
   }
   if (buffer) result.push(buffer.trim());
   return result;
-}
-
-function splitByCommaAnd(dialogue, maxLen) {
-  let parts = [];
-  let remaining = dialogue;
-  const separator = ", and ";
-  while (remaining.length > maxLen) {
-    const sub = remaining.slice(0, maxLen);
-    const lastSep = sub.lastIndexOf(separator);
-    if (lastSep > -1) {
-      let part = remaining.slice(0, lastSep + separator.length);
-      parts.push(part.trim());
-      remaining = remaining.slice(lastSep + separator.length).trim();
-    } else {
-      break;
-    }
-  }
-  if (remaining.length > 0) parts.push(remaining.trim());
-  return parts;
 }
 
 function splitByQuotes(dialogue, maxLen) {
@@ -161,7 +31,17 @@ function splitByQuotes(dialogue, maxLen) {
       parts.push(part.trim());
       remaining = remaining.slice(lastEllipsis + ellipsis.length).trim();
     } else {
-      break;
+      // ellipsis 못 찾으면 그냥 공백 기준으로 잘라내기
+      const lastSpace = sub.lastIndexOf(" ");
+      if (lastSpace > -1) {
+        let part = remaining.slice(0, lastSpace);
+        parts.push(part.trim());
+        remaining = remaining.slice(lastSpace).trim();
+      } else {
+        // 공백도 못 찾으면 강제 자르기
+        parts.push(remaining.slice(0, maxLen).trim());
+        remaining = remaining.slice(maxLen).trim();
+      }
     }
   }
   if (remaining.length > 0) parts.push(remaining.trim());
@@ -171,8 +51,8 @@ function splitByQuotes(dialogue, maxLen) {
 export const useConvert = () => {
   const [rightText, setRightText] = useState("");
 
-  const doConvertSpeech = (leftText, { allowSplit = false } = {}) => {
-    const maxLength = 200;
+  const doConvertSpeech = (leftText, { allowSplit = true } = {}) => {
+    const maxLength = 300;
     const lines = leftText.split(/\r?\n/);
     let result = [];
     let currentSpeaker = null;
@@ -185,35 +65,43 @@ export const useConvert = () => {
         return;
       }
 
+      // pushDialogue() 수정된 부분
       const cleaned = currentLine
         .replace(/\s*[([][^\])]*[\])]\s*/g, " ")
         .replace(/\s+/g, " ")
         .trim();
 
-      if (!cleaned) {
-        currentSpeaker = null;
-        currentLine = "";
-        return;
-      }
+      const normalized = cleaned
+        // 1) ellipsis 그룹: '...' 뒤에 공백이 없으면 한꺼번에 '... ' 으로
+        .replace(/\.{3}(?=[^\s])/g, "... ")
+        // 2) single punctuation: 마침표·물음표·느낌표 중
+        //    • 마침표는 바로 뒤에 또 마침표가 오지 않는 것만 (\.(?!\.))
+        //    • 느낌표·물음표는 그대로 ([!?])
+        //    뒤에 공백이 없으면 '$1 ' 으로
+        .replace(/(\.(?!\.)|[!?])(?=[^\s])/g, "$1 ");
 
-      if (allowSplit && cleaned.length > maxLength) {
-        let parts =
-          splitOutsideQuotes(cleaned, maxLength) ||
-          (splitByCommaAnd(cleaned, maxLength).length > 1
-            ? splitByCommaAnd(cleaned, maxLength)
-            : null) ||
-          (splitByQuotes(cleaned, maxLength).length > 1
-            ? splitByQuotes(cleaned, maxLength)
-            : null) ||
-          splitBySentences(cleaned, maxLength);
+      // 2) 분할 로직
+      if (allowSplit && normalized.length > maxLength) {
+        // ① 문장 끝 기준으로 먼저 시도
+        let parts = splitBySentences(normalized, maxLength);
 
-        if (parts && parts.every((p) => p.length <= maxLength)) {
+        // ② 문장 분할이 안 되었으면 ellipsis 기준으로
+        if (parts.length === 1) {
+          parts = splitByQuotes(normalized, maxLength);
+        }
+
+        // ③ 여전히 너무 길면 강제 분할
+        if (parts.every((p) => p.length <= maxLength)) {
           parts.forEach((p) => result.push(`${currentSpeaker}: ${p}`));
         } else {
-          result.push(`${currentSpeaker}: ${cleaned}`);
+          for (let i = 0; i < normalized.length; i += maxLength) {
+            result.push(
+              `${currentSpeaker}: ${normalized.slice(i, i + maxLength).trim()}`
+            );
+          }
         }
       } else {
-        result.push(`${currentSpeaker}: ${cleaned}`);
+        result.push(`${currentSpeaker}: ${normalized}`);
       }
 
       currentSpeaker = null;
@@ -229,12 +117,11 @@ export const useConvert = () => {
 
       if (
         line.startsWith("[") ||
-        line.startsWith("(") ||
+        // line.startsWith("(") ||
         /Credits|Break|Scene|^End$/i.test(line) ||
         /^[-\s]*\d+\s*[-\s]*$/.test(line) ||
         /(teleplay|story|written|transcribed|adjustments?)\s+by/i.test(line) ||
-        /^with help from:/i.test(line) ||
-        line.startsWith("Location notes:")
+        /^with help from:/i.test(line)
       ) {
         pushDialogue();
         return;

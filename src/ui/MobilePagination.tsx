@@ -5,9 +5,9 @@ const SideNavigationButton = styled.button`
   position: fixed;
   top: 55%;
   transform: translateY(-50%);
-  background-color: var(--color-grey-50);
+  background-color: var(--color-grey-300);
   color: var(--color-grey-700);
-  border: 1px solid var(--color-grey-200);
+  border: 2px solid var(--color-grey-200);
   border-radius: 50%;
   width: 4rem;
   height: 4rem;
@@ -16,8 +16,13 @@ const SideNavigationButton = styled.button`
   justify-content: center;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0.8;
+  opacity: 0.3;
   transition: all 0.3s;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
 
   &:disabled {
     cursor: not-allowed;
