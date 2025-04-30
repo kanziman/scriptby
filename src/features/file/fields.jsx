@@ -46,7 +46,13 @@ export const fields = [
     fieldType: {
       type: "input",
     },
-    alternateMatches: ["ROMAN", "romanized", "romanization", "roman-text"],
+    alternateMatches: [
+      "ROMAN",
+      "roman",
+      "romanized",
+      "romanization",
+      "roman-text",
+    ],
     validations: [], // 필수 아님
   },
   {

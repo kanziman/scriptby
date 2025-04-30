@@ -2,8 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import * as XLSX from "xlsx";
 import Button from "../../ui/Button";
+import FileInput from "../../ui/FileInput";
 import { downloadSample } from "../../utils/helpers";
 import { useConvert } from "./useConvert";
+import { usePdfHandler } from "./usePdfHandler";
 
 // styled-components를 이용한 스타일 정의
 const Container = styled.div`
@@ -12,8 +14,40 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
 `;
+// 파일 입력 버튼을 오른쪽 상단에 고정
+// const FileInputWrapper = styled.div`
+//   display: flex;
+//   align-self: flex-end;
+//   margin-bottom: 1rem;
+// `;
+
+const FileInputWrapper = styled.div`
+  position: absolute;
+  top: -3rem;
+  right: 0;
+
+  cursor: help;
+
+  &:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    padding: 4px 8px;
+    background: #333;
+    color: #fff;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+`;
 
 const TextareaContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -23,6 +57,7 @@ const TextareaContainer = styled.div`
 `;
 
 const StyledTextarea = styled.textarea`
+  margin-top: 2rem;
   width: 48%;
   height: 50rem;
   padding: 1rem;
@@ -38,7 +73,9 @@ const ButtonContainer = styled.div`
 
 function Convert() {
   const [leftText, setLeftText] = useState("");
-  const { rightText, doConvert, setRightText } = useConvert();
+  const [rightText, setRightText] = useState("");
+  const { doConvert } = useConvert({ rightText, setRightText });
+  const { handleFileChange } = usePdfHandler(rightText, setRightText);
 
   // reset 버튼 클릭 시 오른쪽 텍스트 에리어 리셋
   const handleReset = () => {
@@ -50,6 +87,7 @@ function Convert() {
     const headerRow = [
       "Original",
       "Translated",
+      "Roman",
       "Original_Words",
       "Translated_Words",
       "Original_Phrases",
@@ -60,7 +98,7 @@ function Convert() {
     // 각 줄을 첫번째 컬럼에 넣고, 나머지는 빈 값으로 채움
     const dataRows = rightText
       .split("\n")
-      .map((line) => [line, "", "", "", "", "", "", ""]);
+      .map((line) => [line, "", "", "", "", "", "", "", ""]);
     // 전체 데이터: 헤더 + 데이터 rows
     const wsData = [headerRow, ...dataRows];
 
@@ -75,6 +113,14 @@ function Convert() {
   return (
     <Container>
       <TextareaContainer>
+        <FileInputWrapper title="It should be form of a script">
+          <FileInput
+            id="pdf-file"
+            onChange={handleFileChange}
+            name="PDF FILE"
+            accept=".pdf,application/pdf"
+          />
+        </FileInputWrapper>
         <StyledTextarea
           value={leftText}
           onChange={(e) => setLeftText(e.target.value)}

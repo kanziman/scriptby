@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { doConvertXml } from "../../utils/refine";
 
 function splitBySentences(text, maxLen) {
@@ -49,8 +48,8 @@ function splitByQuotes(dialogue, maxLen) {
   return parts;
 }
 
-export const useConvert = () => {
-  const [rightText, setRightText] = useState("");
+export const useConvert = ({ rightText, setRightText }) => {
+  // const [rightText, setRightText] = useState("");
 
   const doConvertSpeech = (leftText, { allowSplit = true } = {}) => {
     const maxLength = 300;

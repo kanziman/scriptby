@@ -97,6 +97,7 @@ const Button = styled.button<ButtonProps>`
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
   word-break: keep-all;
+  transition: background-color 0.2s, color 0.2s;
 
   ${(props) => sizes[props.size || "medium"]}
   ${(props) => variations[props.variation || "primary"]}

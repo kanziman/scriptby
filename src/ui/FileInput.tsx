@@ -35,11 +35,13 @@ const FileNameDisplay = styled.span`
 interface FileInputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  name?: string;
 }
 
 function FileInput({
   onChange,
   disabled = false,
+  name,
 }: FileInputProps): JSX.Element {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [fileName, setFileName] = useState("");
@@ -62,7 +64,11 @@ function FileInput({
         disabled={disabled}
       />
       <CustomButton type="button" onClick={handleButtonClick}>
-        <FormattedMessage id="form.file" defaultMessage="Select File" />
+        {name ? (
+          name
+        ) : (
+          <FormattedMessage id="form.file" defaultMessage="Select File" />
+        )}
       </CustomButton>
       {fileName && <FileNameDisplay>{fileName}</FileNameDisplay>}
     </Container>
