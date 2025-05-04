@@ -89,3 +89,43 @@ export function doConvertXml(xmlText) {
 
   return lines.join("\n");
 }
+
+export function doConvertSrt(srtText) {
+  // 빈 줄 2개(블록 구분)로 split
+  const blocks = srtText
+    .trim()
+    .split(/\r?\n\r?\n/)
+    .filter(Boolean);
+
+  let result = [];
+  // 시간 매칭용 정규식 (시:분:초,밀리초 --> ...)
+  const timeRe = /^(\d{2}):(\d{2}):(\d{2}),\d{3}\s*-->/;
+
+  for (const block of blocks) {
+    const lines = block
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean);
+    if (lines.length < 2) continue; // 번호+타임코드 최소 2줄 이상
+
+    const timeLine = lines[1];
+    const m = timeLine.match(timeRe);
+    if (!m) continue; // 타임코드 형식 아니면 스킵
+
+    const hours = parseInt(m[1], 10);
+    const minutes = parseInt(m[2], 10);
+    const seconds = parseInt(m[3], 10);
+
+    // 시간 포맷: h가 0이면 생략
+    let timeLabel = "";
+    if (hours > 0) timeLabel += `${hours}h`;
+    timeLabel += `${minutes}m${seconds}s`;
+
+    // 나머지 줄들을 한 줄로 합침
+    const text = lines.slice(2).join(" ");
+
+    result.push(`${timeLabel}: ${text}`);
+  }
+
+  return result.join("\n");
+}

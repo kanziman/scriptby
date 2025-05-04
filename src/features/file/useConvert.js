@@ -1,4 +1,4 @@
-import { doConvertXml } from "../../utils/refine";
+import { doConvertSrt, doConvertXml } from "../../utils/refine";
 
 function splitBySentences(text, maxLen) {
   // non-greedy 매치 + 부호 + (공백 또는 문자열 끝)
@@ -154,8 +154,13 @@ export const useConvert = ({ rightText, setRightText }) => {
 
   const doConvert = (leftText) => {
     const trimmed = leftText.trim();
-    if (trimmed.startsWith("<")) {
+    const srtHeaderRe =
+      /^\d+\s*\r?\n\s*\d{2}:\d{2}:\d{2},\d{3}\s*-->\s*\d{2}:\d{2}:\d{2},\d{3}/;
+
+    if (trimmed.startsWith("<?xml")) {
       setRightText(doConvertXml(leftText));
+    } else if (srtHeaderRe.test(trimmed)) {
+      setRightText(doConvertSrt(leftText));
     } else {
       setRightText(doConvertSpeech(leftText));
     }
