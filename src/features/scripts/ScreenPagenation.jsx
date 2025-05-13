@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import {
+  HiChevronDoubleLeft,
+  HiChevronDoubleRight,
+  HiChevronLeft,
+  HiChevronRight,
+} from "react-icons/hi2";
 import { FormattedMessage } from "react-intl";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -107,16 +112,30 @@ function ScreenPagenation({ count, isToggled }) {
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(startIndex + pageSize - 1, count);
 
-  function nextPage() {
-    const next = currentPage < pageCount ? currentPage + 1 : currentPage;
-    searchParams.set("page", next);
-    setSearchParams(searchParams);
+  function firstPage() {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", 1);
+    setSearchParams(newParams);
   }
 
   function prevPage() {
-    const prev = currentPage > 1 ? currentPage - 1 : currentPage;
-    searchParams.set("page", prev);
-    setSearchParams(searchParams);
+    const prev = currentPage > 1 ? currentPage - 1 : 1;
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", prev);
+    setSearchParams(newParams);
+  }
+
+  function nextPage() {
+    const next = currentPage < pageCount ? currentPage + 1 : pageCount;
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", next);
+    setSearchParams(newParams);
+  }
+
+  function lastPage() {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("page", pageCount);
+    setSearchParams(newParams);
   }
 
   if (pageCount <= 1) return null;
@@ -142,24 +161,51 @@ function ScreenPagenation({ count, isToggled }) {
       )}
 
       <Buttons>
+        <PaginationButton onClick={firstPage} disabled={currentPage === 1}>
+          <HiChevronDoubleLeft />
+          {!isSmall && (
+            <Span>
+              <FormattedMessage id="pagination.first" defaultMessage="First" />
+            </Span>
+          )}
+        </PaginationButton>
+
         <PaginationButton onClick={prevPage} disabled={currentPage === 1}>
           <HiChevronLeft />
-          <Span>
-            <FormattedMessage
-              id="pagination.previous"
-              defaultMessage="Previous"
-            />
-          </Span>
+          {!isSmall && (
+            <Span>
+              <FormattedMessage
+                id="pagination.previous"
+                defaultMessage="Previous"
+              />
+            </Span>
+          )}
         </PaginationButton>
 
         <PaginationButton
           onClick={nextPage}
           disabled={currentPage === pageCount}
         >
-          <Span>
-            <FormattedMessage id="pagination.next" defaultMessage="Next" />
-          </Span>
+          {!isSmall && (
+            <Span>
+              <FormattedMessage id="pagination.next" defaultMessage="Next" />
+            </Span>
+          )}
+
           <HiChevronRight />
+        </PaginationButton>
+
+        <PaginationButton
+          onClick={lastPage}
+          disabled={currentPage === pageCount}
+        >
+          {!isSmall && (
+            <Span>
+              <FormattedMessage id="pagination.last" defaultMessage="Last" />
+            </Span>
+          )}
+
+          <HiChevronDoubleRight />
         </PaginationButton>
       </Buttons>
     </StyledScreenPagenation>

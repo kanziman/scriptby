@@ -42,6 +42,9 @@ const ko = {
 
   "pagination.previous": "이전",
   "pagination.next": "다음",
+  "pagination.first": "처음",
+  "pagination.last": "끝",
+
   "sortOptions.created.desc": "오래된순 ⬇️",
   "sortOptions.created.asc": "최신순 ⬇️",
   "sortOptions.title.desc": "제목 (Z-A)",

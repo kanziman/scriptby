@@ -42,6 +42,9 @@ const ja = {
 
   "pagination.previous": "前へ",
   "pagination.next": "次へ",
+  "pagination.first": "先頭へ",
+  "pagination.last": "最後へ",
+
   "sortOptions.created.desc": "古い順 ⬇️",
   "sortOptions.created.asc": "新しい順 ⬇️",
   "sortOptions.title.desc": "タイトル (Z-A)",

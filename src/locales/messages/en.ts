@@ -45,6 +45,8 @@ const en = {
 
   "pagination.previous": "previous",
   "pagination.next": "next",
+  "pagination.first": "first",
+  "pagination.last": "last",
 
   "sortOptions.created.desc": "oldest ⬇️",
   "sortOptions.created.asc": "latest ⬇️",
